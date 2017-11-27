@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	wangwenteng
+	date	:	2017-11-01 16:25:41
+	version	:	1.0
+-->
+<mapper namespace="com.jinpaihushi.jphs.platform.dao.PlatformRoleModuleDao">
+	
+	<sql id="field">
+		PRM.platform_role_id, PRM.platform_module_id
+	</sql>
+
+	<sql id="fieldGlobal">
+		PRM.platform_role_id PRM_platform_role_id, PRM.platform_module_id PRM_platform_module_id
+	</sql>
+	
+	<sql id="fieldWithAlias">
+		PRM.platform_role_id platformRoleId, PRM.platform_module_id platformModuleId
+	</sql>
+	
+	<sql id="condition">
+		<if test="platformRoleId!=null and platformRoleId!=''">
+			AND PRM.platform_role_id=#{platformRoleId}
+		</if>
+		<if test="platformModuleId!=null and platformModuleId!=''">
+			AND PRM.platform_module_id=#{platformModuleId}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="queryWhere">
+		<where>
+			<if test="platformRoleId!=null and platformRoleId!=''">
+				AND PRM.platform_role_id LIKE CONCAT('%', #{platformRoleId}, '%')
+			</if>
+			<if test="platformModuleId!=null and platformModuleId!=''">
+				AND PRM.platform_module_id LIKE CONCAT('%', #{platformModuleId}, '%')
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="dynamicSet">
+		<set>
+           <if test="platformRoleId!=null">
+				PRM.platform_role_id=#{platformRoleId}, 
+		   </if>
+           <if test="platformModuleId!=null">
+				PRM.platform_module_id=#{platformModuleId}, 
+		   </if>
+		</set>
+	</sql>
+	
+	<sql id="orderby">
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+	</sql>
+
+	<resultMap id="platformRoleModule" type="com.jinpaihushi.jphs.platform.model.PlatformRoleModule">
+		<result property="platformRoleId" column="platform_role_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="platformModuleId" column="platform_module_id" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<resultMap id="platformRoleModuleGlobal" type="com.jinpaihushi.jphs.platform.model.PlatformRoleModule">
+		<result property="platformRoleId" column="PRM_platform_role_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="platformModuleId" column="PRM_platform_module_id" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.jinpaihushi.jphs.platform.model.PlatformRoleModule">
+		INSERT INTO `PLATFORM_ROLE_MODULE`(
+			platform_role_id, platform_module_id
+		)VALUES(
+			#{platformRoleId,jdbcType=VARCHAR}, #{platformModuleId,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<insert id="inserts" useGeneratedKeys="false"
+		parameterType="list">
+        <![CDATA[
+        INSERT INTO `PLATFORM_ROLE_MODULE`(
+			platform_role_id, platform_module_id
+        )]]>
+       	VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.platformRoleId,jdbcType=VARCHAR}, #{item.platformModuleId,jdbcType=VARCHAR}
+			)
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById">
+		DELETE PRM FROM `PLATFORM_ROLE_MODULE` PRM WHERE PRM.ID = #{id} 
+	</delete>
+	
+	<update id="disableById">
+	    UPDATE `PLATFORM_ROLE_MODULE` PRM
+		SET 
+		PRM.STATUS = -1
+		WHERE PRM.ID = #{id}
+	</update>
+
+	<update id="update">
+		UPDATE `PLATFORM_ROLE_MODULE` PRM
+		<include refid="dynamicSet" /> 
+	    WHERE PRM.ID = #{id}
+	</update>
+
+	<select id="load" resultMap="platformRoleModule">
+		SELECT <include refid="field"/>
+		FROM `PLATFORM_ROLE_MODULE` PRM
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `PLATFORM_ROLE_MODULE` PRM
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="list" resultMap="platformRoleModule">
+		SELECT <include refid="field"/>
+		FROM `PLATFORM_ROLE_MODULE` PRM
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="query" resultMap="platformRoleModule">
+		SELECT <include refid="field"/>
+		FROM `PLATFORM_ROLE_MODULE` PRM
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadById" resultMap="platformRoleModule">
+		SELECT <include refid="field"/>
+		FROM `PLATFORM_ROLE_MODULE` PRM
+		WHERE PRM.ID = #{id}
+	</select>
+	
+</mapper>

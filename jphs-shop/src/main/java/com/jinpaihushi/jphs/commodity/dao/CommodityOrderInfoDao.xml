@@ -1,0 +1,716 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!-- author : yangsong date : 2017-08-09 09:07:25 version : 1.0 -->
+<mapper namespace="com.jinpaihushi.jphs.commodity.dao.CommodityOrderInfoDao">
+
+	<sql id="field">
+		COI.id, COI.commodity_order_id, COI.commodity_id, COI.user_id, 
+		COI.profit, COI.title, COI.old_price, COI.price, 
+		COI.commodity_price_name, COI.commodity_model, COI.number, COI.remark, 
+		COI.status, COI.create_time, COI.creator_id, COI.creator_name, 
+		COI.code, COI.commodity_price_id, COI.activity_promotion_id, COI.activity_promotion_price
+	</sql>
+
+	<sql id="fieldGlobal">
+		COI.id COI_id, COI.commodity_order_id COI_commodity_order_id, 
+		COI.commodity_id COI_commodity_id, COI.user_id COI_user_id, 
+		COI.profit COI_profit, COI.title COI_title, 
+		COI.old_price COI_old_price, COI.price COI_price, 
+		COI.commodity_price_name COI_commodity_price_name, COI.commodity_model COI_commodity_model, 
+		COI.number COI_number, COI.remark COI_remark, 
+		COI.status COI_status, COI.create_time COI_create_time, 
+		COI.creator_id COI_creator_id, COI.creator_name COI_creator_name, 
+		COI.code COI_code, COI.commodity_price_id COI_commodity_price_id, 
+		COI.activity_promotion_id COI_activity_promotion_id, COI.activity_promotion_price COI_activity_promotion_price
+	</sql>
+	
+	<sql id="fieldWithAlias">
+		COI.id id, COI.commodity_order_id commodityOrderId, 
+		COI.commodity_id commodityId, COI.user_id userId, 
+		COI.profit profit, COI.title title, 
+		COI.old_price oldPrice, COI.price price, 
+		COI.commodity_price_name commodityPriceName, COI.commodity_model commodityModel, 
+		COI.number number, COI.remark remark, 
+		COI.status status, COI.create_time createTime, 
+		COI.creator_id creatorId, COI.creator_name creatorName, 
+		COI.code code, COI.commodity_price_id commodityPriceId, 
+		COI.activity_promotion_id activityPromotionId, COI.activity_promotion_price activityPromotionPrice
+	</sql>
+	
+	<sql id="condition">
+		<if test="id!=null and id!=''">
+			AND COI.id=#{id}
+		</if>
+		<if test="commodityOrderId!=null and commodityOrderId!=''">
+			AND COI.commodity_order_id=#{commodityOrderId}
+		</if>
+		<if test="commodityId!=null and commodityId!=''">
+			AND COI.commodity_id=#{commodityId}
+		</if>
+		<if test="userId!=null and userId!=''">
+			AND COI.user_id=#{userId}
+		</if>
+		<if test="profit!=null">
+			AND COI.profit=#{profit}
+		</if>
+		<if test="title!=null and title!=''">
+			AND COI.title=#{title}
+		</if>
+		<if test="oldPrice!=null">
+			AND COI.old_price=#{oldPrice}
+		</if>
+		<if test="price!=null">
+			AND COI.price=#{price}
+		</if>
+		<if test="commodityPriceName!=null and commodityPriceName!=''">
+			AND COI.commodity_price_name=#{commodityPriceName}
+		</if>
+		<if test="commodityModel!=null and commodityModel!=''">
+			AND COI.commodity_model=#{commodityModel}
+		</if>
+		<if test="number!=null">
+			AND COI.number=#{number}
+		</if>
+		<if test="remark!=null and remark!=''">
+			AND COI.remark=#{remark}
+		</if>
+		<if test="status!=null">
+			AND COI.status=#{status}
+		</if>
+		<if test="createTime!=null">
+			AND COI.create_time=#{createTime}
+		</if>
+		<if test="creatorId!=null and creatorId!=''">
+			AND COI.creator_id=#{creatorId}
+		</if>
+		<if test="creatorName!=null and creatorName!=''">
+			AND COI.creator_name=#{creatorName}
+		</if>
+		<if test="code!=null and code!=''">
+			AND COI.code=#{code}
+		</if>
+		<if test="commodityPriceId!=null and commodityPriceId!=''">
+			AND COI.commodity_price_id=#{commodityPriceId}
+		</if>
+		<if test="activityPromotionId!=null and activityPromotionId!=''">
+			AND COI.activity_promotion_id=#{activityPromotionId}
+		</if>
+		<if test="activityPromotionPrice!=null">
+			AND COI.activity_promotion_price=#{activityPromotionPrice}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="queryWhere">
+		<where>
+			<if test="id!=null and id!=''">
+				AND COI.id LIKE CONCAT('%', #{id}, '%')
+			</if>
+			<if test="commodityOrderId!=null and commodityOrderId!=''">
+				AND COI.commodity_order_id LIKE CONCAT('%', #{commodityOrderId}, '%')
+			</if>
+			<if test="commodityId!=null and commodityId!=''">
+				AND COI.commodity_id LIKE CONCAT('%', #{commodityId}, '%')
+			</if>
+			<if test="userId!=null and userId!=''">
+				AND COI.user_id LIKE CONCAT('%', #{userId}, '%')
+			</if>
+			<if test="profit!=null">
+				AND COI.profit=#{profit}
+			</if>
+			<if test="title!=null and title!=''">
+				AND COI.title LIKE CONCAT('%', #{title}, '%')
+			</if>
+			<if test="oldPrice!=null">
+				AND COI.old_price=#{oldPrice}
+			</if>
+			<if test="price!=null">
+				AND COI.price=#{price}
+			</if>
+			<if test="commodityPriceName!=null and commodityPriceName!=''">
+				AND COI.commodity_price_name LIKE CONCAT('%', #{commodityPriceName}, '%')
+			</if>
+			<if test="commodityModel!=null and commodityModel!=''">
+				AND COI.commodity_model LIKE CONCAT('%', #{commodityModel}, '%')
+			</if>
+			<if test="number!=null">
+				AND COI.number=#{number}
+			</if>
+			<if test="remark!=null and remark!=''">
+				AND COI.remark LIKE CONCAT('%', #{remark}, '%')
+			</if>
+			<if test="status!=null">
+				AND COI.status=#{status}
+			</if>
+			<if test="createTime!=null">
+				AND COI.create_time=#{createTime}
+			</if>
+			<if test="creatorId!=null and creatorId!=''">
+				AND COI.creator_id LIKE CONCAT('%', #{creatorId}, '%')
+			</if>
+			<if test="creatorName!=null and creatorName!=''">
+				AND COI.creator_name LIKE CONCAT('%', #{creatorName}, '%')
+			</if>
+			<if test="code!=null and code!=''">
+				AND COI.code LIKE CONCAT('%', #{code}, '%')
+			</if>
+			<if test="commodityPriceId!=null and commodityPriceId!=''">
+				AND COI.commodity_price_id LIKE CONCAT('%', #{commodityPriceId}, '%')
+			</if>
+			<if test="activityPromotionId!=null and activityPromotionId!=''">
+				AND COI.activity_promotion_id LIKE CONCAT('%', #{activityPromotionId}, '%')
+			</if>
+			<if test="activityPromotionPrice!=null">
+				AND COI.activity_promotion_price=#{activityPromotionPrice}
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="dynamicSet">
+		<set>
+           <if test="id!=null">
+				COI.id=#{id}, 
+		   </if>
+           <if test="commodityOrderId!=null">
+				COI.commodity_order_id=#{commodityOrderId}, 
+		   </if>
+           <if test="commodityId!=null">
+				COI.commodity_id=#{commodityId}, 
+		   </if>
+           <if test="userId!=null">
+				COI.user_id=#{userId}, 
+		   </if>
+           <if test="profit!=null">
+				COI.profit=#{profit}, 
+		   </if>
+           <if test="title!=null">
+				COI.title=#{title}, 
+		   </if>
+           <if test="oldPrice!=null">
+				COI.old_price=#{oldPrice}, 
+		   </if>
+           <if test="price!=null">
+				COI.price=#{price}, 
+		   </if>
+           <if test="commodityPriceName!=null">
+				COI.commodity_price_name=#{commodityPriceName}, 
+		   </if>
+           <if test="commodityModel!=null">
+				COI.commodity_model=#{commodityModel}, 
+		   </if>
+           <if test="number!=null">
+				COI.number=#{number}, 
+		   </if>
+           <if test="remark!=null">
+				COI.remark=#{remark}, 
+		   </if>
+           <if test="status!=null">
+				COI.status=#{status}, 
+		   </if>
+           <if test="createTime!=null">
+				COI.create_time=#{createTime}, 
+		   </if>
+           <if test="creatorId!=null">
+				COI.creator_id=#{creatorId}, 
+		   </if>
+           <if test="creatorName!=null">
+				COI.creator_name=#{creatorName}, 
+		   </if>
+           <if test="code!=null">
+				COI.code=#{code}, 
+		   </if>
+           <if test="commodityPriceId!=null">
+				COI.commodity_price_id=#{commodityPriceId}, 
+		   </if>
+           <if test="activityPromotionId!=null">
+				COI.activity_promotion_id=#{activityPromotionId}, 
+		   </if>
+           <if test="activityPromotionPrice!=null">
+				COI.activity_promotion_price=#{activityPromotionPrice}, 
+		   </if>
+		</set>
+	</sql>
+	
+	<sql id="orderby">
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+	</sql>
+
+	<resultMap id="commodityOrderInfo" type="com.jinpaihushi.jphs.commodity.model.CommodityOrderInfo">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="commodityOrderId" column="commodity_order_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="commodityId" column="commodity_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="userId" column="user_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="profit" column="profit" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="title" column="title" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="oldPrice" column="old_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="price" column="price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="commodityPriceName" column="commodity_price_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="commodityModel" column="commodity_model" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="number" column="number" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="remark" column="remark" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="creator_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="code" column="code" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="commodityPriceId" column="commodity_price_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="activityPromotionId" column="activity_promotion_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="activityPromotionPrice" column="activity_promotion_price" javaType="Double" jdbcType="DECIMAL"></result>
+	</resultMap>
+	
+	<resultMap id="commodityOrderInfoGlobal" type="com.jinpaihushi.jphs.commodity.model.CommodityOrderInfo">
+		<result property="id" column="COI_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="commodityOrderId" column="COI_commodity_order_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="commodityId" column="COI_commodity_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="userId" column="COI_user_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="profit" column="COI_profit" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="title" column="COI_title" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="oldPrice" column="COI_old_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="price" column="COI_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="commodityPriceName" column="COI_commodity_price_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="commodityModel" column="COI_commodity_model" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="number" column="COI_number" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="remark" column="COI_remark" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="COI_status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="COI_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="COI_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="COI_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="code" column="COI_code" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="commodityPriceId" column="COI_commodity_price_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="activityPromotionId" column="COI_activity_promotion_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="activityPromotionPrice" column="COI_activity_promotion_price" javaType="Double" jdbcType="DECIMAL"></result>
+	</resultMap>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.jinpaihushi.jphs.commodity.model.CommodityOrderInfo">
+		INSERT INTO `COMMODITY_ORDER_INFO`(
+			id, commodity_order_id, 
+			commodity_id, user_id, 
+			profit, title, 
+			old_price, price, 
+			commodity_price_name, commodity_model, 
+			number, remark, 
+			status, create_time, 
+			creator_id, creator_name, 
+			code, commodity_price_id, 
+			activity_promotion_id, activity_promotion_price
+		)VALUES(
+			#{id,jdbcType=VARCHAR}, #{commodityOrderId,jdbcType=VARCHAR}, 
+			#{commodityId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
+			#{profit,jdbcType=DECIMAL}, #{title,jdbcType=VARCHAR}, 
+			#{oldPrice,jdbcType=DECIMAL}, #{price,jdbcType=DECIMAL}, 
+			#{commodityPriceName,jdbcType=VARCHAR}, #{commodityModel,jdbcType=VARCHAR}, 
+			#{number,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+			#{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+			#{creatorId,jdbcType=VARCHAR}, #{creatorName,jdbcType=VARCHAR}, 
+			#{code,jdbcType=VARCHAR}, #{commodityPriceId,jdbcType=VARCHAR}, 
+			#{activityPromotionId,jdbcType=VARCHAR}, #{activityPromotionPrice,jdbcType=DECIMAL}
+		)
+	</insert>
+	
+	
+	<resultMap id="commoditySaleByNurse"
+		type="com.jinpaihushi.jphs.commodity.model.CommoditySaleByNurse">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="profit" column="profit" javaType="Double"
+			jdbcType="DECIMAL"></result>
+		<result property="title" column="title" javaType="String"
+			jdbcType="VARCHAR"></result>
+		<result property="price" column="price" javaType="Double"
+			jdbcType="DECIMAL"></result>
+		<result property="comId" column="comId"
+			javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="status" javaType="Integer"
+			jdbcType="INTEGER"></result>
+		<result property="url" column="url" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+
+	<insert id="inserts" useGeneratedKeys="false"
+		parameterType="list">
+        <![CDATA[
+        INSERT INTO `COMMODITY_ORDER_INFO`(
+			id, commodity_order_id, 
+			commodity_id, user_id, 
+			profit, title, 
+			old_price, price, 
+			commodity_price_name, commodity_model, 
+			number, remark, 
+			status, create_time, 
+			creator_id, creator_name, 
+			code, commodity_price_id, 
+			activity_promotion_id, activity_promotion_price
+        )]]>
+       	VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id,jdbcType=VARCHAR}, #{item.commodityOrderId,jdbcType=VARCHAR}, 
+			#{item.commodityId,jdbcType=VARCHAR}, #{item.userId,jdbcType=VARCHAR}, 
+			#{item.profit,jdbcType=DECIMAL}, #{item.title,jdbcType=VARCHAR}, 
+			#{item.oldPrice,jdbcType=DECIMAL}, #{item.price,jdbcType=DECIMAL}, 
+			#{item.commodityPriceName,jdbcType=VARCHAR}, #{item.commodityModel,jdbcType=VARCHAR}, 
+			#{item.number,jdbcType=INTEGER}, #{item.remark,jdbcType=VARCHAR}, 
+			#{item.status,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP}, 
+			#{item.creatorId,jdbcType=VARCHAR}, #{item.creatorName,jdbcType=VARCHAR}, 
+			#{item.code,jdbcType=VARCHAR}, #{item.commodityPriceId,jdbcType=VARCHAR}, 
+			#{item.activityPromotionId,jdbcType=VARCHAR}, #{item.activityPromotionPrice,jdbcType=DECIMAL}
+			)
+		</foreach>
+	</insert>
+
+	<delete id="deleteById">
+		DELETE COI FROM `COMMODITY_ORDER_INFO` COI WHERE COI.ID = #{id} 
+	</delete>
+	
+	<update id="disableById">
+	    UPDATE `COMMODITY_ORDER_INFO` COI
+		SET 
+		COI.STATUS = -1
+		WHERE COI.ID = #{id}
+	</update>
+
+	<update id="update">
+		UPDATE `COMMODITY_ORDER_INFO` COI
+		<include refid="dynamicSet" /> 
+	    WHERE COI.ID = #{id}
+	</update>
+
+	<select id="load" resultMap="commodityOrderInfo">
+		SELECT <include refid="field"/>
+		FROM `COMMODITY_ORDER_INFO` COI
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `COMMODITY_ORDER_INFO` COI
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="list" resultMap="commodityOrderInfo">
+		SELECT <include refid="field"/>
+		FROM `COMMODITY_ORDER_INFO` COI
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="query" resultMap="commodityOrderInfo">
+		SELECT <include refid="field"/>
+		FROM `COMMODITY_ORDER_INFO` COI
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadById" resultMap="commodityOrderInfo">
+		SELECT <include refid="field"/>
+		FROM `COMMODITY_ORDER_INFO` COI
+		WHERE COI.ID = #{id}
+	</select>
+
+	<update id="updateByOrderNo">
+		UPDATE
+		commodity_order_info coi
+		SET
+		coi.status =
+		#{status}
+		WHERE coi.commodity_order_id = #{commodityOrderId}
+	</update>
+
+	<select id="getAllNumber" resultType="java.lang.Integer">
+		SELECT
+		SUM(coi.number)
+		FROM
+		commodity_order_info coi
+		WHERE coi.commodity_order_id = #{id}
+	</select>
+
+	<select id="getAllNumberByCommoditById" resultType="java.lang.Integer">
+		SELECT
+		SUM(coi.number)
+		FROM commodity_order_info coi
+		WHERE coi.commodity_id =
+		#{commodityId}
+	</select>
+
+	<select id="getMoneyByNurse" resultType="java.lang.Double">
+		SELECT
+		SUM(coi.profit)
+		FROM commodity_order_info coi
+		WHERE coi.commodity_id = #{commodityId}
+		AND coi.user_id = #{userId}
+	</select>
+
+	<select id="getListByCoId" resultMap="commodityOrderInfo">
+		SELECT
+		coi.title,
+		coi.price,
+		coi.number,
+		coi.user_id
+		FROM
+		commodity_order_info coi
+		WHERE coi.commodity_order_id =
+		#{coId};
+	</select>
+
+
+
+	<select id="judgeProfit" resultType="java.util.HashMap">
+		SELECT
+		coi.id,
+		coi.commodity_id comId,
+		coi.`status`,
+		coi.profit,
+		coi.price,
+		coi.title,
+		ci.url
+		FROM
+		commodity_order_info coi
+		LEFT JOIN
+		commodity_images ci ON (
+		coi.commodity_id = ci.source_id
+		)
+		WHERE
+		coi.user_id = ${userId}
+		AND ci.type = 1
+		<if test="status==-2">
+			AND coi.`status` = -2
+		</if>
+		<if test="status==0">
+			AND coi.`status` in (0 ,1)
+		</if>
+		<if test="status==2">
+			AND coi.`status` = 2
+		</if>
+		ORDER BY coi.create_time DESC
+	</select>
+
+	<update id="confimOrder">
+		UPDATE
+		commodity_order_info coi
+		SET coi.`status` = 2
+		WHERE coi.id = #{id}
+	</update>
+
+
+	<select id="getList" resultMap="commodityOrderInfo">
+		SELECT
+		ci.url,
+		coi.id,
+		coi.commodity_id,
+		coi.title,
+		coi.commodity_price_name,
+		coi.commodity_model,
+		coi.profit,
+		coi.price,
+		coi.number,
+		u.`name` userName,
+		coi.remark,
+		coi.code,
+		coi.`status`,
+		coi.user_id
+		FROM
+		commodity_order_info coi
+		LEFT JOIN commodity_images ci ON (ci.source_id = coi.commodity_id)
+		LEFT JOIN `user` u ON  (u.id = coi.user_id)
+		WHERE coi.commodity_order_id = #{coId}
+		AND ci.type = 1
+		 
+	</select>
+<resultMap id="commodityOrderInfoList" type="com.jinpaihushi.jphs.commodity.model.CommodityOrderInfo">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="commodityOrderId" column="commodity_order_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="commodityId" column="commodity_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="userId" column="user_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="profit" column="profit" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="title" column="title" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="oldPrice" column="old_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="price" column="price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="commodityPriceName" column="commodity_price_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="commodityModel" column="commodity_model" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="number" column="number" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="remark" column="remark" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="creator_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="code" column="code" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="commodityPriceId" column="commodity_price_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="activityPromotionId" column="activity_promotion_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="activityPromotionPrice" column="activity_promotion_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="imagesUrl" column="images_url" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="apType" column="ap_type" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="apPrice" column="ap_price" javaType="Double" jdbcType="DECIMAL"></result>
+	</resultMap>
+	<select id="getOrderInfo" resultMap="commodityOrderInfoList">
+		SELECT
+		coi.*,
+		CASE
+		WHEN ap.type = '1' THEN
+			'下单立减'
+		WHEN ap.type = '2' THEN
+			'首单立减'
+		WHEN ap.type = '3' THEN
+			'第二单立减'
+		ELSE
+			0
+		END ap_type,
+		 CASE
+		WHEN ap.price IS NOT NULL THEN
+			ap.price
+		WHEN ap.price != '' THEN
+			ap.price
+		ELSE
+			0
+		END ap_price,
+		 IFNULL(si.url, '') images_url,
+		ci.url 
+		FROM
+		commodity_order_info coi
+		LEFT JOIN commodity_images ci ON (coi.commodity_id = ci.source_id)
+		LEFT JOIN `activity_promotion` ap ON coi.activity_promotion_id = ap.id 
+		LEFT JOIN service_images si ON ap.id = si.source_id 
+		WHERE
+		coi.commodity_order_id = #{coId}
+		AND ci.type=1
+		 
+	</select>
+
+
+	<select id="getConfirmList" resultMap="commodityOrderInfo">
+		SELECT
+		coi.id,
+		coi.commodity_order_id,
+		coi.`status`
+		FROM
+		`commodity_order_info` coi
+		WHERE coi.commodity_order_id = #{comId}
+
+	</select>
+	
+	<select id="getCountByOrderNo" resultType="java.lang.Integer">
+		SELECT COUNT(COI.id) FROM `COMMODITY_ORDER_INFO` COI
+		LEFT JOIN commodity_order co ON(co.id = COI.commodity_order_id)
+		where co.order_no LIKE CONCAT('%', #{orderNo}, '%') ;
+	</select>
+	
+	<select id="alreadyRefund" resultMap="commoditySaleByNurse">
+		SELECT
+			coi.id,
+			coi.commodity_id comId,
+			coi.`status`,
+			coi.profit,
+			coi.price,
+			coi.title,
+			ci.url
+		FROM
+			commodity_return cr
+		LEFT JOIN commodity_order_info coi ON (cr.commodity_order_info_id = coi.id)
+		LEFT JOIN commodity_images ci ON (
+			coi.commodity_id = ci.source_id
+		)
+		WHERE
+			coi.user_id = #{userId}
+		AND ci.type = 1
+		AND cr.`status` = 2
+		ORDER BY
+			coi.create_time 
+
+	</select>
+	
+		<select id="alreadyBalance" resultMap="commoditySaleByNurse">
+		SELECT
+			coi.id,
+			coi.commodity_id comId,
+			coi.`status`,
+			coi.profit,
+			coi.price,
+			coi.title,
+			ci.url
+		FROM
+			`transaction` t
+		LEFT JOIN commodity_order_info coi ON (t.order_id = coi.id)
+		LEFT JOIN commodity_images ci ON (
+			coi.commodity_id = ci.source_id
+		)
+		WHERE
+			t.creator_id = #{userId}
+		AND t.type = 2
+		AND t.operate = 4
+		AND t.operate_source = 1
+		AND ci.type = 1
+		ORDER BY
+			coi.create_time
+
+	</select>
+	
+	<select id="turnOver" resultMap="commoditySaleByNurse">
+		SELECT
+			coi.id,
+			coi.commodity_id comId,
+			coi.`status`,
+			coi.profit,
+			coi.price,
+			coi.title,
+			ci.url,coi.create_time
+		FROM
+			commodity_order_info coi
+		LEFT JOIN commodity_images ci ON (
+			coi.commodity_id = ci.source_id
+		)
+		LEFT JOIN commodity_order co ON (
+			coi.commodity_order_id = co.id
+		)
+		WHERE
+			coi.user_id = #{userId}
+		AND co.`schedule` = 4
+		AND ci.type = 1
+		AND coi.id NOT IN (
+			SELECT
+				t.order_id 
+			FROM
+				`transaction` t
+		 WHERE t.operate = 4
+		 and t.type=2
+		)
+		AND coi.id NOT IN(
+			SELECT 
+				cr.commodity_order_info_id
+			FROM commodity_return cr 
+		where cr.status = 2
+		)
+		 ORDER BY
+			coi.create_time
+
+	</select>
+	
+	<select id="all" resultMap="commoditySaleByNurse">
+		SELECT
+			coi.id,
+			coi.commodity_id comId,
+			coi.`status`,
+			coi.profit,
+			coi.price,
+			coi.title,
+			ci.url
+		FROM
+			commodity_order_info coi
+		LEFT JOIN commodity_images ci ON (
+			coi.commodity_id = ci.source_id
+		)
+		LEFT JOIN commodity_order co 
+		ON (coi.commodity_order_id = co.id)
+		WHERE coi.user_id = #{userId}
+		AND ci.type = 1
+		ORDER BY
+			coi.create_time
+
+	</select>
+	
+</mapper>

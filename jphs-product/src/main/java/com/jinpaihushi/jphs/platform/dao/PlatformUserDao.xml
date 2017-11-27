@@ -1,0 +1,392 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	wangwenteng
+	date	:	2017-11-01 16:25:41
+	version	:	1.0
+-->
+<mapper namespace="com.jinpaihushi.jphs.platform.dao.PlatformUserDao">
+	
+	<sql id="field">
+		PU.id, PU.platform_id, PU.login_name, PU.login_pwd, 
+		PU.user_name, PU.user_phone, PU.user_email, PU.create_time, 
+		PU.creator_id, PU.creator_name, PU.status, PU.user_login_time, 
+		PU.user_last_time
+	</sql>
+
+	<sql id="fieldGlobal">
+		PU.id PU_id, PU.platform_id PU_platform_id, 
+		PU.login_name PU_login_name, PU.login_pwd PU_login_pwd, 
+		PU.user_name PU_user_name, PU.user_phone PU_user_phone, 
+		PU.user_email PU_user_email, PU.create_time PU_create_time, 
+		PU.creator_id PU_creator_id, PU.creator_name PU_creator_name, 
+		PU.status PU_status, PU.user_login_time PU_user_login_time, 
+		PU.user_last_time PU_user_last_time
+	</sql>
+	
+	<sql id="fieldWithAlias">
+		PU.id id, PU.platform_id platformId, 
+		PU.login_name loginName, PU.login_pwd loginPwd, 
+		PU.user_name userName, PU.user_phone userPhone, 
+		PU.user_email userEmail, PU.create_time createTime, 
+		PU.creator_id creatorId, PU.creator_name creatorName, 
+		PU.status status, PU.user_login_time userLoginTime, 
+		PU.user_last_time userLastTime
+	</sql>
+	
+	<sql id="condition">
+		<if test="id!=null and id!=''">
+			AND PU.id=#{id}
+		</if>
+		<if test="platformId!=null and platformId!=''">
+			AND PU.platform_id=#{platformId}
+		</if>
+		<if test="loginName!=null and loginName!=''">
+			AND PU.login_name=#{loginName}
+		</if>
+		<if test="loginPwd!=null and loginPwd!=''">
+			AND PU.login_pwd=#{loginPwd}
+		</if>
+		<if test="userName!=null and userName!=''">
+			AND PU.user_name=#{userName}
+		</if>
+		<if test="userPhone!=null and userPhone!=''">
+			AND PU.user_phone=#{userPhone}
+		</if>
+		<if test="userEmail!=null and userEmail!=''">
+			AND PU.user_email=#{userEmail}
+		</if>
+		<if test="createTime!=null">
+			AND PU.create_time=#{createTime}
+		</if>
+		<if test="creatorId!=null and creatorId!=''">
+			AND PU.creator_id=#{creatorId}
+		</if>
+		<if test="creatorName!=null and creatorName!=''">
+			AND PU.creator_name=#{creatorName}
+		</if>
+		<if test="status!=null">
+			AND PU.status=#{status}
+		</if>
+		<if test="userLoginTime!=null">
+			AND PU.user_login_time=#{userLoginTime}
+		</if>
+		<if test="userLastTime!=null">
+			AND PU.user_last_time=#{userLastTime}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="queryWhere">
+		<where>
+			<if test="id!=null and id!=''">
+				AND PU.id LIKE CONCAT('%', #{id}, '%')
+			</if>
+			<if test="platformId!=null and platformId!=''">
+				AND PU.platform_id LIKE CONCAT('%', #{platformId}, '%')
+			</if>
+			<if test="loginName!=null and loginName!=''">
+				AND PU.login_name LIKE CONCAT('%', #{loginName}, '%')
+			</if>
+			<if test="loginPwd!=null and loginPwd!=''">
+				AND PU.login_pwd LIKE CONCAT('%', #{loginPwd}, '%')
+			</if>
+			<if test="userName!=null and userName!=''">
+				AND PU.user_name LIKE CONCAT('%', #{userName}, '%')
+			</if>
+			<if test="userPhone!=null and userPhone!=''">
+				AND PU.user_phone LIKE CONCAT('%', #{userPhone}, '%')
+			</if>
+			<if test="userEmail!=null and userEmail!=''">
+				AND PU.user_email LIKE CONCAT('%', #{userEmail}, '%')
+			</if>
+			<if test="createTime!=null">
+				AND PU.create_time=#{createTime}
+			</if>
+			<if test="creatorId!=null and creatorId!=''">
+				AND PU.creator_id LIKE CONCAT('%', #{creatorId}, '%')
+			</if>
+			<if test="creatorName!=null and creatorName!=''">
+				AND PU.creator_name LIKE CONCAT('%', #{creatorName}, '%')
+			</if>
+			<if test="status!=null">
+				AND PU.status=#{status}
+			</if>
+			<if test="userLoginTime!=null">
+				AND PU.user_login_time=#{userLoginTime}
+			</if>
+			<if test="userLastTime!=null">
+				AND PU.user_last_time=#{userLastTime}
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="dynamicSet">
+		<set>
+           <if test="id!=null">
+				PU.id=#{id}, 
+		   </if>
+           <if test="platformId!=null">
+				PU.platform_id=#{platformId}, 
+		   </if>
+           <if test="loginName!=null">
+				PU.login_name=#{loginName}, 
+		   </if>
+           <if test="loginPwd!=null">
+				PU.login_pwd=#{loginPwd}, 
+		   </if>
+           <if test="userName!=null">
+				PU.user_name=#{userName}, 
+		   </if>
+           <if test="userPhone!=null">
+				PU.user_phone=#{userPhone}, 
+		   </if>
+           <if test="userEmail!=null">
+				PU.user_email=#{userEmail}, 
+		   </if>
+           <if test="createTime!=null">
+				PU.create_time=#{createTime}, 
+		   </if>
+           <if test="creatorId!=null">
+				PU.creator_id=#{creatorId}, 
+		   </if>
+           <if test="creatorName!=null">
+				PU.creator_name=#{creatorName}, 
+		   </if>
+           <if test="status!=null">
+				PU.status=#{status}, 
+		   </if>
+           <if test="userLoginTime!=null">
+				PU.user_login_time=#{userLoginTime}, 
+		   </if>
+           <if test="userLastTime!=null">
+				PU.user_last_time=#{userLastTime}, 
+		   </if>
+		</set>
+	</sql>
+	
+	<sql id="orderby">
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+	</sql>
+
+	<resultMap id="platformUser" type="com.jinpaihushi.jphs.platform.model.PlatformUser">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="platformId" column="platform_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="loginName" column="login_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="loginPwd" column="login_pwd" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="userName" column="user_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="userPhone" column="user_phone" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="userEmail" column="user_email" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="createTime" column="create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="creator_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="userLoginTime" column="user_login_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="userLastTime" column="user_last_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+	</resultMap>
+	
+	<resultMap id="platformUserGlobal" type="com.jinpaihushi.jphs.platform.model.PlatformUser">
+		<result property="id" column="PU_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="platformId" column="PU_platform_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="loginName" column="PU_login_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="loginPwd" column="PU_login_pwd" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="userName" column="PU_user_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="userPhone" column="PU_user_phone" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="userEmail" column="PU_user_email" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="createTime" column="PU_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="PU_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="PU_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="PU_status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="userLoginTime" column="PU_user_login_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="userLastTime" column="PU_user_last_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+	</resultMap>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.jinpaihushi.jphs.platform.model.PlatformUser">
+		INSERT INTO `PLATFORM_USER`(
+			id, platform_id, 
+			login_name, login_pwd, 
+			user_name, user_phone, 
+			user_email, create_time, 
+			creator_id, creator_name, 
+			status, user_login_time, 
+			user_last_time
+		)VALUES(
+			#{id,jdbcType=VARCHAR}, #{platformId,jdbcType=VARCHAR}, 
+			#{loginName,jdbcType=VARCHAR}, #{loginPwd,jdbcType=VARCHAR}, 
+			#{userName,jdbcType=VARCHAR}, #{userPhone,jdbcType=VARCHAR}, 
+			#{userEmail,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+			#{creatorId,jdbcType=VARCHAR}, #{creatorName,jdbcType=VARCHAR}, 
+			#{status,jdbcType=INTEGER}, #{userLoginTime,jdbcType=TIMESTAMP}, 
+			#{userLastTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<insert id="inserts" useGeneratedKeys="false"
+		parameterType="list">
+        <![CDATA[
+        INSERT INTO `PLATFORM_USER`(
+			id, platform_id, 
+			login_name, login_pwd, 
+			user_name, user_phone, 
+			user_email, create_time, 
+			creator_id, creator_name, 
+			status, user_login_time, 
+			user_last_time
+        )]]>
+       	VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id,jdbcType=VARCHAR}, #{item.platformId,jdbcType=VARCHAR}, 
+			#{item.loginName,jdbcType=VARCHAR}, #{item.loginPwd,jdbcType=VARCHAR}, 
+			#{item.userName,jdbcType=VARCHAR}, #{item.userPhone,jdbcType=VARCHAR}, 
+			#{item.userEmail,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
+			#{item.creatorId,jdbcType=VARCHAR}, #{item.creatorName,jdbcType=VARCHAR}, 
+			#{item.status,jdbcType=INTEGER}, #{item.userLoginTime,jdbcType=TIMESTAMP}, 
+			#{item.userLastTime,jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById">
+		DELETE PU FROM `PLATFORM_USER` PU WHERE PU.ID = #{id} 
+	</delete>
+	
+	<update id="disableById">
+	    UPDATE `PLATFORM_USER` PU
+		SET 
+		PU.STATUS = -1
+		WHERE PU.ID = #{id}
+	</update>
+
+	<update id="update">
+		UPDATE `PLATFORM_USER` PU
+		<include refid="dynamicSet" /> 
+	    WHERE PU.ID = #{id}
+	</update>
+
+	<select id="load" resultMap="platformUser">
+		SELECT <include refid="field"/>
+		FROM `PLATFORM_USER` PU
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `PLATFORM_USER` PU
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="list" resultMap="platformUser">
+		SELECT <include refid="field"/>
+		FROM `PLATFORM_USER` PU
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="query" resultMap="platformUser">
+		SELECT <include refid="field"/>
+		FROM `PLATFORM_USER` PU
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadById" resultMap="platformUser">
+		SELECT <include refid="field"/>
+		FROM `PLATFORM_USER` PU
+		WHERE PU.ID = #{id}
+	</select>
+	<resultMap id="platformUserDescribe" type="com.jinpaihushi.jphs.platform.model.PlatformUser">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="platformId" column="platform_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="loginName" column="login_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="loginPwd" column="login_pwd" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="userName" column="user_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="userPhone" column="user_phone" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="userEmail" column="user_email" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="createTime" column="create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="creator_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="userLoginTime" column="user_login_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="userLastTime" column="user_last_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<collection property="roleList"
+			ofType="com.jinpaihushi.jphs.platform.model.PlatformRole">
+			<result property="id" column="role_id" javaType="String"
+				jdbcType="VARCHAR"></result>
+			<result property="name" column="role_name" javaType="String"
+				jdbcType="VARCHAR"></result>
+			<result property="describe" column="role_describe" javaType="String"
+				jdbcType="VARCHAR"></result>
+			<result property="status" column="role_status" javaType="Integer"
+				jdbcType="INTEGER"></result>
+			<result property="createTime" column="role_create_time"
+				javaType="Date" jdbcType="TIMESTAMP"></result>
+			<collection property="moduleList"
+				ofType="com.jinpaihushi.jphs.platform.model.PlatformModel">
+				<result property="id" column="module_id" javaType="String"
+					jdbcType="VARCHAR"></result>
+				<result property="name" column="module_name" javaType="String"
+					jdbcType="VARCHAR"></result>
+				<result property="status" column="module_status" javaType="Integer"
+					jdbcType="INTEGER"></result>
+				<result property="url" column="module_url" javaType="String"
+					jdbcType="VARCHAR"></result>
+				<result property="parentId" column="module_parent_id"
+					javaType="String" jdbcType="VARCHAR"></result>
+				<result property="text" column="module_name" javaType="String"
+					jdbcType="VARCHAR"></result>
+				<result property="createTime" column="module_create_time"
+					javaType="Date" jdbcType="TIMESTAMP"></result>
+			</collection>
+		</collection>
+	</resultMap>
+	<select id="getUserRoleModule" resultMap="platformUserDescribe">
+		SELECT
+				pu.id,
+				pu.login_name,
+				pu.login_pwd,
+				pu.user_name,
+				pu.user_email,
+				pu.user_phone,
+				pu.create_time,
+				pu.creator_id,
+				pu.creator_name,
+				pu.`status`,
+				pr.id
+				role_id,
+				pr.`name` role_name,
+				pr.`describe` role_describe,
+				pr.create_time role_create_time,
+				pr.`status` role_status,
+				pm.id
+				module_id,
+				pm.`name` module_name,
+				pm.parent_id module_parent_id,
+				pm.url
+				module_url,
+				pm.create_time module_create_time,
+				pm.`status` module_status
+		FROM
+			platform_user pu
+		LEFT JOIN platform_user_role pur ON pu.id = pur.platform_user_id
+		LEFT JOIN platform_role pr ON pur.platform_role_id = pr.id
+		
+		LEFT JOIN platform_role_module prm ON pr.id = prm.platform_role_id
+		LEFT JOIN platform_model pm ON prm.platform_module_id = pm.id
+		<where>
+			<if test="id!=null and id!=''">
+				AND pu.id = #{id}
+			</if>
+			AND pu.`status` =0 AND pr.`status`=0 AND pm.`status`=0
+		</where>
+	</select>
+</mapper>

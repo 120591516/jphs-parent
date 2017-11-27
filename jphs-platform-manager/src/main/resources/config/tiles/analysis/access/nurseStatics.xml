@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+	
+	<definition name="nurse.statistics.properties" extends="default.layout">
+		<put-attribute type="string" name="title" value="注册量统计" />
+		<put-attribute type="template" name="left"
+			value="/WEB-INF/view/statistics/left.jsp" />
+		<put-attribute type="template" name="body"
+			value="/WEB-INF/view/statistics/nurse/properties.jsp" />
+		<put-list-attribute name="css" inherit="true">
+			<add-attribute value="/static/css/access/log/access.css" />					
+		</put-list-attribute>
+		<put-list-attribute name="scripts" inherit="true">
+			<add-attribute value="/static/js/analysis/echarts_pie.js" />					
+			<add-attribute value="/static/js/analysis/nurse/properties.js" />					
+		</put-list-attribute>
+	</definition>
+	<definition name="nurse.statistics.serviceRank" extends="default.layout">
+		<put-attribute type="string" name="title" value="注册量统计" />
+		<put-attribute type="template" name="left"
+			value="/WEB-INF/view/statistics/left.jsp" />
+		<put-attribute type="template" name="body"
+			value="/WEB-INF/view/statistics/nurse/server/index.jsp" />
+		<put-list-attribute name="css" inherit="true">
+			<add-attribute value="/static/css/access/log/access.css" />					
+		</put-list-attribute>
+		<put-list-attribute name="scripts" inherit="true">
+			<add-attribute value="/static/js/analysis/yearSatatis.js" />
+			<add-attribute value="/static/js/analysis/nurse/serviceRanking.js" />					
+			<add-attribute value="/static/js/analysis/echarts_bar.js" />					
+		</put-list-attribute>
+	</definition>
+	<definition name="nurse.statistics.serviceRankByYear" extends="empty.layout">
+		<put-attribute type="string" name="title" value="注册量统计" />
+		<put-attribute type="template" name="body"
+			value="/WEB-INF/view/statistics/nurse/server/form.jsp" />
+		<put-list-attribute name="css" inherit="true">
+			<add-attribute value="/static/css/access/log/access.css" />					
+		</put-list-attribute>
+		<put-list-attribute name="scripts" inherit="true">
+			<add-attribute value="/static/js/analysis/yearSatatis.js" />
+			<add-attribute value="/static/js/analysis/nurse/serviceRanking.js" />					
+			<add-attribute value="/static/js/analysis/echarts_bar.js" />					
+		</put-list-attribute>
+	</definition>
+	<definition name="nurse.statistics.orderRank" extends="default.layout">
+		<put-attribute type="string" name="title" value="注册量统计" />
+		<put-attribute type="template" name="left"
+			value="/WEB-INF/view/statistics/left.jsp" />
+		<put-attribute type="template" name="body"
+			value="/WEB-INF/view/statistics/nurse/order/index.jsp" />
+		<put-list-attribute name="css" inherit="true">
+			<add-attribute value="/static/css/access/log/access.css" />					
+		</put-list-attribute>
+		<put-list-attribute name="scripts" inherit="true">
+			<add-attribute value="/static/js/analysis/nurse/yearSatatis.js" />
+			<add-attribute value="/static/js/analysis/nurse/orderRanking.js" />					
+			<add-attribute value="/static/js/analysis/echarts_bar.js" />					
+		</put-list-attribute>
+	</definition>
+	<definition name="nurse.statistics.orderRankSearch" extends="empty.layout">
+		<put-attribute type="string" name="title" value="注册量统计" />
+		<put-attribute type="template" name="body"
+			value="/WEB-INF/view/statistics/nurse/order/search.jsp" />
+		<put-list-attribute name="css" inherit="true">
+			<add-attribute value="/static/css/access/log/access.css" />					
+		</put-list-attribute>
+		<put-list-attribute name="scripts" inherit="true">
+			<add-attribute value="/static/js/analysis/nurse/yearSatatis.js" />
+			<add-attribute value="/static/js/analysis/nurse/orderRanking.js" />					
+			<add-attribute value="/static/js/analysis/echarts_bar.js" />					
+		</put-list-attribute>
+	</definition>
+</tiles-definitions>

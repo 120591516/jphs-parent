@@ -1,0 +1,205 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	wangwenteng
+	date	:	2017-11-01 16:25:41
+	version	:	1.0
+-->
+<mapper namespace="com.jinpaihushi.jphs.platform.dao.PlatformRoleDao">
+	
+	<sql id="field">
+		PR.id, PR.platform_id, PR.name, PR.describe, 
+		PR.status, PR.create_time
+	</sql>
+
+	<sql id="fieldGlobal">
+		PR.id PR_id, PR.platform_id PR_platform_id, 
+		PR.name PR_name, PR.describe PR_describe, 
+		PR.status PR_status, PR.create_time PR_create_time
+	</sql>
+	
+	<sql id="fieldWithAlias">
+		PR.id id, PR.platform_id platformId, 
+		PR.name name, PR.describe describe, 
+		PR.status status, PR.create_time createTime
+	</sql>
+	
+	<sql id="condition">
+		<if test="id!=null and id!=''">
+			AND PR.id=#{id}
+		</if>
+		<if test="platformId!=null and platformId!=''">
+			AND PR.platform_id=#{platformId}
+		</if>
+		<if test="name!=null and name!=''">
+			AND PR.name=#{name}
+		</if>
+		<if test="describe!=null and describe!=''">
+			AND PR.describe=#{describe}
+		</if>
+		<if test="status!=null">
+			AND PR.status=#{status}
+		</if>
+		<if test="createTime!=null">
+			AND PR.create_time=#{createTime}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="queryWhere">
+		<where>
+			<if test="id!=null and id!=''">
+				AND PR.id LIKE CONCAT('%', #{id}, '%')
+			</if>
+			<if test="platformId!=null and platformId!=''">
+				AND PR.platform_id LIKE CONCAT('%', #{platformId}, '%')
+			</if>
+			<if test="name!=null and name!=''">
+				AND PR.name LIKE CONCAT('%', #{name}, '%')
+			</if>
+			<if test="describe!=null and describe!=''">
+				AND PR.describe LIKE CONCAT('%', #{describe}, '%')
+			</if>
+			<if test="status!=null">
+				AND PR.status=#{status}
+			</if>
+			<if test="createTime!=null">
+				AND PR.create_time=#{createTime}
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="dynamicSet">
+		<set>
+           <if test="id!=null">
+				PR.id=#{id}, 
+		   </if>
+           <if test="platformId!=null">
+				PR.platform_id=#{platformId}, 
+		   </if>
+           <if test="name!=null">
+				PR.name=#{name}, 
+		   </if>
+           <if test="describe!=null">
+				PR.describe=#{describe}, 
+		   </if>
+           <if test="status!=null">
+				PR.status=#{status}, 
+		   </if>
+           <if test="createTime!=null">
+				PR.create_time=#{createTime}, 
+		   </if>
+		</set>
+	</sql>
+	
+	<sql id="orderby">
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+	</sql>
+
+	<resultMap id="platformRole" type="com.jinpaihushi.jphs.platform.model.PlatformRole">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="platformId" column="platform_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="name" column="name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="describe" column="describe" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+	</resultMap>
+	
+	<resultMap id="platformRoleGlobal" type="com.jinpaihushi.jphs.platform.model.PlatformRole">
+		<result property="id" column="PR_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="platformId" column="PR_platform_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="name" column="PR_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="describe" column="PR_describe" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="PR_status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="PR_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+	</resultMap>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.jinpaihushi.jphs.platform.model.PlatformRole">
+		INSERT INTO `PLATFORM_ROLE`(
+			id, platform_id, 
+			name, describe, 
+			status, create_time
+		)VALUES(
+			#{id,jdbcType=VARCHAR}, #{platformId,jdbcType=VARCHAR}, 
+			#{name,jdbcType=VARCHAR}, #{describe,jdbcType=VARCHAR}, 
+			#{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<insert id="inserts" useGeneratedKeys="false"
+		parameterType="list">
+        <![CDATA[
+        INSERT INTO `PLATFORM_ROLE`(
+			id, platform_id, 
+			name, describe, 
+			status, create_time
+        )]]>
+       	VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id,jdbcType=VARCHAR}, #{item.platformId,jdbcType=VARCHAR}, 
+			#{item.name,jdbcType=VARCHAR}, #{item.describe,jdbcType=VARCHAR}, 
+			#{item.status,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById">
+		DELETE PR FROM `PLATFORM_ROLE` PR WHERE PR.ID = #{id} 
+	</delete>
+	
+	<update id="disableById">
+	    UPDATE `PLATFORM_ROLE` PR
+		SET 
+		PR.STATUS = -1
+		WHERE PR.ID = #{id}
+	</update>
+
+	<update id="update">
+		UPDATE `PLATFORM_ROLE` PR
+		<include refid="dynamicSet" /> 
+	    WHERE PR.ID = #{id}
+	</update>
+
+	<select id="load" resultMap="platformRole">
+		SELECT <include refid="field"/>
+		FROM `PLATFORM_ROLE` PR
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `PLATFORM_ROLE` PR
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="list" resultMap="platformRole">
+		SELECT <include refid="field"/>
+		FROM `PLATFORM_ROLE` PR
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="query" resultMap="platformRole">
+		SELECT <include refid="field"/>
+		FROM `PLATFORM_ROLE` PR
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadById" resultMap="platformRole">
+		SELECT <include refid="field"/>
+		FROM `PLATFORM_ROLE` PR
+		WHERE PR.ID = #{id}
+	</select>
+	
+</mapper>

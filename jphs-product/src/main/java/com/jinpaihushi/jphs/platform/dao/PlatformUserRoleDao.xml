@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	wangwenteng
+	date	:	2017-11-01 16:25:41
+	version	:	1.0
+-->
+<mapper namespace="com.jinpaihushi.jphs.platform.dao.PlatformUserRoleDao">
+	
+	<sql id="field">
+		PUR.id, PUR.platform_user_id, PUR.platform_role_id
+	</sql>
+
+	<sql id="fieldGlobal">
+		PUR.id PUR_id, PUR.platform_user_id PUR_platform_user_id, 
+		PUR.platform_role_id PUR_platform_role_id
+	</sql>
+	
+	<sql id="fieldWithAlias">
+		PUR.id id, PUR.platform_user_id platformUserId, 
+		PUR.platform_role_id platformRoleId
+	</sql>
+	
+	<sql id="condition">
+		<if test="id!=null and id!=''">
+			AND PUR.id=#{id}
+		</if>
+		<if test="platformUserId!=null and platformUserId!=''">
+			AND PUR.platform_user_id=#{platformUserId}
+		</if>
+		<if test="platformRoleId!=null and platformRoleId!=''">
+			AND PUR.platform_role_id=#{platformRoleId}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="queryWhere">
+		<where>
+			<if test="id!=null and id!=''">
+				AND PUR.id LIKE CONCAT('%', #{id}, '%')
+			</if>
+			<if test="platformUserId!=null and platformUserId!=''">
+				AND PUR.platform_user_id LIKE CONCAT('%', #{platformUserId}, '%')
+			</if>
+			<if test="platformRoleId!=null and platformRoleId!=''">
+				AND PUR.platform_role_id LIKE CONCAT('%', #{platformRoleId}, '%')
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="dynamicSet">
+		<set>
+           <if test="id!=null">
+				PUR.id=#{id}, 
+		   </if>
+           <if test="platformUserId!=null">
+				PUR.platform_user_id=#{platformUserId}, 
+		   </if>
+           <if test="platformRoleId!=null">
+				PUR.platform_role_id=#{platformRoleId}, 
+		   </if>
+		</set>
+	</sql>
+	
+	<sql id="orderby">
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+	</sql>
+
+	<resultMap id="platformUserRole" type="com.jinpaihushi.jphs.platform.model.PlatformUserRole">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="platformUserId" column="platform_user_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="platformRoleId" column="platform_role_id" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<resultMap id="platformUserRoleGlobal" type="com.jinpaihushi.jphs.platform.model.PlatformUserRole">
+		<result property="id" column="PUR_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="platformUserId" column="PUR_platform_user_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="platformRoleId" column="PUR_platform_role_id" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.jinpaihushi.jphs.platform.model.PlatformUserRole">
+		INSERT INTO `PLATFORM_USER_ROLE`(
+			id, platform_user_id, 
+			platform_role_id
+		)VALUES(
+			#{id,jdbcType=VARCHAR}, #{platformUserId,jdbcType=VARCHAR}, 
+			#{platformRoleId,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<insert id="inserts" useGeneratedKeys="false"
+		parameterType="list">
+        <![CDATA[
+        INSERT INTO `PLATFORM_USER_ROLE`(
+			id, platform_user_id, 
+			platform_role_id
+        )]]>
+       	VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id,jdbcType=VARCHAR}, #{item.platformUserId,jdbcType=VARCHAR}, 
+			#{item.platformRoleId,jdbcType=VARCHAR}
+			)
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById">
+		DELETE PUR FROM `PLATFORM_USER_ROLE` PUR WHERE PUR.ID = #{id} 
+	</delete>
+	
+	<update id="disableById">
+	    UPDATE `PLATFORM_USER_ROLE` PUR
+		SET 
+		PUR.STATUS = -1
+		WHERE PUR.ID = #{id}
+	</update>
+
+	<update id="update">
+		UPDATE `PLATFORM_USER_ROLE` PUR
+		<include refid="dynamicSet" /> 
+	    WHERE PUR.ID = #{id}
+	</update>
+
+	<select id="load" resultMap="platformUserRole">
+		SELECT <include refid="field"/>
+		FROM `PLATFORM_USER_ROLE` PUR
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `PLATFORM_USER_ROLE` PUR
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="list" resultMap="platformUserRole">
+		SELECT <include refid="field"/>
+		FROM `PLATFORM_USER_ROLE` PUR
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="query" resultMap="platformUserRole">
+		SELECT <include refid="field"/>
+		FROM `PLATFORM_USER_ROLE` PUR
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadById" resultMap="platformUserRole">
+		SELECT <include refid="field"/>
+		FROM `PLATFORM_USER_ROLE` PUR
+		WHERE PUR.ID = #{id}
+	</select>
+	
+</mapper>

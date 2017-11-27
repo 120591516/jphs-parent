@@ -1,0 +1,222 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	yangsong
+	date	:	2017-09-29 16:55:54
+	version	:	1.0
+-->
+<mapper namespace="com.jinpaihushi.jphs.remark.dao.RemarkDao">
+	
+	<sql id="field">
+		R.id, R.source_id, R.content, R.status, 
+		R.create_time, R.creator_id, R.creator_name
+	</sql>
+
+	<sql id="fieldGlobal">
+		R.id R_id, R.source_id R_source_id, 
+		R.content R_content, R.status R_status, 
+		R.create_time R_create_time, R.creator_id R_creator_id, 
+		R.creator_name R_creator_name
+	</sql>
+	
+	<sql id="fieldWithAlias">
+		R.id id, R.source_id sourceId, 
+		R.content content, R.status status, 
+		R.create_time createTime, R.creator_id creatorId, 
+		R.creator_name creatorName
+	</sql>
+	
+	<sql id="condition">
+		<if test="id!=null and id!=''">
+			AND R.id=#{id}
+		</if>
+		<if test="sourceId!=null and sourceId!=''">
+			AND R.source_id=#{sourceId}
+		</if>
+		<if test="content!=null and content!=''">
+			AND R.content=#{content}
+		</if>
+		<if test="status!=null">
+			AND R.status=#{status}
+		</if>
+		<if test="createTime!=null">
+			AND R.create_time=#{createTime}
+		</if>
+		<if test="creatorId!=null and creatorId!=''">
+			AND R.creator_id=#{creatorId}
+		</if>
+		<if test="creatorName!=null and creatorName!=''">
+			AND R.creator_name=#{creatorName}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="queryWhere">
+		<where>
+			<if test="id!=null and id!=''">
+				AND R.id LIKE CONCAT('%', #{id}, '%')
+			</if>
+			<if test="sourceId!=null and sourceId!=''">
+				AND R.source_id LIKE CONCAT('%', #{sourceId}, '%')
+			</if>
+			<if test="content!=null and content!=''">
+				AND R.content LIKE CONCAT('%', #{content}, '%')
+			</if>
+			<if test="status!=null">
+				AND R.status=#{status}
+			</if>
+			<if test="createTime!=null">
+				AND R.create_time=#{createTime}
+			</if>
+			<if test="creatorId!=null and creatorId!=''">
+				AND R.creator_id LIKE CONCAT('%', #{creatorId}, '%')
+			</if>
+			<if test="creatorName!=null and creatorName!=''">
+				AND R.creator_name LIKE CONCAT('%', #{creatorName}, '%')
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="dynamicSet">
+		<set>
+           <if test="id!=null">
+				R.id=#{id}, 
+		   </if>
+           <if test="sourceId!=null">
+				R.source_id=#{sourceId}, 
+		   </if>
+           <if test="content!=null">
+				R.content=#{content}, 
+		   </if>
+           <if test="status!=null">
+				R.status=#{status}, 
+		   </if>
+           <if test="createTime!=null">
+				R.create_time=#{createTime}, 
+		   </if>
+           <if test="creatorId!=null">
+				R.creator_id=#{creatorId}, 
+		   </if>
+           <if test="creatorName!=null">
+				R.creator_name=#{creatorName}, 
+		   </if>
+		</set>
+	</sql>
+	
+	<sql id="orderby">
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+	</sql>
+
+	<resultMap id="remark" type="com.jinpaihushi.jphs.remark.model.Remark">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="sourceId" column="source_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="content" column="content" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="creator_name" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<resultMap id="remarkGlobal" type="com.jinpaihushi.jphs.remark.model.Remark">
+		<result property="id" column="R_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="sourceId" column="R_source_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="content" column="R_content" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="R_status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="R_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="R_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="R_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.jinpaihushi.jphs.remark.model.Remark">
+		INSERT INTO `REMARK`(
+			id, source_id, 
+			content, status, 
+			create_time, creator_id, 
+			creator_name
+		)VALUES(
+			#{id,jdbcType=VARCHAR}, #{sourceId,jdbcType=VARCHAR}, 
+			#{content,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+			#{createTime,jdbcType=TIMESTAMP}, #{creatorId,jdbcType=VARCHAR}, 
+			#{creatorName,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<insert id="inserts" useGeneratedKeys="false"
+		parameterType="list">
+        <![CDATA[
+        INSERT INTO `REMARK`(
+			id, source_id, 
+			content, status, 
+			create_time, creator_id, 
+			creator_name
+        )]]>
+       	VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id,jdbcType=VARCHAR}, #{item.sourceId,jdbcType=VARCHAR}, 
+			#{item.content,jdbcType=VARCHAR}, #{item.status,jdbcType=INTEGER}, 
+			#{item.createTime,jdbcType=TIMESTAMP}, #{item.creatorId,jdbcType=VARCHAR}, 
+			#{item.creatorName,jdbcType=VARCHAR}
+			)
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById">
+		DELETE R FROM `REMARK` R WHERE R.ID = #{id} 
+	</delete>
+	
+	<update id="disableById">
+	    UPDATE `REMARK` R
+		SET 
+		R.STATUS = -1
+		WHERE R.ID = #{id}
+	</update>
+
+	<update id="update">
+		UPDATE `REMARK` R
+		<include refid="dynamicSet" /> 
+	    WHERE R.ID = #{id}
+	</update>
+
+	<select id="load" resultMap="remark">
+		SELECT <include refid="field"/>
+		FROM `REMARK` R
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `REMARK` R
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="list" resultMap="remark">
+		SELECT <include refid="field"/>
+		FROM `REMARK` R
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="query" resultMap="remark">
+		SELECT <include refid="field"/>
+		FROM `REMARK` R
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadById" resultMap="remark">
+		SELECT <include refid="field"/>
+		FROM `REMARK` R
+		WHERE R.ID = #{id}
+	</select>
+	
+</mapper>

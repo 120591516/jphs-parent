@@ -1,0 +1,515 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	scj
+	date	:	2017-09-22 15:56:54
+	version	:	1.0
+-->
+<mapper namespace="com.jinpaihushi.jphs.family.dao.FamilyOrderDao">
+	
+	<sql id="field">
+		FO.id, FO.family_mode_id, FO.pay_price, FO.wx_no, 
+		FO.end_time, FO.code, FO.status, FO.create_time, 
+		FO.creator_id, FO.creator_name
+	</sql>
+
+	<sql id="fieldGlobal">
+		FO.id FO_id, FO.family_mode_id FO_family_mode_id, 
+		FO.pay_price FO_pay_price, FO.wx_no FO_wx_no, 
+		FO.end_time FO_end_time, FO.code FO_code, 
+		FO.status FO_status, FO.create_time FO_create_time, 
+		FO.creator_id FO_creator_id, FO.creator_name FO_creator_name
+	</sql>
+	
+	<sql id="fieldWithAlias">
+		FO.id id, FO.family_mode_id familyModeId, 
+		FO.pay_price payPrice, FO.wx_no wxNo, 
+		FO.end_time endTime, FO.code code, 
+		FO.status status, FO.create_time createTime, 
+		FO.creator_id creatorId, FO.creator_name creatorName
+	</sql>
+	
+	<sql id="condition">
+		<if test="id!=null and id!=''">
+			AND FO.id=#{id}
+		</if>
+		<if test="familyModeId!=null and familyModeId!=''">
+			AND FO.family_mode_id=#{familyModeId}
+		</if>
+		<if test="payPrice!=null">
+			AND FO.pay_price=#{payPrice}
+		</if>
+		<if test="wxNo!=null and wxNo!=''">
+			AND FO.wx_no=#{wxNo}
+		</if>
+		<if test="endTime!=null">
+			AND FO.end_time=#{endTime}
+		</if>
+		<if test="code!=null and code!=''">
+			AND FO.code=#{code}
+		</if>
+		<if test="status!=null">
+			AND FO.status=#{status}
+		</if>
+		<if test="createTime!=null">
+			AND FO.create_time=#{createTime}
+		</if>
+		<if test="creatorId!=null and creatorId!=''">
+			AND FO.creator_id=#{creatorId}
+		</if>
+		<if test="creatorName!=null and creatorName!=''">
+			AND FO.creator_name=#{creatorName}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="queryWhere">
+		<where>
+			<if test="id!=null and id!=''">
+				AND FO.id LIKE CONCAT('%', #{id}, '%')
+			</if>
+			<if test="familyModeId!=null and familyModeId!=''">
+				AND FO.family_mode_id LIKE CONCAT('%', #{familyModeId}, '%')
+			</if>
+			<if test="payPrice!=null">
+				AND FO.pay_price=#{payPrice}
+			</if>
+			<if test="wxNo!=null and wxNo!=''">
+				AND FO.wx_no LIKE CONCAT('%', #{wxNo}, '%')
+			</if>
+			<if test="endTime!=null">
+				AND FO.end_time=#{endTime}
+			</if>
+			<if test="code!=null and code!=''">
+				AND FO.code LIKE CONCAT('%', #{code}, '%')
+			</if>
+			<if test="status!=null">
+				AND FO.status=#{status}
+			</if>
+			<if test="createTime!=null">
+				AND FO.create_time=#{createTime}
+			</if>
+			<if test="creatorId!=null and creatorId!=''">
+				AND FO.creator_id LIKE CONCAT('%', #{creatorId}, '%')
+			</if>
+			<if test="creatorName!=null and creatorName!=''">
+				AND FO.creator_name LIKE CONCAT('%', #{creatorName}, '%')
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="dynamicSet">
+		<set>
+           <if test="id!=null">
+				FO.id=#{id}, 
+		   </if>
+           <if test="familyModeId!=null">
+				FO.family_mode_id=#{familyModeId}, 
+		   </if>
+           <if test="payPrice!=null">
+				FO.pay_price=#{payPrice}, 
+		   </if>
+           <if test="wxNo!=null">
+				FO.wx_no=#{wxNo}, 
+		   </if>
+           <if test="endTime!=null">
+				FO.end_time=#{endTime}, 
+		   </if>
+           <if test="code!=null">
+				FO.code=#{code}, 
+		   </if>
+           <if test="status!=null">
+				FO.status=#{status}, 
+		   </if>
+           <if test="createTime!=null">
+				FO.create_time=#{createTime}, 
+		   </if>
+           <if test="creatorId!=null">
+				FO.creator_id=#{creatorId}, 
+		   </if>
+           <if test="creatorName!=null">
+				FO.creator_name=#{creatorName}, 
+		   </if>
+		</set>
+	</sql>
+	
+	<sql id="orderby">
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+	</sql>
+
+	<resultMap id="familyOrder" type="com.jinpaihushi.jphs.family.model.FamilyOrder">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="familyModeId" column="family_mode_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="payPrice" column="pay_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="wxNo" column="wx_no" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="endTime" column="end_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="code" column="code" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="creator_name" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<resultMap id="familyOrderIndex" type="com.jinpaihushi.jphs.family.model.FamilyOrder">
+		<result property="id" column="FO_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="familyModeId" column="FO_family_mode_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="payPrice" column="FO_pay_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="wxNo" column="FO_wx_no" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="endTime" column="FO_end_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="code" column="FO_code" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="FO_status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="FO_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="FO_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="FO_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+		<association property="user" javaType="com.jinpaihushi.jphs.user.model.User">
+			<result property="id" column="U_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="type" column="U_type" javaType="Integer"
+				jdbcType="INTEGER"></result>
+			<result property="name" column="U_name" javaType="String"
+				jdbcType="VARCHAR"></result>
+			<result property="sex" column="U_sex" javaType="Integer"
+				jdbcType="INTEGER"></result>
+			<result property="phone" column="U_phone" javaType="String"
+				jdbcType="VARCHAR"></result>
+			<result property="password" column="U_password" javaType="String"
+				jdbcType="VARCHAR"></result>
+			<result property="brief" column="U_brief" javaType="String"
+				jdbcType="VARCHAR"></result>
+			<result property="openId" column="U_open_id" javaType="String"
+				jdbcType="VARCHAR"></result>
+			<result property="device" column="U_device" javaType="Integer"
+				jdbcType="INTEGER"></result>
+			<result property="birthday" column="U_birthday" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="address" column="U_address" javaType="String"
+				jdbcType="VARCHAR"></result>
+			<result property="recommendId" column="U_recommend_id"
+				javaType="String" jdbcType="VARCHAR"></result>
+			<result property="createTime" column="U_create_time" javaType="Date"
+				jdbcType="TIMESTAMP"></result>
+			<result property="status" column="U_status" javaType="Integer"
+				jdbcType="INTEGER"></result>
+		</association>
+		<association property="familyMode" javaType="com.jinpaihushi.jphs.family.model.FamilyMode">
+			<result property="id" column="FM_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="familyPackageId" column="FM_family_package_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="accessMode" column="FM_access_mode" javaType="Integer" jdbcType="INTEGER"></result>
+			<result property="validateCode" column="FM_validate_code" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="beginTime" column="FM_begin_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+			<result property="endTime" column="FM_end_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+			<result property="day" column="FM_day" javaType="Integer" jdbcType="INTEGER"></result>
+			<result property="unit" column="FM_unit" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="status" column="FM_status" javaType="Integer" jdbcType="INTEGER"></result>
+			<result property="createTime" column="FM_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+			<result property="creatorId" column="FM_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="creatorName" column="FM_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+			<association property="familyPackage" javaType="com.jinpaihushi.jphs.family.model.FamilyPackage">
+				<result property="id" column="FP_id" javaType="String" jdbcType="VARCHAR"></result>
+				<result property="type" column="FP_type" javaType="Integer" jdbcType="INTEGER"></result>
+				<result property="title" column="FP_title" javaType="String" jdbcType="VARCHAR"></result>
+				<result property="subTitle" column="FP_sub_title" javaType="String" jdbcType="VARCHAR"></result>
+				<result property="price" column="FP_price" javaType="Double" jdbcType="DECIMAL"></result>
+				<result property="image" column="FP_image" javaType="String" jdbcType="VARCHAR"></result>
+				<result property="content" column="FP_content" javaType="String" jdbcType="VARCHAR"></result>
+				<result property="status" column="FP_status" javaType="Integer" jdbcType="INTEGER"></result>
+				<result property="createTime" column="FP_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+				<result property="creatorId" column="FP_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+				<result property="creatorName" column="FP_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+			</association>
+		</association>
+		<collection property="familyConsultationList" ofType="com.jinpaihushi.jphs.family.model.FamilyConsultation">
+			<result property="id" column="FC_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="quiz" column="FC_quiz" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="answer" column="FC_answer" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="status" column="FC_status" javaType="Integer" jdbcType="INTEGER"></result>
+			<result property="createTime" column="FC_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+			<result property="creatorId" column="FC_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="creatorName" column="FC_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+		</collection>
+		<collection property="familyRegisterList" ofType="com.jinpaihushi.jphs.family.model.FamilyRegister">
+			<result property="id" column="FR_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="type" column="FR_type" javaType="Integer" jdbcType="INTEGER"></result>
+			<result property="hospital" column="FR_hospital" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="department" column="FR_department" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="title" column="FR_title" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="phone" column="FR_phone" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="appointmentTime" column="FR_appointment_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+			<result property="week" column="FR_week" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="status" column="FR_status" javaType="Integer" jdbcType="INTEGER"></result>
+			<result property="createTime" column="FR_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+			<result property="creatorId" column="FR_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="creatorName" column="FR_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+		</collection>
+		<collection property="familyMemberList" ofType="com.jinpaihushi.jphs.family.model.FamilyMember">
+			<result property="id" column="FMB_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="name" column="FMB_name" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="phone" column="FMB_phone" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="sfz" column="FMB_sfz" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="relation" column="FMB_relation" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="status" column="FMB_status" javaType="Integer" jdbcType="INTEGER"></result>
+			<result property="createTime" column="FMB_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+			<result property="creatorId" column="FMB_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="creatorName" column="FMB_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+			<collection property="familyHealthyList" ofType="com.jinpaihushi.jphs.family.model.FamilyHealthy">
+				<result property="id" column="FH_id" javaType="String" jdbcType="VARCHAR"></result>
+				<result property="familyMemberId" column="FH_family_member_id" javaType="String" jdbcType="VARCHAR"></result>
+				<result property="title" column="FH_title" javaType="String" jdbcType="VARCHAR"></result>
+				<result property="cycle" column="FH_cycle" javaType="String" jdbcType="VARCHAR"></result>
+				<result property="history" column="FH_history" javaType="String" jdbcType="VARCHAR"></result>
+				<result property="historyContent" column="FH_history_content" javaType="String" jdbcType="VARCHAR"></result>
+				<result property="historyCycle" column="FH_history_cycle" javaType="String" jdbcType="VARCHAR"></result>
+				<result property="plan" column="FH_plan" javaType="String" jdbcType="VARCHAR"></result>
+				<result property="planContent" column="FH_plan_content" javaType="String" jdbcType="VARCHAR"></result>
+				<result property="planCycle" column="FH_plan_cycle" javaType="String" jdbcType="VARCHAR"></result>
+				<result property="diet" column="FH_diet" javaType="String" jdbcType="VARCHAR"></result>
+				<result property="dietContent" column="FH_diet_content" javaType="String" jdbcType="VARCHAR"></result>
+				<result property="dietCycle" column="FH_diet_cycle" javaType="String" jdbcType="VARCHAR"></result>
+				<result property="status" column="FH_status" javaType="Integer" jdbcType="INTEGER"></result>
+				<result property="createTime" column="FH_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+				<result property="creatorId" column="FH_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+				<result property="creatorName" column="FH_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+			</collection>
+		</collection>
+	</resultMap>
+	
+	<resultMap id="familyOrderGlobal" type="com.jinpaihushi.jphs.family.model.FamilyOrder">
+		<result property="id" column="FO_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="familyModeId" column="FO_family_mode_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="payPrice" column="FO_pay_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="wxNo" column="FO_wx_no" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="endTime" column="FO_end_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="code" column="FO_code" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="FO_status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="FO_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="FO_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="FO_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.jinpaihushi.jphs.family.model.FamilyOrder">
+		INSERT INTO `FAMILY_ORDER`(
+			id, family_mode_id, 
+			pay_price, wx_no, 
+			end_time, code, 
+			status, create_time, 
+			creator_id, creator_name
+		)VALUES(
+			#{id,jdbcType=VARCHAR}, #{familyModeId,jdbcType=VARCHAR}, 
+			#{payPrice,jdbcType=DECIMAL}, #{wxNo,jdbcType=VARCHAR}, 
+			#{endTime,jdbcType=TIMESTAMP}, #{code,jdbcType=VARCHAR}, 
+			#{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+			#{creatorId,jdbcType=VARCHAR}, #{creatorName,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<insert id="inserts" useGeneratedKeys="false"
+		parameterType="list">
+        <![CDATA[
+        INSERT INTO `FAMILY_ORDER`(
+			id, family_mode_id, 
+			pay_price, wx_no, 
+			end_time, code, 
+			status, create_time, 
+			creator_id, creator_name
+        )]]>
+       	VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id,jdbcType=VARCHAR}, #{item.familyModeId,jdbcType=VARCHAR}, 
+			#{item.payPrice,jdbcType=DECIMAL}, #{item.wxNo,jdbcType=VARCHAR}, 
+			#{item.endTime,jdbcType=TIMESTAMP}, #{item.code,jdbcType=VARCHAR}, 
+			#{item.status,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP}, 
+			#{item.creatorId,jdbcType=VARCHAR}, #{item.creatorName,jdbcType=VARCHAR}
+			)
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById">
+		DELETE FO FROM `FAMILY_ORDER` FO WHERE FO.ID = #{id} 
+	</delete>
+	
+	<update id="disableById">
+	    UPDATE `FAMILY_ORDER` FO
+		SET 
+		FO.STATUS = -1
+		WHERE FO.ID = #{id}
+	</update>
+
+	<update id="update">
+		UPDATE `FAMILY_ORDER` FO
+		<include refid="dynamicSet" /> 
+	    WHERE FO.ID = #{id}
+	</update>
+
+	<select id="load" resultMap="familyOrder">
+		SELECT <include refid="field"/>
+		FROM `FAMILY_ORDER` FO
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `FAMILY_ORDER` FO
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="list" resultMap="familyOrder">
+		SELECT <include refid="field"/>
+		FROM `FAMILY_ORDER` FO
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="query" resultMap="familyOrder">
+		SELECT <include refid="field"/>
+		FROM `FAMILY_ORDER` FO
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadById" resultMap="familyOrder">
+		SELECT <include refid="field"/>
+		FROM `FAMILY_ORDER` FO
+		WHERE FO.ID = #{id}
+	</select>
+	
+	<select id="familyOrderOneId" resultMap="familyOrderIndex">
+		SELECT 
+			FO.id FO_id, 
+			FO.family_mode_id family_mode_id, 
+			FO.pay_price FO_pay_price, 
+			FO.wx_no FO_wx_no, 
+			FO.end_time FO_end_time, 
+			FO.code FO_code, 
+			FO.status FO_status, 
+			FO.create_time FO_create_time, 
+			FO.creator_id FO_creator_id,
+			FO.creator_name FO_creator_name,
+			FM.id FM_id, 
+			FM.family_package_id FM_family_package_id, 
+			FM.access_mode FM_access_mode, 
+			FM.validate_code FM_validate_code, 
+			FM.begin_time FM_begin_time, 
+			FM.end_time FM_end_time, 
+			FM.day FM_day, 
+			FM.unit FM_unit, 
+			FM.status FM_status, 
+			FM.create_time FM_create_time, 
+			FM.creator_id FM_creator_id, 
+			FM.creator_name FM_creator_name,
+			FP.id FP_id, FP.type FP_type, 
+			FP.title FP_title, FP.sub_title FP_sub_title, 
+			FP.price FP_price, FP.image FP_image, 
+			FP.content FP_content, FP.status FP_status, 
+			FP.create_time FP_create_time, FP.creator_id FP_creator_id, 
+			FP.creator_name FP_creator_name,
+			U.id U_id, U.type U_type,
+			U.name U_name, U.sex U_sex,
+			U.phone U_phone,
+			U.brief U_brief, U.open_id U_open_id,
+			U.device U_device, U.birthday U_birthday,
+			U.address U_address, U.recommend_id U_recommend_id,
+			U.create_time U_create_time, U.status U_status,
+			FC.id FC_id, FC.quiz FC_quiz, 
+			FC.answer FC_answer, FC.status FC_status, 
+			FC.create_time FC_create_time, FC.creator_id FC_creator_id, 
+			FC.creator_name FC_creator_name,
+			FR.id FR_id, FR.type FR_type, 
+			FR.hospital FR_hospital, FR.department FR_department, 
+			FR.title FR_title, FR.phone FR_phone, 
+			FR.appointment_time FR_appointment_time, FR.week FR_week, 
+			FR.status FR_status, FR.create_time FR_create_time, 
+			FR.creator_id FR_creator_id, FR.creator_name FR_creator_name,
+			FMB.id FMB_id, FMB.name FMB_name, 
+			FMB.phone FMB_phone, FMB.sfz FMB_sfz, 
+			FMB.relation FMB_relation, FMB.status FMB_status, 
+			FMB.create_time FMB_create_time, FMB.creator_id FMB_creator_id, 
+			FMB.creator_name FMB_creator_name,
+			FH.id FH_id, FH.family_member_id FH_family_member_id, 
+			FH.title FH_title, FH.cycle FH_cycle, 
+			FH.history FH_history, FH.history_content FH_history_content, 
+			FH.history_cycle FH_history_cycle, FH.plan FH_plan, 
+			FH.plan_content FH_plan_content, FH.plan_cycle FH_plan_cycle, 
+			FH.diet FH_diet, FH.diet_content FH_diet_content, 
+			FH.diet_cycle FH_diet_cycle, FH.status FH_status, 
+			FH.create_time FH_create_time, FH.creator_id FH_creator_id, 
+			FH.creator_name FH_creator_name 
+		FROM `family_order` FO 
+		LEFT JOIN `family_mode` FM ON FO.`family_mode_id`=FM.`id` 
+		LEFT JOIN `family_package` FP ON FM.`family_package_id`=FP.id 
+		LEFT JOIN `user` U ON FO.`creator_id`=U.id 
+		LEFT JOIN `family_consultation` FC ON FO.`creator_id`=FC.`creator_id` AND FC.`status`=1 
+		LEFT JOIN `family_register` FR ON FO.`creator_id`=FR.`creator_id` AND FR.`status`=1 
+		LEFT JOIN `family_member` FMB ON FO.`creator_id`=FMB.`creator_id` AND FMB.`status`=1 
+		LEFT JOIN `family_healthy` FH ON FMB.`id`=FH.`family_member_id` AND FH.`status`=1 
+		WHERE FO.`id`=#{id} 
+	</select>
+	
+	<select id="familyOrderIndex" resultMap="familyOrderIndex">
+		SELECT 
+			FO.id FO_id, 
+			FO.family_mode_id family_mode_id, 
+			FO.pay_price FO_pay_price, 
+			FO.wx_no FO_wx_no, 
+			FO.end_time FO_end_time, 
+			FO.code FO_code, 
+			FO.status FO_status, 
+			FO.create_time FO_create_time, 
+			FO.creator_id FO_creator_id,
+			FO.creator_name FO_creator_name,
+			FM.id FM_id, 
+			FM.family_package_id FM_family_package_id, 
+			FM.access_mode FM_access_mode, 
+			FM.validate_code FM_validate_code, 
+			FM.begin_time FM_begin_time, 
+			FM.end_time FM_end_time, 
+			FM.day FM_day, 
+			FM.unit FM_unit, 
+			FM.status FM_status, 
+			FM.create_time FM_create_time, 
+			FM.creator_id FM_creator_id, 
+			FM.creator_name FM_creator_name,
+			FP.id FP_id, FP.type FP_type, 
+			FP.title FP_title, FP.sub_title FP_sub_title, 
+			FP.price FP_price, FP.image FP_image, 
+			FP.content FP_content, FP.status FP_status, 
+			FP.create_time FP_create_time, FP.creator_id FP_creator_id, 
+			FP.creator_name FP_creator_name,
+			U.id U_id, U.type U_type,
+			U.name U_name, U.sex U_sex,
+			U.phone U_phone,
+			U.brief U_brief, U.open_id U_open_id,
+			U.device U_device, U.birthday U_birthday,
+			U.address U_address, U.recommend_id U_recommend_id,
+			U.create_time U_create_time, U.status U_status
+		FROM `family_order` FO 
+		LEFT JOIN `family_mode` FM ON FO.`family_mode_id`=FM.`id` 
+		LEFT JOIN `family_package` FP ON FM.`family_package_id`=FP.id 
+		LEFT JOIN `user` U ON FO.`creator_id`=U.id 
+		WHERE 1=1 
+		<if test="wxNo!=null and wxNo!=''">
+			AND FO.wx_no LIKE CONCAT('%', #{wxNo}, '%')
+		</if>
+		<if test="phone!=null and phone!=''">
+			AND U.phone LIKE CONCAT('%', #{phone}, '%')
+		</if>
+		<if test="accessMode!=null and accessMode!=''">
+			AND FM.access_mode LIKE CONCAT('%', #{accessMode}, '%')
+		</if>
+		<if test="type!=null">
+			AND FP.type=#{type}
+		</if>
+		<if test="code!=null and code!=''">
+			AND FO.code LIKE CONCAT('%', #{code}, '%')
+		</if> AND FO.`status` IN (0,1) 
+		ORDER BY FO.create_time DESC 
+	</select>
+	
+</mapper>

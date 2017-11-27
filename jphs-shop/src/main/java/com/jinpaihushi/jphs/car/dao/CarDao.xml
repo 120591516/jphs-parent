@@ -1,0 +1,481 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	yangsong
+	date	:	2017-08-08 17:39:23
+	version	:	1.0
+-->
+<mapper namespace="com.jinpaihushi.jphs.car.dao.CarDao">
+	
+	<sql id="field">
+		C.id, C.commodity_id, C.commodity_price_id,C.user_id, C.number, 
+		C.status, C.create_time, C.creator_id, C.creator_name,C.code
+	</sql>
+
+	<sql id="fieldGlobal">
+		C.id C_id, C.commodity_id C_commodity_id, 
+		C.commodity_price_id C_commodity_price_id,C.user_id C_user_id,,
+		C.number C_number, 
+		C.status C_status, C.create_time C_create_time, 
+		C.creator_id C_creator_id, C.creator_name C_creator_name,C.code C_code
+	</sql>
+	
+	<sql id="fieldWithAlias">
+		C.id id, C.commodity_id commodityId, 
+		C.commodity_price_id commodityPriceId, C.user_id userId,
+		C.number number, 
+		C.status status, C.create_time createTime, 
+		C.creator_id creatorId, C.creator_name creatorName,C.code code 
+	</sql>
+	
+	<sql id="condition">
+		<if test="id!=null and id!=''">
+			AND C.id=#{id}
+		</if>
+		<if test="commodityId!=null and commodityId!=''">
+			AND C.commodity_id=#{commodityId}
+		</if>
+		<if test="commodityPriceId!=null and commodityPriceId!=''">
+			AND C.commodity_price_id=#{commodityPriceId}
+		</if>
+		<if test="userId!=null and userId!=''">
+			AND C.user_id=#{userId}
+		</if>
+		<if test="number!=null">
+			AND C.number=#{number}
+		</if>
+		<if test="status!=null">
+			AND C.status=#{status}
+		</if>
+		<if test="createTime!=null">
+			AND C.create_time=#{createTime}
+		</if>
+		<if test="creatorId!=null and creatorId!=''">
+			AND C.creator_id=#{creatorId}
+		</if>
+		<if test="creatorName!=null and creatorName!=''">
+			AND C.creator_name=#{creatorName}
+		</if>
+		<if test="code!=null and code!=''">
+			AND C.code=#{code}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="queryWhere">
+		<where>
+			<if test="id!=null and id!=''">
+				AND C.id LIKE CONCAT('%', #{id}, '%')
+			</if>
+			<if test="commodityId!=null and commodityId!=''">
+				AND C.commodity_id LIKE CONCAT('%', #{commodityId}, '%')
+			</if>
+			<if test="commodityPriceId!=null and commodityPriceId!=''">
+				AND C.commodity_price_id LIKE CONCAT('%', #{commodityPriceId}, '%')
+			</if>
+			<if test="userId!=null and userId!=''">
+				AND C.user_id LIKE CONCAT('%', #{userId}, '%')
+			</if>
+			<if test="number!=null">
+				AND C.number=#{number}
+			</if>
+			<if test="status!=null">
+				AND C.status=#{status}
+			</if>
+			<if test="createTime!=null">
+				AND C.create_time=#{createTime}
+			</if>
+			<if test="creatorId!=null and creatorId!=''">
+				AND C.creator_id LIKE CONCAT('%', #{creatorId}, '%')
+			</if>
+			<if test="creatorName!=null and creatorName!=''">
+				AND C.creator_name LIKE CONCAT('%', #{creatorName}, '%')
+			</if>
+			<if test="code!=null and code!=''">
+				AND C.code=#{code}
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="dynamicSet">
+		<set>
+           <if test="id!=null">
+				C.id=#{id}, 
+		   </if>
+           <if test="commodityId!=null">
+				C.commodity_id=#{commodityId}, 
+		   </if>
+           <if test="commodityPriceId!=null">
+				C.commodity_price_id=#{commodityPriceId}, 
+		   </if>
+		   <if test="userId!=null">
+				C.user_id=#{userId}, 
+		   </if>
+           <if test="number!=null">
+				C.number=#{number}, 
+		   </if>
+           <if test="status!=null">
+				C.status=#{status}, 
+		   </if>
+           <if test="createTime!=null">
+				C.create_time=#{createTime}, 
+		   </if>
+           <if test="creatorId!=null">
+				C.creator_id=#{creatorId}, 
+		   </if>
+           <if test="creatorName!=null">
+				C.creator_name=#{creatorName}, 
+		   </if>
+		   <if test="code!=null">
+				C.code=#{code}, 
+		   </if>
+		</set>
+	</sql>
+	
+	<sql id="orderby">
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+	</sql>
+
+	<resultMap id="car" type="com.jinpaihushi.jphs.car.model.Car">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="commodityId" column="commodity_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="commodityPriceId" column="commodity_price_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="userId" column="user_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="number" column="number" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="creator_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="code" column="code" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<resultMap id="carGlobal" type="com.jinpaihushi.jphs.car.model.Car">
+		<result property="id" column="C_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="commodityId" column="C_commodity_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="commodityPriceId" column="C_commodity_price_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="userId" column="C_user_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="number" column="C_number" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="status" column="C_status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="C_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="C_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="C_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="code" column="C_code" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.jinpaihushi.jphs.car.model.Car">
+		INSERT INTO `CAR`(
+			id, commodity_id, 
+			commodity_price_id,user_id, number, 
+			status, create_time, 
+			creator_id, creator_name,code
+		)VALUES(
+			#{id,jdbcType=VARCHAR}, #{commodityId,jdbcType=VARCHAR}, 
+			#{commodityPriceId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR},
+			#{number,jdbcType=INTEGER}, 
+			#{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+			#{creatorId,jdbcType=VARCHAR}, #{creatorName,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<insert id="inserts" useGeneratedKeys="false"
+		parameterType="list">
+        <![CDATA[
+        INSERT INTO `CAR`(
+			id, commodity_id, 
+			commodity_price_id,user_id, 
+			number, 
+			status, create_time, 
+			creator_id, creator_name,code
+        )]]>
+       	VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id,jdbcType=VARCHAR}, #{item.commodityId,jdbcType=VARCHAR}, 
+			#{item.commodityPriceId,jdbcType=VARCHAR}, #{item.userId,jdbcType=VARCHAR},
+			#{item.number,jdbcType=INTEGER}, 
+			#{item.status,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP}, 
+			#{item.creatorId,jdbcType=VARCHAR}, #{item.creatorName,jdbcType=VARCHAR},
+			#{item.code,jdbcType=VARCHAR}
+			)
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById">
+		DELETE C FROM `CAR` C WHERE C.ID = #{id} 
+	</delete>
+	
+	<update id="disableById">
+	    UPDATE `CAR` C
+		SET 
+		C.STATUS = -1
+		WHERE C.ID = #{id}
+	</update>
+
+	<update id="update">
+		UPDATE `CAR` C
+		<include refid="dynamicSet" /> 
+	    WHERE C.ID = #{id}
+	</update>
+
+	<select id="load" resultMap="car">
+		SELECT <include refid="field"/>
+		FROM `CAR` C
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `CAR` C
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="list" resultMap="car">
+		SELECT <include refid="field"/>
+		FROM `CAR` C
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="query" resultMap="car">
+		SELECT <include refid="field"/>
+		FROM `CAR` C
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadById" resultMap="car">
+		SELECT <include refid="field"/>
+		FROM `CAR` C
+		WHERE C.ID = #{id}
+	</select>
+	
+	<select id="getList" resultType="java.util.HashMap">
+		SELECT
+			car.id,
+			car.commodity_price_id,
+			car.number,
+			car.commodity_id,
+			car.creator_id,
+			car.number,
+			com.title,
+			com.`status`,
+			com.model,
+			com.sub_title,
+			cp.`name`,
+			cp.price,
+			cp.number,
+			ci.url
+		FROM
+			car
+		LEFT JOIN commodity com ON (com.id = car.commodity_id)
+		LEFT JOIN commodity_images ci ON (
+			ci.source_id = car.commodity_id
+		)
+		LEFT JOIN commodity_price cp ON (
+			cp.id = car.commodity_price_id
+		)
+		WHERE
+			ci.type = 1
+		AND car.creator_id = #{creatorId}
+		AND car.`status` = 1
+	</select>
+	
+	<select id="lookup" resultMap="car">
+		SELECT 
+				car.commodity_id,
+				car.commodity_price_id,
+				car.id,
+				car.creator_id,
+				car.number,
+				car.code,
+				car.user_id
+		FROM
+			car
+		WHERE
+			car.creator_id = #{creatorId} AND 
+			car.commodity_id = #{commodityId} AND
+			car.commodity_price_id = #{commodityPriceId} AND
+			car.`status` = #{status}
+	</select>
+	
+	
+	<update id="updateNumber">
+		 UPDATE car 
+		SET car.number = #{number}
+		 where car.id = #{id}
+	</update>
+	<update id="successOrder">
+		 UPDATE car 
+		SET car.`status`  = 0
+		 where car.id = #{id}
+	</update>
+	
+	
+	<select id="getCarBusinessCommodity" resultMap="getCarBusinessCommodity">
+		SELECT B.id B_id, B.name B_name, 
+		B.official_website_url B_official_website_url, B.address B_address, 
+		B.contacts_name B_contacts_name, B.contacts_phone B_contacts_phone, 
+		B.settlement_cycle B_settlement_cycle, B.bank B_bank, 
+		B.open_bank_address B_open_bank_address, B.card_number B_card_number, 
+		B.card_name B_card_name, B.status B_status, 
+		B.remark B_remark, B.create_time B_create_time, 
+		B.creator_id B_creator_id, B.creator_name B_creator_name, 
+		B.unit B_unit, B.pay_type B_pay_type ,
+		C.id C_id, C.business_id C_business_id, C.commodity_type_id
+		C_commodity_type_id, C.title C_title, C.sub_title C_sub_title, C.model
+		C_model, C.content C_content, C.quality C_quality, C.privacy
+		C_privacy, C.security C_security, C.parameter C_parameter,
+		C.support_voucher C_support_voucher, C.limit_number C_limit_number,
+		C.protect_day C_protect_day, C.sort C_sort, C.remark C_remark,
+		C.status C_status, C.create_time C_create_time, C.creator_id
+		C_creator_id, C.creator_name C_creator_name,C.share_number
+		C_share_number,
+		C.browser C_browser,C.count C_count,
+		CI.url url ,
+		CC.id CC_id, CC.commodity_id CC_commodity_id, 
+		CC.commodity_price_id CC_commodity_price_id,CC.user_id CC_user_id,
+		CC.number CC_number, CC.status CC_status, CC.create_time CC_create_time, 
+		CC.creator_id CC_creator_id, CC.creator_name CC_creator_name,CC.code CC_code,
+		CP.id CP_id, CP.commodity_id CP_commodity_id, 
+		CP.name CP_name, CP.number CP_number, 
+		CP.cost_price CP_cost_price, CP.old_price CP_old_price, 
+		CP.price CP_price, CP.profit CP_profit, 
+		CP.sort CP_sort, CP.status CP_status, 
+		CP.create_time CP_create_time, CP.creator_id CP_creator_id, 
+		CP.creator_name CP_creator_name,
+		AP.id AP_id, AP.resource_id AP_resource_id, 
+		AP.price_id AP_price_id, AP.resource_type AP_resource_type, 
+		AP.type AP_type, AP.price AP_price, 
+		AP.begin_time AP_begin_time, AP.end_time AP_end_time, 
+		AP.site_id AP_site_id, AP.platform_id AP_platform_id, 
+		AP.status AP_status, AP.create_time AP_create_time, 
+		AP.creator_id AP_creator_id, AP.creator_name AP_creator_name
+		FROM `car` CC 
+		LEFT JOIN `commodity_price` cp ON CC.`commodity_price_id`= cp.id 
+		LEFT JOIN `commodity` C ON cp.`commodity_id`=C.`id` 
+		LEFT JOIN `commodity_images` CI ON C.id = CI.source_id AND CI.type=1 
+		LEFT JOIN `activity_promotion` AP ON C.id = AP.resource_id AND AP.resource_type=2 AND AP.begin_time &lt; now() AND  AP.end_time &gt; now() AND AP.status=1 AND FIND_IN_SET(cp.id,AP.price_id)  
+		LEFT JOIN `business` B ON C.`business_id`=B.`id` 
+		WHERE CC.`id` IN 
+		<foreach collection="ids" index="index" item="item" open="(" separator="," close=")">   
+	        #{item}   
+	    </foreach>
+	</select>
+	<resultMap id="getCarBusinessCommodity" type="com.jinpaihushi.jphs.business.model.Business">
+		<result property="id" column="B_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="name" column="B_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="officialWebsiteUrl" column="B_official_website_url" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="address" column="B_address" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="contactsName" column="B_contacts_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="contactsPhone" column="B_contacts_phone" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="settlementCycle" column="B_settlement_cycle" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="bank" column="B_bank" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="openBankAddress" column="B_open_bank_address" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="cardNumber" column="B_card_number" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="cardName" column="B_card_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="B_status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="remark" column="B_remark" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="createTime" column="B_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="B_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="B_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="unit" column="B_unit" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="payType" column="B_pay_type" javaType="String" jdbcType="VARCHAR"></result>
+			<collection property="commodityPriceList" ofType="com.jinpaihushi.jphs.commodity.model.CommodityPrice">
+					<result property="id" column="CP_id" javaType="String" jdbcType="VARCHAR"></result>
+					<result property="commodityId" column="CP_commodity_id" javaType="String" jdbcType="VARCHAR"></result>
+					<result property="name" column="CP_name" javaType="String" jdbcType="VARCHAR"></result>
+					<result property="number" column="CP_number" javaType="Integer" jdbcType="INTEGER"></result>
+					<result property="costPrice" column="CP_cost_price" javaType="Double" jdbcType="DECIMAL"></result>
+					<result property="oldPrice" column="CP_old_price" javaType="Double" jdbcType="DECIMAL"></result>
+					<result property="price" column="CP_price" javaType="Double" jdbcType="DECIMAL"></result>
+					<result property="profit" column="CP_profit" javaType="Double" jdbcType="DECIMAL"></result>
+					<result property="sort" column="CP_sort" javaType="Integer" jdbcType="INTEGER"></result>
+					<result property="status" column="CP_status" javaType="Integer" jdbcType="INTEGER"></result>
+					<result property="createTime" column="CP_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+					<result property="creatorId" column="CP_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+					<result property="creatorName" column="CP_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+					
+					<collection property="activityPromotion" javaType="com.jinpaihushi.jphs.car.model.ActivityPromotion">
+						<result property="id" column="AP_id" javaType="String" jdbcType="VARCHAR"></result>
+						<result property="resourceId" column="AP_resource_id" javaType="String" jdbcType="VARCHAR"></result>
+						<result property="priceId" column="AP_price_id" javaType="String" jdbcType="VARCHAR"></result>
+						<result property="resourceType" column="AP_resource_type" javaType="Integer" jdbcType="INTEGER"></result>
+						<result property="type" column="AP_type" javaType="Integer" jdbcType="INTEGER"></result>
+						<result property="price" column="AP_price" javaType="Double" jdbcType="DECIMAL"></result>
+						<result property="beginTime" column="AP_begin_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+						<result property="endTime" column="AP_end_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+						<result property="siteId" column="AP_site_id" javaType="String" jdbcType="VARCHAR"></result>
+						<result property="platformId" column="AP_platform_id" javaType="String" jdbcType="VARCHAR"></result>
+						<result property="status" column="AP_status" javaType="Integer" jdbcType="INTEGER"></result>
+						<result property="createTime" column="AP_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+						<result property="creatorId" column="AP_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+						<result property="creatorName" column="AP_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+					</collection>
+					<collection property="car" javaType="com.jinpaihushi.jphs.car.model.Car">
+						<result property="id" column="CC_id" javaType="String" jdbcType="VARCHAR"></result>
+						<result property="commodityId" column="CC_commodity_id" javaType="String" jdbcType="VARCHAR"></result>
+						<result property="commodityPriceId" column="CC_commodity_price_id" javaType="String" jdbcType="VARCHAR"></result>
+						<result property="userId" column="CC_user_id" javaType="String" jdbcType="VARCHAR"></result>
+						<result property="number" column="CC_number" javaType="Integer" jdbcType="INTEGER"></result>
+						<result property="status" column="CC_status" javaType="Integer" jdbcType="INTEGER"></result>
+						<result property="createTime" column="CC_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+						<result property="creatorId" column="CC_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+						<result property="creatorName" column="CC_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+						<result property="code" column="CC_code" javaType="String" jdbcType="VARCHAR"></result>
+					</collection>
+					<collection property="commodity" javaType="com.jinpaihushi.jphs.commodity.model.Commodity">
+						<result property="id" column="C_id" javaType="String" jdbcType="VARCHAR"></result>
+						<result property="businessId" column="C_business_id" javaType="String" jdbcType="VARCHAR"></result>
+						<result property="commodityTypeId" column="C_commodity_type_id" javaType="String" jdbcType="VARCHAR"></result>
+						<result property="title" column="C_title" javaType="String" jdbcType="VARCHAR"></result>
+						<result property="subTitle" column="C_sub_title" javaType="String" jdbcType="VARCHAR"></result>
+						<result property="model" column="C_model" javaType="String" jdbcType="VARCHAR"></result>
+						<result property="content" column="C_content" javaType="String" jdbcType="VARCHAR"></result>
+						<result property="quality" column="C_quality" javaType="Integer" jdbcType="INTEGER"></result>
+						<result property="privacy" column="C_privacy" javaType="Integer" jdbcType="INTEGER"></result>
+						<result property="security" column="C_security" javaType="Integer" jdbcType="INTEGER"></result>
+						<result property="parameter" column="C_parameter" javaType="String" jdbcType="VARCHAR"></result>
+						<result property="supportVoucher" column="C_support_voucher" javaType="Integer" jdbcType="INTEGER"></result>
+						<result property="limitNumber" column="C_limit_number" javaType="Integer" jdbcType="INTEGER"></result>
+						<result property="protectDay" column="C_protect_day" javaType="Integer" jdbcType="INTEGER"></result>
+						<result property="sort" column="C_sort" javaType="Integer" jdbcType="INTEGER"></result>
+						<result property="remark" column="C_remark" javaType="String" jdbcType="VARCHAR"></result>
+						<result property="status" column="C_status" javaType="Integer" jdbcType="INTEGER"></result>
+						<result property="createTime" column="C_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+						<result property="creatorId" column="C_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+						<result property="creatorName" column="C_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+						<result property="shareNumber" column="C_share_number" javaType="Integer" jdbcType="INTEGER"></result>
+						<result property="browser" column="C_browser" javaType="Integer" jdbcType="INTEGER"></result>
+						<result property="count" column="C_count" javaType="Integer" jdbcType="INTEGER"></result>
+						<association property="commodityImages" javaType="com.jinpaihushi.jphs.commodity.model.CommodityImages">
+							<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+							<result property="sourceId" column="source_id" javaType="String"
+								jdbcType="VARCHAR"></result>
+							<result property="url" column="url" javaType="String"
+								jdbcType="VARCHAR"></result>
+							<result property="path" column="path" javaType="String"
+								jdbcType="VARCHAR"></result>
+							<result property="deviceType" column="device_type" javaType="Integer"
+								jdbcType="INTEGER"></result>
+							<result property="type" column="type" javaType="Integer"
+								jdbcType="INTEGER"></result>
+							<result property="sort" column="sort" javaType="Integer"
+								jdbcType="INTEGER"></result>
+							<result property="remarks" column="remarks" javaType="String"
+								jdbcType="VARCHAR"></result>
+							<result property="status" column="status" javaType="Integer"
+								jdbcType="INTEGER"></result>
+						</association>
+					</collection>		
+			</collection>
+		</resultMap>
+</mapper>

@@ -1,0 +1,233 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	yangsong
+	date	:	2017-10-23 10:01:41
+	version	:	1.0
+-->
+<mapper namespace="com.jinpaihushi.jphs.commodity.dao.CommodityTypeParentDao">
+	
+	<sql id="field">
+		CTP.id, CTP.name, CTP.sort, CTP.remark, 
+		CTP.status, CTP.create_time, CTP.creator_id, CTP.creator_name
+	</sql>
+
+	<sql id="fieldGlobal">
+		CTP.id CTP_id, CTP.name CTP_name, 
+		CTP.sort CTP_sort, CTP.remark CTP_remark, 
+		CTP.status CTP_status, CTP.create_time CTP_create_time, 
+		CTP.creator_id CTP_creator_id, CTP.creator_name CTP_creator_name
+	</sql>
+	
+	<sql id="fieldWithAlias">
+		CTP.id id, CTP.name name, 
+		CTP.sort sort, CTP.remark remark, 
+		CTP.status status, CTP.create_time createTime, 
+		CTP.creator_id creatorId, CTP.creator_name creatorName
+	</sql>
+	
+	<sql id="condition">
+		<if test="id!=null and id!=''">
+			AND CTP.id=#{id}
+		</if>
+		<if test="name!=null and name!=''">
+			AND CTP.name LIKE CONCAT('%', #{name}, '%')
+		</if>
+		<if test="sort!=null">
+			AND CTP.sort=#{sort}
+		</if>
+		<if test="remark!=null and remark!=''">
+			AND CTP.remark=#{remark}
+		</if>
+		<if test="status!=null">
+			AND CTP.status=#{status}
+		</if>
+		<if test="createTime!=null">
+			AND CTP.create_time=#{createTime}
+		</if>
+		<if test="creatorId!=null and creatorId!=''">
+			AND CTP.creator_id=#{creatorId}
+		</if>
+		<if test="creatorName!=null and creatorName!=''">
+			AND CTP.creator_name=#{creatorName}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="queryWhere">
+		<where>
+			<if test="id!=null and id!=''">
+				AND CTP.id LIKE CONCAT('%', #{id}, '%')
+			</if>
+			<if test="name!=null and name!=''">
+				AND CTP.name LIKE CONCAT('%', #{name}, '%')
+			</if>
+			<if test="sort!=null">
+				AND CTP.sort=#{sort}
+			</if>
+			<if test="remark!=null and remark!=''">
+				AND CTP.remark LIKE CONCAT('%', #{remark}, '%')
+			</if>
+			<if test="status!=null">
+				AND CTP.status=#{status}
+			</if>
+			<if test="createTime!=null">
+				AND CTP.create_time=#{createTime}
+			</if>
+			<if test="creatorId!=null and creatorId!=''">
+				AND CTP.creator_id LIKE CONCAT('%', #{creatorId}, '%')
+			</if>
+			<if test="creatorName!=null and creatorName!=''">
+				AND CTP.creator_name LIKE CONCAT('%', #{creatorName}, '%')
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="dynamicSet">
+		<set>
+           <if test="id!=null">
+				CTP.id=#{id}, 
+		   </if>
+           <if test="name!=null">
+				CTP.name=#{name}, 
+		   </if>
+           <if test="sort!=null">
+				CTP.sort=#{sort}, 
+		   </if>
+           <if test="remark!=null">
+				CTP.remark=#{remark}, 
+		   </if>
+           <if test="status!=null">
+				CTP.status=#{status}, 
+		   </if>
+           <if test="createTime!=null">
+				CTP.create_time=#{createTime}, 
+		   </if>
+           <if test="creatorId!=null">
+				CTP.creator_id=#{creatorId}, 
+		   </if>
+           <if test="creatorName!=null">
+				CTP.creator_name=#{creatorName}, 
+		   </if>
+		</set>
+	</sql>
+	
+	<sql id="orderby">
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+	</sql>
+
+	<resultMap id="commodityTypeParent" type="com.jinpaihushi.jphs.commodity.model.CommodityTypeParent">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="name" column="name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="sort" column="sort" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="remark" column="remark" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="creator_name" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<resultMap id="commodityTypeParentGlobal" type="com.jinpaihushi.jphs.commodity.model.CommodityTypeParent">
+		<result property="id" column="CTP_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="name" column="CTP_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="sort" column="CTP_sort" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="remark" column="CTP_remark" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="CTP_status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="CTP_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="CTP_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="CTP_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.jinpaihushi.jphs.commodity.model.CommodityTypeParent">
+		INSERT INTO `COMMODITY_TYPE_PARENT`(
+			id, name, 
+			sort, remark, 
+			status, create_time, 
+			creator_id, creator_name
+		)VALUES(
+			#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+			#{sort,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+			#{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+			#{creatorId,jdbcType=VARCHAR}, #{creatorName,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<insert id="inserts" useGeneratedKeys="false"
+		parameterType="list">
+        <![CDATA[
+        INSERT INTO `COMMODITY_TYPE_PARENT`(
+			id, name, 
+			sort, remark, 
+			status, create_time, 
+			creator_id, creator_name
+        )]]>
+       	VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR}, 
+			#{item.sort,jdbcType=INTEGER}, #{item.remark,jdbcType=VARCHAR}, 
+			#{item.status,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP}, 
+			#{item.creatorId,jdbcType=VARCHAR}, #{item.creatorName,jdbcType=VARCHAR}
+			)
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById">
+		DELETE CTP FROM `COMMODITY_TYPE_PARENT` CTP WHERE CTP.ID = #{id} 
+	</delete>
+	
+	<update id="disableById">
+	    UPDATE `COMMODITY_TYPE_PARENT` CTP
+		SET 
+		CTP.STATUS = -1
+		WHERE CTP.ID = #{id}
+	</update>
+
+	<update id="update">
+		UPDATE `COMMODITY_TYPE_PARENT` CTP
+		<include refid="dynamicSet" /> 
+	    WHERE CTP.ID = #{id}
+	</update>
+
+	<select id="load" resultMap="commodityTypeParent">
+		SELECT <include refid="field"/>
+		FROM `COMMODITY_TYPE_PARENT` CTP
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `COMMODITY_TYPE_PARENT` CTP
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="list" resultMap="commodityTypeParent">
+		SELECT <include refid="field"/>
+		FROM `COMMODITY_TYPE_PARENT` CTP
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="query" resultMap="commodityTypeParent">
+		SELECT <include refid="field"/>
+		FROM `COMMODITY_TYPE_PARENT` CTP
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadById" resultMap="commodityTypeParent">
+		SELECT <include refid="field"/>
+		FROM `COMMODITY_TYPE_PARENT` CTP
+		WHERE CTP.ID = #{id}
+	</select>
+	
+</mapper>

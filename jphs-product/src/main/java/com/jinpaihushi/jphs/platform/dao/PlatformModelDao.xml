@@ -1,0 +1,205 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	wangwenteng
+	date	:	2017-11-01 16:25:40
+	version	:	1.0
+-->
+<mapper namespace="com.jinpaihushi.jphs.platform.dao.PlatformModelDao">
+	
+	<sql id="field">
+		PM.id, PM.name, PM.status, PM.url, 
+		PM.parent_id, PM.create_time
+	</sql>
+
+	<sql id="fieldGlobal">
+		PM.id PM_id, PM.name PM_name, 
+		PM.status PM_status, PM.url PM_url, 
+		PM.parent_id PM_parent_id, PM.create_time PM_create_time
+	</sql>
+	
+	<sql id="fieldWithAlias">
+		PM.id id, PM.name name, 
+		PM.status status, PM.url url, 
+		PM.parent_id parentId, PM.create_time createTime
+	</sql>
+	
+	<sql id="condition">
+		<if test="id!=null and id!=''">
+			AND PM.id=#{id}
+		</if>
+		<if test="name!=null and name!=''">
+			AND PM.name=#{name}
+		</if>
+		<if test="status!=null">
+			AND PM.status=#{status}
+		</if>
+		<if test="url!=null and url!=''">
+			AND PM.url=#{url}
+		</if>
+		<if test="parentId!=null and parentId!=''">
+			AND PM.parent_id=#{parentId}
+		</if>
+		<if test="createTime!=null">
+			AND PM.create_time=#{createTime}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="queryWhere">
+		<where>
+			<if test="id!=null and id!=''">
+				AND PM.id LIKE CONCAT('%', #{id}, '%')
+			</if>
+			<if test="name!=null and name!=''">
+				AND PM.name LIKE CONCAT('%', #{name}, '%')
+			</if>
+			<if test="status!=null">
+				AND PM.status=#{status}
+			</if>
+			<if test="url!=null and url!=''">
+				AND PM.url LIKE CONCAT('%', #{url}, '%')
+			</if>
+			<if test="parentId!=null and parentId!=''">
+				AND PM.parent_id LIKE CONCAT('%', #{parentId}, '%')
+			</if>
+			<if test="createTime!=null">
+				AND PM.create_time=#{createTime}
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="dynamicSet">
+		<set>
+           <if test="id!=null">
+				PM.id=#{id}, 
+		   </if>
+           <if test="name!=null">
+				PM.name=#{name}, 
+		   </if>
+           <if test="status!=null">
+				PM.status=#{status}, 
+		   </if>
+           <if test="url!=null">
+				PM.url=#{url}, 
+		   </if>
+           <if test="parentId!=null">
+				PM.parent_id=#{parentId}, 
+		   </if>
+           <if test="createTime!=null">
+				PM.create_time=#{createTime}, 
+		   </if>
+		</set>
+	</sql>
+	
+	<sql id="orderby">
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+	</sql>
+
+	<resultMap id="platformModel" type="com.jinpaihushi.jphs.platform.model.PlatformModel">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="name" column="name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="url" column="url" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="parentId" column="parent_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="createTime" column="create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+	</resultMap>
+	
+	<resultMap id="platformModelGlobal" type="com.jinpaihushi.jphs.platform.model.PlatformModel">
+		<result property="id" column="PM_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="name" column="PM_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="PM_status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="url" column="PM_url" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="parentId" column="PM_parent_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="createTime" column="PM_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+	</resultMap>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.jinpaihushi.jphs.platform.model.PlatformModel">
+		INSERT INTO `PLATFORM_MODEL`(
+			id, name, 
+			status, url, 
+			parent_id, create_time
+		)VALUES(
+			#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+			#{status,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, 
+			#{parentId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<insert id="inserts" useGeneratedKeys="false"
+		parameterType="list">
+        <![CDATA[
+        INSERT INTO `PLATFORM_MODEL`(
+			id, name, 
+			status, url, 
+			parent_id, create_time
+        )]]>
+       	VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR}, 
+			#{item.status,jdbcType=INTEGER}, #{item.url,jdbcType=VARCHAR}, 
+			#{item.parentId,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById">
+		DELETE PM FROM `PLATFORM_MODEL` PM WHERE PM.ID = #{id} 
+	</delete>
+	
+	<update id="disableById">
+	    UPDATE `PLATFORM_MODEL` PM
+		SET 
+		PM.STATUS = -1
+		WHERE PM.ID = #{id}
+	</update>
+
+	<update id="update">
+		UPDATE `PLATFORM_MODEL` PM
+		<include refid="dynamicSet" /> 
+	    WHERE PM.ID = #{id}
+	</update>
+
+	<select id="load" resultMap="platformModel">
+		SELECT <include refid="field"/>
+		FROM `PLATFORM_MODEL` PM
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `PLATFORM_MODEL` PM
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="list" resultMap="platformModel">
+		SELECT <include refid="field"/>
+		FROM `PLATFORM_MODEL` PM
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="query" resultMap="platformModel">
+		SELECT <include refid="field"/>
+		FROM `PLATFORM_MODEL` PM
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadById" resultMap="platformModel">
+		SELECT <include refid="field"/>
+		FROM `PLATFORM_MODEL` PM
+		WHERE PM.ID = #{id}
+	</select>
+	
+</mapper>

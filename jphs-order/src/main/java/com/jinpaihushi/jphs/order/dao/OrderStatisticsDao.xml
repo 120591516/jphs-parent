@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!-- author : wangwenteng date : 2017-08-16 14:59:44 version : 1.0 -->
+<mapper namespace="com.jinpaihushi.jphs.order.dao.OrderStatisticsDao">
+	<resultMap id="statistics" type="com.jinpaihushi.jphs.statistics.model.StatisticsModel">
+		<result property="device" column="device" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="years" column="years" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="months" column="months" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="days" column="days" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="create_time" column="create_time" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="num" column="num" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	<select id="getQuantityByWeek" resultMap="statistics">
+		SELECT
+			CASE o.device
+		WHEN 6 THEN
+			'wap站'
+		WHEN 5 THEN '官网'
+		WHEN 2 THEN '安卓'
+		WHEN 1 THEN 'IOS'
+		ELSE '其他'
+		END AS device,
+		DATE_FORMAT(o.create_time, '%Y-%m-%d') create_time,
+		COUNT(o.create_time) num
+		FROM
+			`order` o
+		WHERE
+			(o.`schedule`  BETWEEN 1 AND 5) AND o.`status` = 1
+		 AND(DATE_FORMAT(o.create_time, '%Y-%m-%d')  BETWEEN #{startTime}
+		AND #{endTime} )
+		GROUP BY o.device,DATE_FORMAT(o.create_time, '%Y-%m-%d')
+		ORDER BY o.create_time,o.device
+	</select>
+	<select id="quantityByMonth" resultMap="statistics">
+		SELECT
+			CASE o.device
+		WHEN 6 THEN
+			'wap站'
+		WHEN 5 THEN '官网'
+		WHEN 2 THEN '安卓'
+		WHEN 1 THEN 'IOS'
+		ELSE '其他'
+		END AS device,
+		DATE_FORMAT(o.create_time, '%Y-%m-%d') create_time,
+		COUNT(o.create_time) num
+		FROM
+			`order` o
+		WHERE
+			(o.`schedule`  BETWEEN 1 AND 5) AND o.`status` = 1
+		 AND DATE_FORMAT(o.create_time, '%Y-%m') =#{month}
+		GROUP BY o.device,DATE_FORMAT(o.create_time, '%Y-%m-%d')
+		ORDER BY o.create_time,o.device
+	</select>
+	<select id="quantityByYear" resultMap="statistics">
+		SELECT
+			CASE o.device
+		WHEN 6 THEN
+			'wap站'
+		WHEN 5 THEN '官网'
+		WHEN 2 THEN '安卓'
+		WHEN 1 THEN 'IOS'
+		ELSE '其他'
+		END AS device,
+		DATE_FORMAT(o.create_time, '%Y-%m') create_time,
+		COUNT(o.create_time) num
+		FROM
+			`order` o
+		WHERE
+			(o.`schedule`  BETWEEN 1 AND 5) AND o.`status` = 1
+		 AND DATE_FORMAT(o.create_time, '%Y') =#{year}
+		GROUP BY o.device,DATE_FORMAT(o.create_time, '%Y-%m')
+		ORDER BY o.create_time,o.device
+	</select>
+	<select id="getAllNumByYear" resultMap="statistics">
+		 SELECT
+			<!-- CASE o.device
+		WHEN 6 THEN
+			'wap站'
+		WHEN 5 THEN '官网'
+		WHEN 2 THEN '安卓'
+		WHEN 1 THEN 'IOS'
+		ELSE '其他'
+		END AS device, -->
+		DATE_FORMAT(o.create_time, '%Y') years,
+		DATE_FORMAT(o.create_time, '%m') months,
+		DATE_FORMAT(o.create_time, '%d') days,
+		DATE_FORMAT(o.create_time, '%Y-%m-%d') daysStr,
+		COUNT(o.create_time) num
+		FROM
+			`order` o
+		WHERE
+			(o.`schedule`  BETWEEN 1 AND 5) AND o.`status` = 1
+		 AND DATE_FORMAT(o.create_time, '%Y') =#{year}
+		 <if test="device!=null and device!=''">
+		 	o.device =#{device}
+		 </if>
+		GROUP BY daysStr
+		ORDER BY o.create_time
+	</select>
+	<select id="getServiceRanking" resultType="java.util.HashMap">
+		SELECT
+			og.title goodsTitle,
+			COUNT(*) goodsNum
+		FROM
+			`order_goods` og
+			LEFT JOIN `order` o ON og.order_id = o.id
+		WHERE
+			DATE_FORMAT(og.create_time, '%Y') = #{year}
+			AND (o.`schedule`  BETWEEN 1 AND 5) AND o.`status` = 1
+		GROUP BY
+			og.title
+		ORDER BY goodsNum DESC
+		LIMIT 10
+	</select>
+	<select id="getCityRanking" resultType="java.util.HashMap">
+		SELECT
+			CASE
+		WHEN LENGTH(oo.address) > 6 THEN
+			SUBSTR(oo.address, 5, 2)
+		ELSE
+			oo.address
+		END AS city,
+		 count(*) countNum
+		FROM
+			order_other oo
+			LEFT JOIN `order` o ON oo.order_id = o.id
+		WHERE
+			DATE_FORMAT(oo.create_time, '%Y') = #{year}
+		AND oo.address IS NOT NULL
+		AND oo.address != ''
+		AND (o.`schedule`  BETWEEN 1 AND 5)
+		AND o.`status` = 1
+		GROUP BY
+			city
+		ORDER BY
+			countNum DESC
+		LIMIT 10;
+	</select>
+	<select id="getAllServiceNumByYear" resultMap="statistics">
+		SELECT
+		DATE_FORMAT(o.create_time, '%Y') years,
+		DATE_FORMAT(o.create_time, '%m') months,
+		DATE_FORMAT(o.create_time, '%d') days,
+		DATE_FORMAT(o.create_time, '%Y-%m-%d') daysStr,
+		COUNT(o.create_time) num
+		FROM
+			`order` o
+		LEFT JOIN order_goods og ON og.order_id = o.id
+		WHERE
+			<!-- o.`schedule`  = 5 -->
+			(o.`schedule`  BETWEEN 1 AND 5) AND o.`status` = 1
+		 AND DATE_FORMAT(o.create_time, '%Y') =#{year}
+		<if test="goodsId!=null and goodsId!=''">
+			AND og.goods_id = #{goodsId} 
+		</if>
+		GROUP BY daysStr
+		ORDER BY o.create_time
+	</select>
+	<select id="getAllCityNumByYear" resultMap="statistics">
+		SELECT
+		DATE_FORMAT(o.create_time, '%Y') years,
+		DATE_FORMAT(o.create_time, '%m') months,
+		DATE_FORMAT(o.create_time, '%d') days,
+		DATE_FORMAT(o.create_time, '%Y-%m-%d') daysStr,
+		COUNT(o.create_time) num
+		FROM
+			`order` o
+		LEFT JOIN order_other oo ON oo.order_id = o.id
+		WHERE
+			(o.`schedule`  BETWEEN 1 AND 5) AND o.`status` = 1
+		 AND DATE_FORMAT(o.create_time, '%Y') =#{year}
+		<if test="city!=null and city!=''">
+			AND (CASE WHEN LENGTH(oo.address) > 6 THEN
+			SUBSTR(oo.address, 5, 2)
+			ELSE
+			oo.address
+			END ) LIKE #{city}
+		</if>
+		GROUP BY daysStr
+		ORDER BY o.create_time
+	</select>
+</mapper>

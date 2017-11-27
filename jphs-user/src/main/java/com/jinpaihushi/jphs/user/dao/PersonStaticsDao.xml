@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!-- author : wangwenteng date : 2017-08-16 14:59:44 version : 1.0 -->
+<mapper namespace="com.jinpaihushi.jphs.user.dao.PersonStaticsDao">
+	<resultMap id="statistics" type="com.jinpaihushi.jphs.statistics.model.StatisticsModel">
+		<result property="device" column="device" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="years" column="years" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="months" column="months" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="days" column="days" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="create_time" column="create_time" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="num" column="num" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	<select id="userRegisterByWeek" resultMap="statistics">
+		SELECT CASE u.device
+				WHEN 6 THEN
+					'wap站'
+				WHEN 5 THEN '官网'
+				WHEN 2 THEN '安卓'
+				WHEN 1 THEN 'IOS'
+				WHEN 3 THEN '微信'
+				WHEN 4 THEN '114'
+				WHEN 7 THEN '呼啦圈'
+				ELSE '其他'
+				END AS device,
+		DATE_FORMAT(u.create_time, '%Y-%m-%d') create_time,
+				COUNT(u.create_time) num
+		FROM `user` u 
+		WHERE (DATE_FORMAT(u.create_time, '%Y-%m-%d')  BETWEEN #{startTime} AND #{endTime} )
+		AND u.type =1
+		GROUP BY u.device ,DATE_FORMAT(u.create_time, '%Y-%m-%d')
+	</select>
+	<select id="userRegisterByMonth" resultMap="statistics">
+		SELECT CASE u.device
+				WHEN 6 THEN
+					'wap站'
+				WHEN 5 THEN '官网'
+				WHEN 2 THEN '安卓'
+				WHEN 1 THEN 'IOS'
+				WHEN 3 THEN '微信'
+				WHEN 4 THEN '114'
+				WHEN 7 THEN '呼啦圈'
+				ELSE '其他'
+				END AS device,
+		DATE_FORMAT(u.create_time, '%Y-%m-%d') create_time,
+				COUNT(u.create_time) num
+		FROM `user` u 
+		<where>
+			 AND DATE_FORMAT(u.create_time, '%Y-%m') =#{month}
+			 AND u.type =1
+		</where>
+		GROUP BY u.device ,DATE_FORMAT(u.create_time, '%Y-%m-%d')
+	</select>
+	<select id="userRegisterByYear" resultMap="statistics">
+		SELECT CASE u.device
+				WHEN 6 THEN
+					'wap站'
+				WHEN 5 THEN '官网'
+				WHEN 2 THEN '安卓'
+				WHEN 1 THEN 'IOS'
+				WHEN 3 THEN '微信'
+				WHEN 4 THEN '114'
+				WHEN 7 THEN '呼啦圈'
+				ELSE '其他'
+				END AS device,
+		DATE_FORMAT(u.create_time, '%Y-%m') create_time,
+				COUNT(u.create_time) num
+		FROM `user` u 
+		<where>
+			 AND DATE_FORMAT(u.create_time, '%Y') =#{year}
+			 AND u.type =1
+		</where>
+		GROUP BY u.device ,DATE_FORMAT(u.create_time, '%Y-%m')
+	</select>
+	<select id="userAllNumByYear" resultMap="statistics">
+		SELECT
+			
+		DATE_FORMAT(u.create_time, '%Y') years,
+		DATE_FORMAT(u.create_time, '%m') months,
+		DATE_FORMAT(u.create_time, '%d') days,
+		DATE_FORMAT(u.create_time, '%Y-%m-%d') daysStr,
+		COUNT(u.create_time) num
+		FROM
+			`user` u
+		<where>
+			AND  DATE_FORMAT(u.create_time, '%Y') =#{year}
+			AND u.type =1
+			<if test="device!=null and device!=''">
+		 	o.device =#{device}
+			</if>
+		</where>
+		GROUP BY daysStr
+		ORDER BY u.create_time
+	</select>
+	<select id="nurseRegisterByWeek" resultMap="statistics">
+		SELECT t.device,t.create_time,COUNT(t.creator_id) num FROM (SELECT DISTINCT
+			'注册量' AS device,
+			DATE_FORMAT(u.create_time, '%Y-%m-%d') create_time,
+			n.creator_id
+		FROM
+			nurse n
+		LEFT JOIN `user` u ON n.creator_id = u.id
+		LEFT JOIN nurse_jobtitle nj ON n.creator_id = nj.creator_id
+		WHERE
+			(
+				DATE_FORMAT(n.create_time, '%Y-%m-%d') BETWEEN #{startTime} AND #{endTime}
+			)
+		AND u.type = 0
+		<if test="type!=null">
+			AND nj.type = #{type}
+		</if>
+		) t
+		GROUP BY t.create_time
+		UNION 
+		SELECT '审核量' AS device,
+			DATE_FORMAT(a.create_time, '%Y-%m-%d') create_time,
+		COUNT(a.create_time) num
+		FROM audit a 
+		LEFT JOIN nurse_jobtitle nj ON (nj.creator_id = a.creator_id or nj.id = a.creator_id)
+		WHERE (a.create_time  BETWEEN #{startTime} AND #{endTime} )
+		AND a.audit =1
+		<if test="type!=null">
+			AND nj.type = #{type}
+		</if>
+		GROUP BY DATE_FORMAT(a.create_time, '%Y-%m-%d')
+	</select>
+	<select id="nurseRegisterByMonth" resultMap="statistics">
+		SELECT t.device,t.create_time,COUNT(t.creator_id) num FROM (SELECT DISTINCT
+			'注册量' AS device,
+			DATE_FORMAT(u.create_time, '%Y-%m-%d') create_time,
+			n.creator_id
+		FROM
+			nurse n
+		LEFT JOIN `user` u ON n.creator_id = u.id
+		LEFT JOIN nurse_jobtitle nj ON n.creator_id = nj.creator_id
+		WHERE
+		DATE_FORMAT(u.create_time, '%Y-%m') =#{month}
+		AND u.type = 0
+		<if test="type!=null">
+			AND nj.type = #{type}
+		</if>
+		) t
+		GROUP BY t.create_time
+		UNION 
+		SELECT '审核量' AS device,
+			DATE_FORMAT(a.create_time, '%Y-%m-%d') create_time,
+		COUNT(a.create_time) num
+		FROM audit a 
+		LEFT JOIN nurse_jobtitle nj ON (nj.creator_id = a.creator_id or nj.id = a.creator_id)
+		WHERE DATE_FORMAT(a.create_time, '%Y-%m') =#{month}
+		AND a.audit =1
+		<if test="type!=null">
+			AND nj.type = #{type}
+		</if>
+		GROUP BY DATE_FORMAT(a.create_time, '%Y-%m-%d')
+	</select>
+	<select id="nurseRegisterByYear" resultMap="statistics">
+	SELECT t.device,t.create_time,COUNT(t.creator_id) num FROM (SELECT DISTINCT
+			'注册量' AS device,
+			DATE_FORMAT(u.create_time, '%Y-%m') create_time,
+			n.creator_id
+		FROM
+			nurse n
+		LEFT JOIN `user` u ON n.creator_id = u.id
+		LEFT JOIN nurse_jobtitle nj ON n.creator_id = nj.creator_id
+		WHERE
+		DATE_FORMAT(u.create_time, '%Y') =#{year}
+		AND u.type = 0
+		<if test="type!=null">
+			AND nj.type = #{type}
+		</if>
+		) t
+		GROUP BY t.create_time
+		UNION 
+		SELECT '审核量' AS device,
+			DATE_FORMAT(a.create_time, '%Y-%m') create_time,
+		COUNT(a.create_time) num
+		FROM audit a
+		LEFT JOIN nurse_jobtitle nj ON (nj.creator_id = a.creator_id or nj.id = a.creator_id) 
+		WHERE DATE_FORMAT(a.create_time, '%Y') =#{year}
+		AND a.audit =1
+		<if test="type!=null">
+			AND nj.type = #{type}
+		</if>
+		GROUP BY DATE_FORMAT(a.create_time, '%Y-%m')
+	</select>
+	<select id="nurseAllNumByYear" resultMap="statistics">
+		SELECT
+			reg.years,
+			reg.months,
+			reg.days,
+			reg.daysStr,
+			CONCAT(
+				IFNULL(aud.totalA, 0),
+				'/',
+				IFNULL(reg.totalR, 0)
+			) num
+		FROM
+			(
+				SELECT t.device,t.years,t.months,t.days,t.daysStr,COUNT(t.creator_id) totalR FROM (SELECT DISTINCT
+					'注册量' device,
+					DATE_FORMAT(n.create_time, '%Y') years,
+					DATE_FORMAT(n.create_time, '%m') months,
+					DATE_FORMAT(n.create_time, '%d') days,
+					DATE_FORMAT(n.create_time, '%Y-%m-%d') daysStr,
+					n.creator_id
+				FROM nurse n
+				LEFT JOIN `user` u ON n.creator_id = u.id
+				LEFT JOIN nurse_jobtitle nj ON nj.creator_id = u.id
+				WHERE
+					DATE_FORMAT(n.create_time, '%Y') = '2017'
+				AND u.type = 0
+				<if test="type!=null">
+					AND nj.type = #{type}
+				</if>
+				) t
+				GROUP BY
+					t.daysStr
+			) reg
+		LEFT JOIN (
+			SELECT
+				'审核量' device,
+				DATE_FORMAT(a.create_time, '%Y') years,
+				DATE_FORMAT(a.create_time, '%m') months,
+				DATE_FORMAT(a.create_time, '%d') days,
+				DATE_FORMAT(a.create_time, '%Y-%m-%d') daysStr,
+				IFNULL(COUNT(a.create_time), '0') totalA
+			FROM
+				audit a
+			LEFT JOIN nurse_jobtitle nj ON (nj.creator_id = a.creator_id or nj.id = a.creator_id)
+			WHERE
+				DATE_FORMAT(a.create_time, '%Y') = #{year}
+			AND a.audit = 1
+			<if test="type!=null">
+				AND nj.type = #{type}
+			</if>
+			GROUP BY
+				daysStr
+		) aud ON reg.daysStr = aud.daysStr
+	</select>
+</mapper>
