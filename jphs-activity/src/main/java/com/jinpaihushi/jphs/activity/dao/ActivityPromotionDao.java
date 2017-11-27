@@ -1,7 +1,9 @@
 package com.jinpaihushi.jphs.activity.dao;
 
+import java.util.Date;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.jinpaihushi.dao.BaseDao;
@@ -32,6 +34,7 @@ public interface ActivityPromotionDao extends BaseDao<ActivityPromotion> {
      * @param map
      * @return
      */
-    Integer getIndexNumberP(Map<String,Object> map);
+    Integer getIndexNumberP(@Param("activityId") String activityId, @Param("userId") String userId,
+            @Param("startTime") Date startTime, @Param("endTime") Date endTime);
     
 }

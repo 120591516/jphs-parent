@@ -168,6 +168,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			<result property="priceId" column="AP_price_id" javaType="String" jdbcType="VARCHAR"></result>
 			<result property="resourceType" column="AP_resource_type" javaType="Integer" jdbcType="INTEGER"></result>
 			<result property="type" column="AP_type" javaType="Integer" jdbcType="INTEGER"></result>
+			<result property="typeName" column="AP_type_name" javaType="String" jdbcType="VARCHAR"></result>
 			<result property="price" column="AP_price" javaType="Double" jdbcType="DECIMAL"></result>
 			<result property="beginTime" column="AP_begin_time" javaType="Date" jdbcType="TIMESTAMP"></result>
 			<result property="endTime" column="AP_end_time" javaType="Date" jdbcType="TIMESTAMP"></result>
@@ -273,7 +274,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		(SELECT url FROM `service_images` `SI` WHERE`SI`.source_id=`JP`.`id` AND `SI`.status=1 AND `SI`.device_type=#{deviceType}) JP_img_url,
 		AP.begin_time AP_begin_time, AP.end_time AP_end_time, 
 		AP.site_id AP_site_id, AP.platform_id AP_platform_id, 
-		AP.status AP_status
+		AP.status AP_status,
+		CASE WHEN AP.type='1' THEN '下单立减' WHEN AP.type=2 THEN '首单立减' WHEN AP.type=3 THEN '第二单立减' ELSE NULL END AP_type_name 
 		FROM `JKWY_PACKAGE` JP 
 		LEFT JOIN `jkwy_package_platform` `JPP` ON JP.`id`=`JPP`.`jkwy_package_id` 
 		LEFT JOIN `activity_promotion` `AP` ON JP.`id` =`AP`.`resource_id` AND (`AP`.begin_time &lt; NOW()) AND (`AP`.end_time &gt; NOW())
@@ -316,7 +318,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		AP.type AP_type, AP.price AP_price, 
 		AP.begin_time AP_begin_time, AP.end_time AP_end_time, 
 		AP.site_id AP_site_id, AP.platform_id AP_platform_id, 
-		AP.status AP_status
+		AP.status AP_status,
+		CASE WHEN AP.type='1' THEN '下单立减' WHEN AP.type=2 THEN '首单立减' WHEN AP.type=3 THEN '第二单立减' ELSE NULL END AP_type_name 
 		FROM `jkwy_package` JP 
 		LEFT JOIN `jkwy_package_platform` `JPP` ON JP.`id`=`JPP`.`jkwy_package_id` 
 		LEFT JOIN `service_images` `SI` ON `JP`.id=`SI`.source_id AND `SI`.status=1 AND `SI`.device_type=#{deviceType}
@@ -372,6 +375,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 				<result property="priceId" column="AP_price_id" javaType="String" jdbcType="VARCHAR"></result>
 				<result property="resourceType" column="AP_resource_type" javaType="Integer" jdbcType="INTEGER"></result>
 				<result property="type" column="AP_type" javaType="Integer" jdbcType="INTEGER"></result>
+				<result property="typeName" column="AP_type_name" javaType="String" jdbcType="VARCHAR"></result>
 				<result property="price" column="AP_price" javaType="Double" jdbcType="DECIMAL"></result>
 				<result property="beginTime" column="AP_begin_time" javaType="Date" jdbcType="TIMESTAMP"></result>
 				<result property="endTime" column="AP_end_time" javaType="Date" jdbcType="TIMESTAMP"></result>

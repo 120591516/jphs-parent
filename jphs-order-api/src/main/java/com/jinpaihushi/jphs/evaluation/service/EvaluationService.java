@@ -22,4 +22,11 @@ public interface EvaluationService extends BaseService<Evaluation> {
 
 	List<Evaluation> listInfo(Evaluation evaluation);
 
+	/**
+	 * 插入评价记录
+	 * @param evaluation
+	 * @return
+	 */
+	int insertEvaluation(Evaluation evaluation);
+	
 }

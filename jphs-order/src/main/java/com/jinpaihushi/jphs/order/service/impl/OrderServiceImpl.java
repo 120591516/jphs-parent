@@ -470,6 +470,9 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
 
                     // 先获取商品的基本信息
                     Goods goods = goodsDao.getGoodsByPricePart(orderInfo.getPricePartId());
+                    if (goods.getType() == 0) {
+                        orderInfo.setExpectorId("10022");
+                    }
                     Double salePrice = 0.00;
                     Price price = priceDao.loadById(pricePart.getPriceId());
                     if (StringUtils.isNotEmpty(orderInfo.getExpectorId())) {
@@ -1373,7 +1376,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
                     if (falg) {
                         Order order_size = new Order();
                         order_size.setId(orderId);
-                        order_size.setSchedule(5);
+                        order_size.setSchedule(4);
                         int od = orderDao.update(order_size);
                         if (od <= 0) {
                             System.out.println(1 / 0);
@@ -1771,18 +1774,19 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
                             String oo_ss_pj = "";
                             if (oo_addess_arr[1].equals("市辖区")) {
                                 oo_ss_pj = oo_addess_arr[0] + oo_addess_arr[0];
-                            } else {
-                            	String shi = oo_addess_arr[1].replace("市", "");
-                            	if(shi.equals(oo_addess_arr[0])){
-                            		oo_ss_pj = oo_addess_arr[1] + oo_addess_arr[1];
-                            	}else{
-                            		oo_ss_pj = oo_addess_arr[0] + oo_addess_arr[1];
-                            	}
+                            }
+                            else {
+                                String shi = oo_addess_arr[1].replace("市", "");
+                                if (shi.equals(oo_addess_arr[0])) {
+                                    oo_ss_pj = oo_addess_arr[1] + oo_addess_arr[1];
+                                }
+                                else {
+                                    oo_ss_pj = oo_addess_arr[0] + oo_addess_arr[1];
+                                }
                             }
                             if (oo_ss_pj.equals("")) {
                                 return "15";
                             }
-                            
 
                             for (int a = 0; a < ua_list.size(); a++) {
                                 if (ua_list.get(a).getProvince() == null || ua_list.get(a).getProvince().equals("")) {

@@ -363,10 +363,15 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	</sql>
 	
 	<select id="getIndexNumberP" resultType="java.lang.Integer">
-		select COUNT(O.id) FROM `activity_promotion` AP 
-		LEFT JOIN `order_goods` OG ON AP.resource_id = OG.goods_id 
-		LEFT JOIN `order` O ON OG.order_id = O.id 
-		WHERE OG.goods_id=#{goodsId} and O.creator_id=#{userId} 
+		SELECT
+			COUNT(*) countNum
+		FROM
+			`order` o
+		WHERE o.create_time BETWEEN #{startTime} AND #{endTime}
+		AND o.creator_id =  #{userId}
+		AND o.activity_promotion_id = #{activityId}
+		AND o.`schedule` &lt; 6
+		AND o.`status` =1 
 	</select>
 	
 	<select id="loadById" resultMap="activityPromotion">

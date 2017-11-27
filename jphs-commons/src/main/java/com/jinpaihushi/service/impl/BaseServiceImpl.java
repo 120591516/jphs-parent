@@ -191,7 +191,6 @@ public abstract class BaseServiceImpl<T extends BaseModel>
      * @param allNumByYear 
      * @return
      */
-    @SuppressWarnings("unchecked")
     protected Map<String, Object> getAnnualData(String year, List<StatisticsModel> allNumByYear) {
         Map<String, Object> result = new HashMap<>();
         String[] month = new String[13];
@@ -222,9 +221,18 @@ public abstract class BaseServiceImpl<T extends BaseModel>
 
         }
         result.put("days", Arrays.toString(days));
-        String[][] allData = new String[31][13];
+        String[][] allData = getDataByAllData(allNumByYear, month, chMonth, days);
+        result.put("allData", allData);
+        result.put("year", "'" + year + "-01'");
+        return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected String[][] getDataByAllData(List<StatisticsModel> allNumByYear, String[] month, String[] chMonth,
+            String[] days) {
+        String[][] allData = new String[days.length][chMonth.length];
         for (int i = 0; i < allData.length; i++) {
-            Predicate daysPredicate = new MyPredicate("days", days[i]);
+            Predicate daysPredicate = new MyPredicate("device", days[i].replace("'", ""));
             List<StatisticsModel> daysSelect = (List<StatisticsModel>) CollectionUtils.select(allNumByYear,
                     daysPredicate);
             for (int j = 0; j < allData[i].length; j++) {
@@ -244,9 +252,7 @@ public abstract class BaseServiceImpl<T extends BaseModel>
                 }
             }
         }
-        result.put("allData", allData);
-        result.put("year", "'" + year + "-01'");
-        return result;
+        return allData;
     }
 
     /**

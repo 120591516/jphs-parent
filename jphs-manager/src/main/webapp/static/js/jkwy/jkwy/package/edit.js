@@ -56,7 +56,7 @@ $(function() {
 						alert("请完善套餐内容！！");
 						return false;
 					}
-//					form.submit();
+					form.submit();
 				}
 			});
 })

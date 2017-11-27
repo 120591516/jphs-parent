@@ -76,7 +76,7 @@ public class WechatPay {
 		String body = ""; // 商品名称
 		String out_trade_no = ""; // 订单号
 		String CREATE_IP = "";
-		String serviceType = "";//	1：服务，2:商品
+		String serviceType = "";//	1：服务，2:商品，3家庭护士，4：健康优护套餐
 		String familyData = "";
 		String OPENID = "";
 		try {
@@ -305,7 +305,7 @@ public class WechatPay {
 		String body = ""; // 商品名称
 		String out_trade_no = ""; // 订单号
 		String CREATE_IP = "";
-		String serviceType = "";//	1：服务，2:商品	,3:家庭护士
+		String serviceType = "";//	1：服务，2:商品	,3:家庭护士，4：健康优护
 		String familyData = "";
 		try {
 			JSONObject contentjson = JSONObject.fromObject(content);
@@ -416,7 +416,7 @@ public class WechatPay {
 		String signRe = "";
 		try {
 			JSONObject attach_obj = new JSONObject();
-			attach_obj.put("payType", serviceType);//	支付类型1：服务；2：商品
+			attach_obj.put("payType", serviceType);//	支付类型1：服务；2：商品/3家庭护士、4健康优护套餐
 			if(!"".equals(serviceType) && serviceType.equals("3")){
 				attach_obj.put("familyData", familyData);
 			}

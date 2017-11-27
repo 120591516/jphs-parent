@@ -1,0 +1,251 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	yangsong
+	date	:	2017-11-23 15:40:14
+	version	:	1.0
+-->
+<mapper namespace="com.jinpaihushi.jphs.sms.dao.SmsTemplateDao">
+	
+	<sql id="field">
+		ST.id, ST.type, ST.sms_id, ST.title, 
+		ST.content, ST.status, ST.create_time, ST.creator_id, 
+		ST.creator_name
+	</sql>
+
+	<sql id="fieldGlobal">
+		ST.id ST_id, ST.type ST_type, 
+		ST.sms_id ST_sms_id, ST.title ST_title, 
+		ST.content ST_content, ST.status ST_status, 
+		ST.create_time ST_create_time, ST.creator_id ST_creator_id, 
+		ST.creator_name ST_creator_name
+	</sql>
+	
+	<sql id="fieldWithAlias">
+		ST.id id, ST.type type, 
+		ST.sms_id smsId, ST.title title, 
+		ST.content content, ST.status status, 
+		ST.create_time createTime, ST.creator_id creatorId, 
+		ST.creator_name creatorName
+	</sql>
+	
+	<sql id="condition">
+		<if test="id!=null and id!=''">
+			AND ST.id=#{id}
+		</if>
+		<if test="type!=null">
+			AND ST.type=#{type}
+		</if>
+		<if test="smsId!=null and smsId!=''">
+			AND ST.sms_id LIKE CONCAT('%', #{smsId}, '%')
+		</if>
+		<if test="title!=null and title!=''">
+			AND ST.title LIKE CONCAT('%', #{title}, '%')
+		</if>
+		<if test="content!=null and content!=''">
+			AND ST.content LIKE CONCAT('%', #{content}, '%')
+		</if>
+		<if test="status!=null">
+			AND ST.status=#{status}
+		</if>
+		<if test="createTime!=null">
+			AND ST.create_time=#{createTime}
+		</if>
+		<if test="creatorId!=null and creatorId!=''">
+			AND ST.creator_id=#{creatorId}
+		</if>
+		<if test="creatorName!=null and creatorName!=''">
+			AND ST.creator_name=#{creatorName}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="queryWhere">
+		<where>
+			<if test="id!=null and id!=''">
+				AND ST.id LIKE CONCAT('%', #{id}, '%')
+			</if>
+			<if test="type!=null">
+				AND ST.type=#{type}
+			</if>
+			<if test="smsId!=null and smsId!=''">
+				AND ST.sms_id LIKE CONCAT('%', #{smsId}, '%')
+			</if>
+			<if test="title!=null and title!=''">
+				AND ST.title LIKE CONCAT('%', #{title}, '%')
+			</if>
+			<if test="content!=null and content!=''">
+				AND ST.content LIKE CONCAT('%', #{content}, '%')
+			</if>
+			<if test="status!=null">
+				AND ST.status=#{status}
+			</if>
+			<if test="createTime!=null">
+				AND ST.create_time=#{createTime}
+			</if>
+			<if test="creatorId!=null and creatorId!=''">
+				AND ST.creator_id LIKE CONCAT('%', #{creatorId}, '%')
+			</if>
+			<if test="creatorName!=null and creatorName!=''">
+				AND ST.creator_name LIKE CONCAT('%', #{creatorName}, '%')
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="dynamicSet">
+		<set>
+           <if test="id!=null">
+				ST.id=#{id}, 
+		   </if>
+           <if test="type!=null">
+				ST.type=#{type}, 
+		   </if>
+           <if test="smsId!=null">
+				ST.sms_id=#{smsId}, 
+		   </if>
+           <if test="title!=null">
+				ST.title=#{title}, 
+		   </if>
+           <if test="content!=null">
+				ST.content=#{content}, 
+		   </if>
+           <if test="status!=null">
+				ST.status=#{status}, 
+		   </if>
+           <if test="createTime!=null">
+				ST.create_time=#{createTime}, 
+		   </if>
+           <if test="creatorId!=null">
+				ST.creator_id=#{creatorId}, 
+		   </if>
+           <if test="creatorName!=null">
+				ST.creator_name=#{creatorName}, 
+		   </if>
+		</set>
+	</sql>
+	
+	<sql id="orderby">
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+	</sql>
+
+	<resultMap id="smsTemplate" type="com.jinpaihushi.jphs.sms.model.SmsTemplate">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="type" column="type" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="smsId" column="sms_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="title" column="title" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="content" column="content" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="creator_name" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<resultMap id="smsTemplateGlobal" type="com.jinpaihushi.jphs.sms.model.SmsTemplate">
+		<result property="id" column="ST_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="type" column="ST_type" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="smsId" column="ST_sms_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="title" column="ST_title" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="content" column="ST_content" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="ST_status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="ST_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="ST_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="ST_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.jinpaihushi.jphs.sms.model.SmsTemplate">
+		INSERT INTO `SMS_TEMPLATE`(
+			id, type, 
+			sms_id, title, 
+			content, status, 
+			create_time, creator_id, 
+			creator_name
+		)VALUES(
+			#{id,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
+			#{smsId,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
+			#{content,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+			#{createTime,jdbcType=TIMESTAMP}, #{creatorId,jdbcType=VARCHAR}, 
+			#{creatorName,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<insert id="inserts" useGeneratedKeys="false"
+		parameterType="list">
+        <![CDATA[
+        INSERT INTO `SMS_TEMPLATE`(
+			id, type, 
+			sms_id, title, 
+			content, status, 
+			create_time, creator_id, 
+			creator_name
+        )]]>
+       	VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id,jdbcType=VARCHAR}, #{item.type,jdbcType=INTEGER}, 
+			#{item.smsId,jdbcType=VARCHAR}, #{item.title,jdbcType=VARCHAR}, 
+			#{item.content,jdbcType=VARCHAR}, #{item.status,jdbcType=INTEGER}, 
+			#{item.createTime,jdbcType=TIMESTAMP}, #{item.creatorId,jdbcType=VARCHAR}, 
+			#{item.creatorName,jdbcType=VARCHAR}
+			)
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById">
+		DELETE ST FROM `SMS_TEMPLATE` ST WHERE ST.ID = #{id} 
+	</delete>
+	
+	<update id="disableById">
+	    UPDATE `SMS_TEMPLATE` ST
+		SET 
+		ST.STATUS = -1
+		WHERE ST.ID = #{id}
+	</update>
+
+	<update id="update">
+		UPDATE `SMS_TEMPLATE` ST
+		<include refid="dynamicSet" /> 
+	    WHERE ST.ID = #{id}
+	</update>
+
+	<select id="load" resultMap="smsTemplate">
+		SELECT <include refid="field"/>
+		FROM `SMS_TEMPLATE` ST
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `SMS_TEMPLATE` ST
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="list" resultMap="smsTemplate">
+		SELECT <include refid="field"/>
+		FROM `SMS_TEMPLATE` ST
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="query" resultMap="smsTemplate">
+		SELECT <include refid="field"/>
+		FROM `SMS_TEMPLATE` ST
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadById" resultMap="smsTemplate">
+		SELECT <include refid="field"/>
+		FROM `SMS_TEMPLATE` ST
+		WHERE ST.ID = #{id}
+	</select>
+	
+</mapper>

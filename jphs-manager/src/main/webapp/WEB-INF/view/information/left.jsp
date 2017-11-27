@@ -34,5 +34,26 @@
 				</jphs:hasPermission>
 			</div>
 		</jphs:hasAnyPermission>
+			<jphs:hasAnyPermission
+			url="/information/channel/index.jhtml,/information/index.jhtml,/information/evaluate/index.jhtml">
+			<dt class="public_left_active">
+				<span class="common_left_icon"> </span>短信服务 <i
+					class="public-horn-135 left-mg"></i>
+			</dt>
+			<div class="public_left_list">
+				<jphs:hasPermission url="/sms/template/index.jhtml">
+					<dd>
+						<a href="/sms/template/index.jhtml"><img
+							src="/static/images/Group7.png" />短信模板</a>
+					</dd>
+				</jphs:hasPermission>
+				<jphs:hasPermission url="/sms/history/index.jhtml">
+					<dd>
+						<a href="/sms/history/index.jhtml"><img
+							src="/static/images/Group7.png" />短信中心</a>
+					</dd>
+				</jphs:hasPermission>
+			</div>
+		</jphs:hasAnyPermission>
 	</dl>
 </div>

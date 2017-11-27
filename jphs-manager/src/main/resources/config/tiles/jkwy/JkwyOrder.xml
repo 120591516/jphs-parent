@@ -35,5 +35,23 @@
 			<add-attribute value="/static/js/jkwy/jkwy/order/detail.js" />
 		</put-list-attribute>
 	</definition>
+	<definition name="jkwy.order.statistics.quantity" extends="default.layout">
+		<put-attribute type="string" name="title" value="订单量统计" />
+		<put-attribute type="template" name="left"
+			value="/WEB-INF/view/statistics/left.jsp" />
+		<put-attribute type="template" name="body"
+			value="/WEB-INF/view/statistics/jkwy/order/index.jsp" />
+		<put-list-attribute name="css" inherit="true">
+			<add-attribute value="/static/css/access/log/access.css" />					
+		</put-list-attribute>
+		<put-list-attribute name="scripts" inherit="true">
+			<add-attribute value="/static/js/analysis/weekSatatis.js" />
+			<add-attribute value="/static/js/analysis/monthSatatis.js" />
+			<add-attribute value="/static/js/analysis/yearSatatis.js" />
+			<add-attribute value="/static/js/analysis/order/quantity.js" />
+			<add-attribute value="/static/js/analysis/echartsData.js" />
+			<add-attribute value="/static/js/analysis/annual.js" />
+		</put-list-attribute>
+	</definition>
 	
 </tiles-definitions>

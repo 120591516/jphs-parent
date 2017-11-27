@@ -117,5 +117,32 @@
 				</jphs:hasPermission>
 			</div>
 		</jphs:hasAnyPermission>
+		<jphs:hasAnyPermission
+			url="/jkwy/order/quantity.jhtml">
+			<dt class="public_left_active">
+				<span class="common_left_icon"> </span>健康无忧护<i
+					class="public-horn-135 left-mg"></i>
+			</dt>
+			<div class="public_left_list">
+				<jphs:hasPermission url="/jkwy/order/quantity.jhtml">
+					<dd>
+						<a href="/jkwy/order/quantity.jhtml"><img
+							src="/static/images/Group7.png" />订单量统计</a>
+					</dd>
+				</jphs:hasPermission>
+				<%-- <jphs:hasPermission url="/nurse/statistics/serviceRank.jhtml">
+					<dd >
+						<a href="/nurse/statistics/serviceRank.jhtml"><img
+							src="/static/images/Group7.png" />个人服务分析</a>
+					</dd>
+				</jphs:hasPermission>
+				<jphs:hasPermission url="/nurse/statistics/orderRank.jhtml">
+					<dd>
+						<a href="/nurse/statistics/orderRank.jhtml"><img
+							src="/static/images/Group7.png" />个人订单分析</a>
+					</dd>
+				</jphs:hasPermission> --%>
+			</div>
+		</jphs:hasAnyPermission>
 	</dl>
 </div>

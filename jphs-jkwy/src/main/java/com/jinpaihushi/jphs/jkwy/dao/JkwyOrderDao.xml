@@ -409,4 +409,97 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		WHERE JO.ID = #{id}
 	</select>
 	
+	<select id="getJkwyOrderNumber" resultType="java.lang.Integer">
+		SELECT
+			COUNT(*) countNum
+		FROM `JKWY_ORDER` JO
+		WHERE JO.create_time BETWEEN #{startTime} AND #{endTime}
+		AND JO.creator_id =  #{userId}
+		AND JO.activity_promotion_id = #{activityId}
+		AND JO.`schedule` != 1 
+		AND o.`status` =0  
+	</select>
+	<resultMap id="statistics" type="com.jinpaihushi.jphs.statistics.model.StatisticsModel">
+		<result property="device" column="device" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="years" column="years" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="months" column="months" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="days" column="days" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="create_time" column="create_time" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="num" column="num" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	<select id="getQuantityByWeek" resultMap="statistics">
+		SELECT
+			jo.`code` device,
+			DATE_FORMAT(jo.create_time, '%Y-%m-%d') create_time,
+			COUNT(jo.`code`) num
+		FROM
+			jkwy_order jo
+		WHERE
+			jo.`code` != ''
+		AND jo.`code` IS NOT NULL
+		AND (
+			DATE_FORMAT(jo.create_time, '%Y-%m-%d') BETWEEN #{startTime}
+		AND #{endTime} )
+		GROUP BY
+			jo.`code`,
+			DATE_FORMAT(jo.create_time, '%Y-%m-%d')
+		ORDER BY
+			jo.create_time,
+			jo.`code`
+	</select>
+	<select id="quantityByMonth" resultMap="statistics">
+		SELECT
+			jo.`code` device,
+			DATE_FORMAT(jo.create_time, '%Y-%m-%d') create_time,
+			COUNT(jo.`code`) num
+		FROM
+			jkwy_order jo
+		WHERE
+			jo.`code` != ''
+		AND jo.`code` IS NOT NULL
+		AND   DATE_FORMAT(jo.create_time, '%Y-%m')  =#{month}
+		GROUP BY
+			jo.`code`,
+			DATE_FORMAT(jo.create_time, '%Y-%m-%d')
+		ORDER BY
+			jo.create_time,
+			jo.`code`
+	</select>
+	<select id="quantityByYear" resultMap="statistics">
+		SELECT
+			jo.`code` device,
+			DATE_FORMAT(jo.create_time, '%Y-%m') create_time,
+			COUNT(jo.`code`) num
+		FROM
+			jkwy_order jo
+		WHERE
+			jo.`code` != ''
+		AND jo.`code` IS NOT NULL
+		AND   DATE_FORMAT(jo.create_time, '%Y') =#{year}
+		GROUP BY
+			jo.`code`,
+			DATE_FORMAT(jo.create_time, '%Y-%m')
+		ORDER BY
+			jo.create_time,
+			jo.`code`
+	</select>
+	<select id="getAllNumByYear" resultMap="statistics">
+		SELECT
+			jo.`code` device,
+			DATE_FORMAT(jo.create_time, '%Y') years,
+			DATE_FORMAT(jo.create_time, '%m') months,
+			COUNT(jo.`code`) num
+		FROM
+			jkwy_order jo
+		WHERE
+			jo.`code` != ''
+		AND jo.`code` IS NOT NULL
+		AND   DATE_FORMAT(jo.create_time, '%Y') =#{year}
+		GROUP BY
+			jo.`code`,
+			DATE_FORMAT(jo.create_time, '%Y-%m')
+		ORDER BY
+			jo.create_time,
+			jo.`code`
+	</select>
 </mapper>

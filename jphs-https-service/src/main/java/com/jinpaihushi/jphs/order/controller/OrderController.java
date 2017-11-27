@@ -338,7 +338,7 @@ public class OrderController {
                 ip = req.getRemoteAddr();
             }
             logger.info("ip地址：" + ip);
-            if (StringUtils.isEmpty(payParice.toString()) || StringUtils.isEmpty(orderNo) || type == null
+            if (StringUtils.isEmpty(orderNo) || type == null
                     || StringUtils.isEmpty(return_url) || StringUtils.isEmpty(userId) || StringUtils.isEmpty(return_url)
                     || StringUtils.isEmpty(show_url) || serviceType == null || payParice == null) {
                 return JSONUtil.toJSONResult(0, "参数不能为空", null);
@@ -367,8 +367,8 @@ public class OrderController {
             if (serviceType == 1) {
                 flag = orderService.checkPrice(orderNo, payParice);
                 notify_url = "https://s.goldnurse.com/alipay/otherNotify.json";
-            } else if(serviceType == 3) {
-                notify_url = "https://s.goldnurse.com/alipay/otherNotifyGoods.json";
+            } else if(serviceType == 4) {
+                notify_url = "https://s.goldnurse.com/alipay/alipayNotifyJkwy.json";
             } else {
                 notify_url = "https://s.goldnurse.com/alipay/otherNotifyGoods.json";
             }

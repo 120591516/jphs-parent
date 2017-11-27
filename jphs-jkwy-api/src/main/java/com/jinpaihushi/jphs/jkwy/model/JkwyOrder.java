@@ -68,6 +68,17 @@ public class JkwyOrder extends BaseModel implements Predicate<JkwyOrder>, Updato
     /** 支付时间 */
     private Date payTime;
 
+	private String platformId;
+	
+    public String getPlatformId() {
+		return platformId;
+	}
+
+	public void setPlatformId(String platformId) {
+		this.platformId = platformId;
+	}
+
+	/** 套餐结束日期 */
     private Integer schedule;
 
     /** 套餐结束日期 */

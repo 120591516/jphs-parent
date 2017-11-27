@@ -1,0 +1,269 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	yangsong
+	date	:	2017-11-23 15:40:14
+	version	:	1.0
+-->
+<mapper namespace="com.jinpaihushi.jphs.sms.dao.SmsHistoryDao">
+	
+	<sql id="field">
+		SH.id, SH.sms_template_id, SH.phone, SH.send_ip, 
+		SH.status, SH.create_time, SH.creator_id, SH.creator_name
+	</sql>
+
+	<sql id="fieldGlobal">
+		SH.id SH_id, SH.sms_template_id SH_sms_template_id, 
+		SH.phone SH_phone, SH.send_ip SH_send_ip, 
+		SH.status SH_status, SH.create_time SH_create_time, 
+		SH.creator_id SH_creator_id, SH.creator_name SH_creator_name
+	</sql>
+	
+	<sql id="fieldWithAlias">
+		SH.id id, SH.sms_template_id smsTemplateId, 
+		SH.phone phone, SH.send_ip sendIp, 
+		SH.status status, SH.create_time createTime, 
+		SH.creator_id creatorId, SH.creator_name creatorName
+	</sql>
+	
+	<sql id="condition">
+		<if test="id!=null and id!=''">
+			AND SH.id=#{id}
+		</if>
+		<if test="smsTemplateId!=null and smsTemplateId!=''">
+			AND SH.sms_template_id=#{smsTemplateId}
+		</if>
+		<if test="phone!=null and phone!=''">
+			AND SH.phone LIKE CONCAT('%', #{phone}, '%')
+		</if>
+		 <if test="smsTemplate!=null">
+			 <if test="smsTemplate.smsId!=null and smsTemplate.smsId!=''">
+			AND ST.sms_id LIKE CONCAT('%', #{smsTemplate.smsId}, '%')
+			</if>
+			 <if test="smsTemplate.title!=null and smsTemplate.title!=''">
+			AND ST.title LIKE CONCAT('%', #{smsTemplate.title}, '%')
+			</if>
+			<if test="smsTemplate.type!=null and smsTemplate.type!=''">
+			AND ST.type LIKE CONCAT('%', #{smsTemplate.type}, '%')
+			</if>
+		  </if>
+		<if test="sendIp!=null and sendIp!=''">
+			AND SH.send_ip=#{sendIp}
+		</if>
+		<if test="status!=null">
+			AND SH.status=#{status}
+		</if>
+		<if test="createTime!=null">
+			AND SH.create_time=#{createTime}
+		</if>
+		<if test="creatorId!=null and creatorId!=''">
+			AND SH.creator_id=#{creatorId}
+		</if>
+		<if test="creatorName!=null and creatorName!=''">
+			AND SH.creator_name=#{creatorName}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="queryWhere">
+		<where>
+			<if test="id!=null and id!=''">
+				AND SH.id LIKE CONCAT('%', #{id}, '%')
+			</if>
+			<if test="smsTemplateId!=null and smsTemplateId!=''">
+				AND SH.sms_template_id LIKE CONCAT('%', #{smsTemplateId}, '%')
+			</if>
+			<if test="phone!=null and phone!=''">
+				AND SH.phone LIKE CONCAT('%', #{phone}, '%')
+			</if>
+			<if test="sendIp!=null and sendIp!=''">
+				AND SH.send_ip LIKE CONCAT('%', #{sendIp}, '%')
+			</if>
+			<if test="status!=null">
+				AND SH.status=#{status}
+			</if>
+			<if test="createTime!=null">
+				AND SH.create_time=#{createTime}
+			</if>
+			<if test="creatorId!=null and creatorId!=''">
+				AND SH.creator_id LIKE CONCAT('%', #{creatorId}, '%')
+			</if>
+			<if test="creatorName!=null and creatorName!=''">
+				AND SH.creator_name LIKE CONCAT('%', #{creatorName}, '%')
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="dynamicSet">
+		<set>
+           <if test="id!=null">
+				SH.id=#{id}, 
+		   </if>
+           <if test="smsTemplateId!=null">
+				SH.sms_template_id=#{smsTemplateId}, 
+		   </if>
+           <if test="phone!=null">
+				SH.phone=#{phone}, 
+		   </if>
+           <if test="sendIp!=null">
+				SH.send_ip=#{sendIp}, 
+		   </if>
+           <if test="status!=null">
+				SH.status=#{status}, 
+		   </if>
+           <if test="createTime!=null">
+				SH.create_time=#{createTime}, 
+		   </if>
+           <if test="creatorId!=null">
+				SH.creator_id=#{creatorId}, 
+		   </if>
+           <if test="creatorName!=null">
+				SH.creator_name=#{creatorName}, 
+		   </if>
+		</set>
+	</sql>
+	
+	<sql id="orderby">
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+	</sql>
+
+	<resultMap id="smsHistory" type="com.jinpaihushi.jphs.sms.model.SmsHistory">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="smsTemplateId" column="sms_template_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="phone" column="phone" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="sendIp" column="send_ip" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="creator_name" javaType="String" jdbcType="VARCHAR"></result>
+		<association property="smsTemplate" javaType="com.jinpaihushi.jphs.sms.model.SmsTemplate">
+			<result property="id" column="ST_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="type" column="ST_type" javaType="Integer" jdbcType="INTEGER"></result>
+			<result property="smsId" column="ST_sms_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="title" column="ST_title" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="content" column="ST_content" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="status" column="ST_status" javaType="Integer" jdbcType="INTEGER"></result>
+			<result property="createTime" column="ST_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+			<result property="creatorId" column="ST_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="creatorName" column="ST_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+		</association>
+		
+	</resultMap>
+	
+	<resultMap id="smsHistoryGlobal" type="com.jinpaihushi.jphs.sms.model.SmsHistory">
+		<result property="id" column="SH_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="smsTemplateId" column="SH_sms_template_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="phone" column="SH_phone" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="sendIp" column="SH_send_ip" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="SH_status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="SH_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="SH_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="SH_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.jinpaihushi.jphs.sms.model.SmsHistory">
+		INSERT INTO `SMS_HISTORY`(
+			id, sms_template_id, 
+			phone, send_ip, 
+			status, create_time, 
+			creator_id, creator_name
+		)VALUES(
+			#{id,jdbcType=VARCHAR}, #{smsTemplateId,jdbcType=VARCHAR}, 
+			#{phone,jdbcType=VARCHAR}, #{sendIp,jdbcType=VARCHAR}, 
+			#{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+			#{creatorId,jdbcType=VARCHAR}, #{creatorName,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<insert id="inserts" useGeneratedKeys="false"
+		parameterType="list">
+        <![CDATA[
+        INSERT INTO `SMS_HISTORY`(
+			id, sms_template_id, 
+			phone, send_ip, 
+			status, create_time, 
+			creator_id, creator_name
+        )]]>
+       	VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id,jdbcType=VARCHAR}, #{item.smsTemplateId,jdbcType=VARCHAR}, 
+			#{item.phone,jdbcType=VARCHAR}, #{item.sendIp,jdbcType=VARCHAR}, 
+			#{item.status,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP}, 
+			#{item.creatorId,jdbcType=VARCHAR}, #{item.creatorName,jdbcType=VARCHAR}
+			)
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById">
+		DELETE SH FROM `SMS_HISTORY` SH WHERE SH.ID = #{id} 
+	</delete>
+	
+	<update id="disableById">
+	    UPDATE `SMS_HISTORY` SH
+		SET 
+		SH.STATUS = -1
+		WHERE SH.ID = #{id}
+	</update>
+
+	<update id="update">
+		UPDATE `SMS_HISTORY` SH
+		<include refid="dynamicSet" /> 
+	    WHERE SH.ID = #{id}
+	</update>
+
+	<select id="load" resultMap="smsHistory">
+	SELECT <include refid="field"/>,ST.id ST_id, ST.type ST_type, 
+		ST.sms_id ST_sms_id, ST.title ST_title, 
+		ST.content ST_content, ST.status ST_status, 
+		ST.create_time ST_create_time, ST.creator_id ST_creator_id, 
+		ST.creator_name ST_creator_name
+		FROM `SMS_HISTORY` SH
+		left join SMS_TEMPLATE ST
+		on ST.id=SH.sms_template_id
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `SMS_HISTORY` SH
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="list" resultMap="smsHistory">
+		SELECT <include refid="field"/>
+		FROM `SMS_HISTORY` SH
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="query" resultMap="smsHistory">
+		SELECT <include refid="field"/>,ST.id ST_id, ST.type ST_type, 
+		ST.sms_id ST_sms_id, ST.title ST_title, 
+		ST.content ST_content, ST.status ST_status, 
+		ST.create_time ST_create_time, ST.creator_id ST_creator_id, 
+		ST.creator_name ST_creator_name
+		FROM `SMS_HISTORY` SH
+		left join SMS_TEMPLATE ST
+		on ST.id=SH.sms_template_id
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadById" resultMap="smsHistory">
+		SELECT <include refid="field"/>
+		FROM `SMS_HISTORY` SH
+		WHERE SH.ID = #{id}
+	</select>
+	
+</mapper>

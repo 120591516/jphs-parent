@@ -55,8 +55,17 @@ public class ActivityPromotion extends BaseModel implements Predicate<ActivityPr
     private String platformName;
 
     private String image;
+    private String typeName;
+    
+    public String getTypeName() {
+		return typeName;
+	}
 
-    public String getSiteName() {
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
+	}
+
+	public String getSiteName() {
         return siteName;
     }
 

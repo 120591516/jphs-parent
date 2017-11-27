@@ -72,6 +72,7 @@ public class JkwyOrderController {
                 		+" VoucherUserId="+jkwyOrder.getVoucherUserId()
                 		+" VoucherPrice="+jkwyOrder.getVoucherPrice()
                 		+" ActivityPromotionId="+jkwyOrder.getActivityPromotionId()
+                		+" getPlatformId="+jkwyOrder.getPlatformId() 
                 		+" ActivityPromotionPrice="+jkwyOrder.getActivityPromotionPrice()
                 		+" code="+jkwyOrder.getCode());
             }
@@ -79,6 +80,7 @@ public class JkwyOrderController {
 					StringUtils.isEmpty(jkwyOrder.getAddress()) || 
 					StringUtils.isEmpty(jkwyOrder.getJkwyPackageId()) || 
 					StringUtils.isEmpty(jkwyOrder.getJkwyPackagePriceId()) || 
+					StringUtils.isEmpty(jkwyOrder.getPlatformId()) || 
 					jkwyOrder.getPayPrice() == null || 
 					StringUtils.isEmpty(jkwyOrder.getDetailAddress())){
 				return JSONUtil.toJSONResult(0, "参数不能为空", null);

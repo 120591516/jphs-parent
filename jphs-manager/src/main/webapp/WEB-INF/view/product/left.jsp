@@ -86,12 +86,12 @@
 
 			<div class="public_left_list">
 				<!-- jphs:url 为自定义标签库 用来判断是否具有需要验证的按钮的权限  -->
-				 <jphs:hasPermission url="/business/index.jhtml">
+				 <%-- <jphs:hasPermission url="/business/index.jhtml">
 					<dd>
 						<a href="/business/index.jhtml"><img
 							src="/static/images/Group7.png" />商家管理</a>
 					</dd>
-				</jphs:hasPermission>
+				</jphs:hasPermission> --%>
 				<jphs:hasPermission url="/jkwy/package/index.jhtml">
 					<dd>
 						<a href="/jkwy/package/index.jhtml"><img

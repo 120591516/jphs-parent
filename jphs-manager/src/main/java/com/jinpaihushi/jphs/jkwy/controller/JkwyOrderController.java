@@ -1,6 +1,8 @@
 package com.jinpaihushi.jphs.jkwy.controller;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,6 +35,8 @@ import com.jinpaihushi.jphs.transaction.service.TransactionService;
 import com.jinpaihushi.jphs.user.model.User;
 import com.jinpaihushi.jphs.user.service.UserService;
 import com.jinpaihushi.service.BaseService;
+import com.jinpaihushi.utils.CycleTimeUtils;
+import com.jinpaihushi.utils.DateUtils;
 import com.jinpaihushi.utils.PageInfos;
 
 /**
@@ -185,4 +189,69 @@ public class JkwyOrderController extends BaseController<JkwyOrder> {
         return "redirect:/jkwy/order/index.jhtml";
     }
 
+    @RequestMapping(name = "订单量统计", path = "/quantity.jhtml")
+    public String index(HttpSession hs, HttpServletRequest req, HttpServletResponse resp, ModelMap modelMap) {
+        Date date = new Date();
+        //格式化为当前日期
+        String startDay = CycleTimeUtils.getWeekStartDay(date);
+        String endDay = CycleTimeUtils.getWeekEndtDay(date);
+        String weeks = startDay + "T" + endDay;
+        req.setAttribute("flag", true);
+        List<Map<String, Object>> quantityByWeek = jkwyOrderService.getQuantityByWeek(weeks);
+        pushDimensionalData(req, quantityByWeek, "weekTimeList", "weekDeviceName", "weekTotal");
+        List<Map<String, Object>> quantityByMonth = jkwyOrderService.quantityByMonth(DateUtils.formartMonth(date));
+        pushDimensionalData(req, quantityByMonth, "monthTimeList", "monthDeviceName", "monthTotal");
+        List<Map<String, Object>> quantityByYear = jkwyOrderService.quantityByYear(DateUtils.formartYear(date));
+        pushDimensionalData(req, quantityByYear, "yearTimeList", "yearDeviceName", "yearTotal");
+        Map<String, Object> allDataByYear = jkwyOrderService.getAllNumByYear(DateUtils.formartYear(date));
+        getTableData(req, allDataByYear);
+        return "jkwy.order.statistics.quantity";
+    }
+
+    @RequestMapping(name = "订单量周统计", path = "/quantityByWeek.jhtml")
+    public String quantityByWeek(HttpSession hs, HttpServletRequest req, HttpServletResponse resp, ModelMap modelMap,
+            String weeks) {
+        List<Map<String, Object>> quantityByWeek = jkwyOrderService.getQuantityByWeek(weeks);
+        pushDimensionalData(req, quantityByWeek, "weekTimeList", "weekDeviceName", "weekTotal");
+        return "order.statistics.quantityByWeek";
+    }
+
+    @RequestMapping(name = "订单量月统计", path = "/quantityByMonth.jhtml")
+    public String quantityByMonth(HttpSession hs, HttpServletRequest req, HttpServletResponse resp, ModelMap modelMap,
+            String month) {
+        List<Map<String, Object>> quantityByMonth = jkwyOrderService.quantityByMonth(month);
+        pushDimensionalData(req, quantityByMonth, "monthTimeList", "monthDeviceName", "monthTotal");
+        return "order.statistics.quantityByMonth";
+    }
+
+    @RequestMapping(name = "订单量年统计", path = "/quantityByYear.jhtml")
+    public String quantityByYear(HttpSession hs, HttpServletRequest req, HttpServletResponse resp, ModelMap modelMap,
+            String year) {
+        req.setAttribute("flag", true);
+        List<Map<String, Object>> quantityByYear = jkwyOrderService.quantityByYear(year);
+        pushDimensionalData(req, quantityByYear, "yearTimeList", "yearDeviceName", "yearTotal");
+        return "order.statistics.quantityByYear";
+    }
+
+    @RequestMapping(name = "全年订单量统计", path = "/quantityByAnnual.jhtml")
+    public String quantityByAnnual(HttpSession hs, HttpServletRequest req, HttpServletResponse resp, ModelMap modelMap,
+            String year) {
+        req.setAttribute("flag", true);
+        Map<String, Object> allDataByYear = jkwyOrderService.getAllNumByYear(year);
+        getTableData(req, allDataByYear);
+        return "order.statistics.quantityByAnnual";
+    }
+
+    /**
+     * 全年数据公用方法
+     * @param req
+     * @param allDataByYear
+     */
+    private void getTableData(HttpServletRequest req, Map<String, Object> allDataByYear) {
+        req.setAttribute("months", allDataByYear.get("months"));
+        req.setAttribute("days", allDataByYear.get("days"));
+        //        req.setAttribute("allData", Arrays.deepToString((Object[]) allDataByYear.get("allData")));
+        req.setAttribute("allData", allDataByYear.get("allData"));
+        req.setAttribute("year", allDataByYear.get("year"));
+    }
 }

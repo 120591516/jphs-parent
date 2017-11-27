@@ -1,8 +1,5 @@
 package com.jinpaihushi.jphs.activity.service.impl;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -80,20 +77,16 @@ public class ActivityPromotionServiceImpl extends BaseServiceImpl<ActivityPromot
 			return activityPromotionOne;
 		}
 		if(activityPromotionOne.getType() == 2){
-			Map<String,Object> map = new HashMap<String,Object>();
-			map.put("userId", userId);
-			map.put("goodsId", goodsId);
-			int onumber = activityPromotionDao.getIndexNumberP(map);
+			int onumber = activityPromotionDao.getIndexNumberP(activityPromotionOne.getId(), userId,
+					activityPromotionOne.getBeginTime(), activityPromotionOne.getBeginTime());
 			if(onumber == 0){
 				return activityPromotionOne;
 			}
 			return null;
 		}
 		if(activityPromotionOne.getType() == 3){
-			Map<String,Object> map = new HashMap<String,Object>();
-			map.put("userId", userId);
-			map.put("goodsId", goodsId);
-			int onumber = activityPromotionDao.getIndexNumberP(map);
+			int onumber = activityPromotionDao.getIndexNumberP(activityPromotionOne.getId(), userId,
+					activityPromotionOne.getBeginTime(), activityPromotionOne.getBeginTime());
 			if(onumber == 1){
 				return activityPromotionOne;
 			}

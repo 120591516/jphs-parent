@@ -90,7 +90,7 @@ aa --%>
 				style="width: 900px; margin: 0 auto">
 				<thead>
 					<tr>
-						<td>服务模块</td>
+						<td width="60">服务模块</td>
 						<td>服务内容</td>
 						<td>服务说明</td>
 						<td>总服务次数</td>

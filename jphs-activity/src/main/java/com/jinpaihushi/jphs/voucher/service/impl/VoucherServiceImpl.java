@@ -510,6 +510,9 @@ public class VoucherServiceImpl extends BaseServiceImpl<Voucher> implements Vouc
         	Map<String,Object> map_se = new HashMap<String,Object>();
         	map_se.put("id", pricePartId);
         	Map<String,Object> map_price = voucherRepertoryDao.getJkwyPackagePriceVoucher(map_se);
+        	if(map_price == null){
+        		return null;
+        	}
 //        	pricePartId
 //        	goodsId
         	if(!map_price.containsKey("price")){

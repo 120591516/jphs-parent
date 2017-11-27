@@ -13,7 +13,9 @@ import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import com.jinpaihushi.dao.BaseDao;
+import com.jinpaihushi.jphs.activity.model.ActivityPromotion;
 import com.jinpaihushi.jphs.goods.model.ImageType;
+import com.jinpaihushi.jphs.jkwy.dao.JkwyOrderDao;
 import com.jinpaihushi.jphs.jkwy.dao.JkwyPackageContentDao;
 import com.jinpaihushi.jphs.jkwy.dao.JkwyPackageDao;
 import com.jinpaihushi.jphs.jkwy.dao.JkwyPackagePlatformDao;
@@ -45,7 +47,8 @@ public class JkwyPackageServiceImpl extends BaseServiceImpl<JkwyPackage> impleme
 
     @Autowired
     private JkwyPackagePlatformDao jkwyPackagePlatformDao;
-
+    @Autowired
+    private JkwyOrderDao jkwyOrderDao;
     @Autowired
     private JkwyRelationDao jkwyRelationDao;
 
@@ -288,6 +291,28 @@ public class JkwyPackageServiceImpl extends BaseServiceImpl<JkwyPackage> impleme
             List<JkwyRelation> jkwyRelationList = jkwyRelationDao.getUserRelationOfOrder(jkwyRelation);
             if (jkwyPackage_re != null) {
                 jkwyPackage_re.setJkwyRelationList(jkwyRelationList);
+            }
+            List<JkwyPackagePrice> jkwyPackagePriceList = jkwyPackage_re.getJkwyPackagePriceList();
+            for(int pp =0;pp<jkwyPackagePriceList.size();pp++){
+            	JkwyPackagePrice jkwyPackagePriceOne = jkwyPackagePriceList.get(pp);
+            	ActivityPromotion activityPromotion = jkwyPackagePriceOne.getActivityPromotion();
+            	if(activityPromotion != null){
+                        int num = jkwyOrderDao.getJkwyOrderNumber(activityPromotion.getId(), userId,
+                        		activityPromotion.getBeginTime(), activityPromotion.getEndTime());
+                        //2 首单立减
+                        if (activityPromotion.getType() == 2) {
+                        	if(num != 0){
+                        		jkwyPackagePriceList.get(pp).getActivityPromotion().setPrice(0d);
+                        	}
+                        }
+                        //3 第二单立减
+                        if (activityPromotion.getType() == 3) {
+                        	if(num != 1){
+                        		jkwyPackagePriceList.get(pp).getActivityPromotion().setPrice(0d);
+                        	}
+                        }
+                    }
+            	
             }
         }
 
