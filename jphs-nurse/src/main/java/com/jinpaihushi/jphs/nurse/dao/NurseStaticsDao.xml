@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!-- author : wangwt date : 2017-06-28 10:05:23 version : 1.0 -->
+<mapper namespace="com.jinpaihushi.jphs.nurse.dao.NurseStaticsDao">
+	<select id="getNurseJob" resultType="java.util.HashMap">
+			SELECT
+				CASE nj.type
+			WHEN 1 THEN
+				'护士'
+			WHEN 2 THEN
+				'康复师'
+			WHEN 3 THEN
+				'母婴师'
+			WHEN 4 THEN
+			'护士'
+			END jobTitles,
+			 COUNT(nj.type) total
+			FROM
+				nurse_jobtitle nj
+			WHERE nj.`status` = 1
+			GROUP BY jobTitles 
+	</select>
+	<select id="getNurseAddress" resultType="java.util.HashMap">
+		SELECT
+			t.address,
+			count(t.address) total
+		FROM
+			(
+				SELECT
+					CASE u.address
+				WHEN locate('-', u.address) = 0 THEN
+					SUBSTRING_INDEX(
+						SUBSTRING_INDEX(
+							SUBSTRING_INDEX(u.address, '-', '2'),
+							'-',
+							'-1'
+						),
+						'市',
+						1
+					)
+				WHEN locate(',', u.address) = 0 THEN
+					SUBSTR(
+						SUBSTRING_INDEX(
+							SUBSTRING_INDEX(u.address, ',', '2'),
+							',',
+							'-1'
+						),
+						1,
+						2
+					)
+				WHEN locate('省', u.address) = 0 THEN
+					SUBSTRING_INDEX(
+						SUBSTRING_INDEX(u.address, '市', '1'),
+						'省',
+						'-1'
+					)
+				WHEN locate('市', u.address) = 0 THEN
+					SUBSTRING_INDEX(
+						SUBSTRING_INDEX(u.address, '市', '2'),
+						'市',
+						'-1'
+					)
+				END AS address
+				FROM
+					`user` u
+				LEFT JOIN nurse n ON u.id = n.creator_id AND n.`status` =1
+				WHERE
+					u.type = 0
+				AND u.address != ''
+				AND u.address IS NOT NULL
+			) t
+		GROUP BY
+			t.address
+	</select>
+	<select id="getNurseAge" resultType="java.util.HashMap">
+		SELECT d.age ages ,count(d.age)total FROM(SELECT
+		CASE 
+		WHEN t.age &lt; 20 THEN '20岁以下' 
+		WHEN t.age between 20 and 25 THEN '20-25岁'
+		WHEN t.age between 26 and 30 THEN '26-30岁'
+		WHEN t.age between 30 and 35 THEN '26-30岁'
+		WHEN t.age between 36 and 40 THEN '26-30岁'
+		WHEN t.age between 40 and 45 THEN '26-30岁'
+		WHEN t.age between 40 and 50 THEN '26-30岁'
+		WHEN t.age &gt; 50 THEN '50岁以上'
+		END AS age
+		FROM
+			(
+				SELECT
+					(
+						YEAR (now()) - YEAR (SUBSTR(n.sfz, 7, 8)) - 1
+					) + (
+						DATE_FORMAT(SUBSTR(n.sfz, 7, 8), '%m%d') &lt;= DATE_FORMAT(NOW(), '%m%d')
+					) age
+				FROM
+					nurse n
+				WHERE
+					n.`status` = 1
+				AND n.sfz != ''
+				AND n.sfz IS NOT NULL
+			) t WHERE t.age IS NOT NULL) d GROUP BY d.age
+	</select>
+	<select id="getNurseJobtitle" resultType="java.util.HashMap">
+		SELECT
+			j.`name` jobtitleName,
+			count(j.`name`) total 
+		FROM
+			nurse_jobtitle nj
+		LEFT JOIN jobtitle j ON nj.jobtitle_id = j.id
+		WHERE
+			(nj.type = 1 OR nj.type = 4)
+		AND nj.`status` = 1
+		AND nj.jobtitle_id IS NOT NULL
+		GROUP BY j.`name`;
+	</select>
+	<select id="getNurseServerTop" resultType="java.util.HashMap">
+		SELECT t.title,COUNT(t.title)total FROM (SELECT DISTINCT
+			g.title,pn.creator_id
+		FROM
+			price_nurse pn
+		LEFT JOIN price_part pp ON pn.price_part_id = pp.id
+		LEFT JOIN price p ON pp.price_id = p.id
+		LEFT JOIN goods g ON p.goods_id = g.id
+		WHERE DATE_FORMAT(pn.create_time, '%Y') = #{year}
+		) t
+		GROUP BY t.title
+		ORDER BY total DESC
+		 LIMIT 10
+	</select>
+	<select id="getServerTotal" resultType="java.util.HashMap">
+		SELECT
+			t.id,
+			t.title,
+			COUNT(t.title) total,
+			(
+				(
+					SELECT
+						COUNT(*)
+					FROM
+						nurse_jobtitle nj
+					WHERE
+						nj.`status` = 1
+					AND nj.jobtitle_id IN (
+						SELECT
+							jg.jobtitle_id
+						FROM
+							jobtitle_goods jg
+						WHERE
+							jg.goods_id = t.id
+					)
+				)
+			) totalPerson,
+			(
+				SELECT
+					COUNT(*)
+				FROM
+					order_goods og
+				LEFT JOIN `order` o ON og.order_id = o.id
+				WHERE
+					o.`schedule` = 5
+				AND og.goods_id = t.id
+			) successOrderNum,
+			(
+				SELECT
+					COUNT(*)
+				FROM
+					order_goods og1
+				LEFT JOIN `order` o1 ON og1.order_id = o1.id
+				LEFT JOIN `transaction` t1 ON t1.order_id = o1.id
+				WHERE
+					o1.`schedule` = 6
+				AND og1.goods_id = t.id
+				AND t1.id IS NOT NULL
+			) cancelNum
+		FROM
+			(
+				SELECT DISTINCT
+					g.id,
+					g.title,
+					pn.creator_id
+				FROM
+					price_nurse pn
+				LEFT JOIN price_part pp ON pn.price_part_id = pp.id
+				LEFT JOIN price p ON pp.price_id = p.id
+				LEFT JOIN goods g ON p.goods_id = g.id
+				WHERE
+					DATE_FORMAT(pn.create_time, '%Y') = #{year}
+			) t
+		GROUP BY
+			t.title
+		ORDER BY
+			total DESC
+		LIMIT 10
+	</select>
+	<select id="getNurseOrderTop" resultType="java.util.HashMap">
+		SELECT t.`name` nurseName,COUNT(t.`name`)total FROM (SELECT DISTINCT
+			o.id,
+			os.nurse_id,
+			u.`name`,
+			og.goods_id,
+			CASE 
+			WHEN LENGTH(oo.address) > 6 THEN 
+			SUBSTR(
+						SUBSTRING_INDEX(
+							SUBSTRING_INDEX(oo.address, ',', '2'),
+							',',
+							'-1'
+						),
+						1,
+						2
+					)
+		WHEN og.title='中日友好医院体检' THEN '北京'
+		ELSE oo.address
+		END AS addressN,
+			og.title
+		FROM
+			`order` o
+		LEFT JOIN order_service os ON os.order_id = o.id
+		LEFT JOIN order_other oo ON oo.order_id = o.id
+		LEFT JOIN order_goods og ON og.order_id = o.id
+		LEFT JOIN `user` u ON os.nurse_id = u.id
+		WHERE
+			o.`schedule` = 5 AND o.`status` = 1
+		AND os.`schedule` = 3
+		AND DATE_FORMAT(o.create_time, '%Y') =#{year}
+		) t
+		<where>
+			<if test="city!=null and city!=''">
+				AND t.addressN =#{city}
+			</if>
+			<if test="goodsId!=null and goodsId!=''">
+				AND t.goods_id = #{goodsId}
+			</if>
+		</where>
+		 GROUP BY t.nurse_id ORDER BY total DESC LIMIT 10
+	</select>
+	<select id="setRank">
+		SET @rank = 0;
+	</select>
+	<select id="getNurseOrderDetail" resultType="java.util.HashMap">
+		SELECT
+	*, (
+		SELECT
+			COUNT(*)
+		FROM
+			`order` o1
+		LEFT JOIN `transaction` t1 ON t1.order_id = o1.id
+		WHERE
+			o1.`schedule` = 6
+		AND o1.accept_user_id = t.nurse_id
+		AND t1.id IS NOT NULL
+	) cancelNum,
+	@rank :=@rank + 1 AS ranking
+FROM
+	(
+		SELECT
+			ka.nurse_id,
+			ka.`name`,
+			ka.addressN,
+			COUNT(ka.`name`) total,
+			CASE
+		WHEN n.sfz != '' THEN
+			(
+				(
+					YEAR (now()) - YEAR (SUBSTR(n.sfz, 7, 8)) - 1
+				) + (
+					DATE_FORMAT(SUBSTR(n.sfz, 7, 8), '%m%d') &lt;= DATE_FORMAT(NOW(), '%m%d')
+				)
+			)
+		ELSE
+			'0'
+		END AS age
+		FROM
+			(
+				SELECT DISTINCT
+					o.id,
+					os.nurse_id,
+					u.`name`,
+					CASE
+				WHEN LENGTH(oo.address) > 6 THEN
+					SUBSTR(
+						SUBSTRING_INDEX(
+							SUBSTRING_INDEX(oo.address, ',', '2'),
+							',',
+							'-1'
+						),
+						1,
+						2
+					)
+				WHEN og.title = '中日友好医院体检' THEN
+					'北京'
+				ELSE
+					oo.address
+				END AS addressN,
+				og.title
+			FROM
+				`order` o
+			LEFT JOIN order_service os ON os.order_id = o.id
+			LEFT JOIN order_other oo ON oo.order_id = o.id
+			LEFT JOIN order_goods og ON og.order_id = o.id
+			LEFT JOIN `user` u ON os.nurse_id = u.id
+			WHERE
+				o.`schedule` = 5
+			AND o.`status` = 1
+			AND os.`schedule` = 3
+			AND DATE_FORMAT(o.create_time, '%Y') = #{year}
+			) ka
+		LEFT JOIN nurse n ON ka.nurse_id = n.creator_id
+		GROUP BY
+			ka.nurse_id
+		ORDER BY
+			total DESC
+	) t
+GROUP BY
+	t.nurse_id
+ORDER BY
+	t.addressN DESC,
+	t.total DESC,
+	t.nurse_id DESC
+	</select>
+</mapper>
