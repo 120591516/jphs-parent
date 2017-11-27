@@ -1,0 +1,289 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	scj
+	date	:	2017-11-02 17:09:13
+	version	:	1.0
+-->
+<mapper namespace="com.jinpaihushi.jphs.share.dao.ShareStatisticsDao">
+	
+	<sql id="field">
+		SS.id, SS.type, SS.goods_id, SS.name, 
+		SS.url, SS.share_platform, SS.share_device, SS.status, 
+		SS.create_time, SS.creator_id, SS.creator_name
+	</sql>
+
+	<sql id="fieldGlobal">
+		SS.id SS_id, SS.type SS_type, 
+		SS.goods_id SS_goods_id, SS.name SS_name, 
+		SS.url SS_url, SS.share_platform SS_share_platform, 
+		SS.share_device SS_share_device, SS.status SS_status, 
+		SS.create_time SS_create_time, SS.creator_id SS_creator_id, 
+		SS.creator_name SS_creator_name
+	</sql>
+	
+	<sql id="fieldWithAlias">
+		SS.id id, SS.type type, 
+		SS.goods_id goodsId, SS.name name, 
+		SS.url url, SS.share_platform sharePlatform, 
+		SS.share_device shareDevice, SS.status status, 
+		SS.create_time createTime, SS.creator_id creatorId, 
+		SS.creator_name creatorName
+	</sql>
+	
+	<sql id="condition">
+		 1=1 
+		<if test="id!=null and id!=''">
+			AND SS.id=#{id}
+		</if>
+		<if test="type!=null">
+			AND SS.type=#{type}
+		</if>
+		<if test="goodsId!=null and goodsId!=''">
+			AND SS.goods_id=#{goodsId}
+		</if>
+		<if test="goodsName!=null and goodsName!=''">
+			AND SS.goods_id IN (SELECT g.id AS id FROM `goods` g WHERE g.title LIKE CONCAT('%', #{goodsName}, '%')) OR  SS.goods_id IN (SELECT c.id AS id FROM `commodity` c WHERE c.title LIKE CONCAT('%',#{goodsName}, '%'))
+		</if>
+		<if test="name!=null and name!=''">
+			AND SS.name=#{name}
+		</if>
+		<if test="url!=null and url!=''">
+			AND SS.url=#{url}
+		</if>
+		<if test="sharePlatform!=null">
+			AND SS.share_platform=#{sharePlatform}
+		</if>
+		<if test="shareDevice!=null">
+			AND SS.share_device=#{shareDevice}
+		</if>
+		<if test="status!=null">
+			AND SS.status=#{status}
+		</if>
+		<if test="beginTime!=null">
+			AND SS.create_time &gt; #{beginTime}
+		</if>
+		<if test="endTime!=null">
+			AND SS.create_time &lt; #{endTime}
+		</if>
+		<if test="createTime!=null">
+			AND SS.create_time=#{createTime}
+		</if>
+		<if test="creatorId!=null and creatorId!=''">
+			AND SS.creator_id=#{creatorId}
+		</if>
+		<if test="creatorName!=null and creatorName!=''">
+			AND SS.creator_name=#{creatorName}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="queryWhere">
+		<where>
+			<if test="id!=null and id!=''">
+				AND SS.id LIKE CONCAT('%', #{id}, '%')
+			</if>
+			<if test="type!=null">
+				AND SS.type=#{type}
+			</if>
+			<if test="goodsId!=null and goodsId!=''">
+				AND SS.goods_id LIKE CONCAT('%', #{goodsId}, '%')
+			</if>
+			<if test="name!=null and name!=''">
+				AND SS.name LIKE CONCAT('%', #{name}, '%')
+			</if>
+			<if test="url!=null and url!=''">
+				AND SS.url LIKE CONCAT('%', #{url}, '%')
+			</if>
+			<if test="sharePlatform!=null">
+				AND SS.share_platform=#{sharePlatform}
+			</if>
+			<if test="shareDevice!=null">
+				AND SS.share_device=#{shareDevice}
+			</if>
+			<if test="status!=null">
+				AND SS.status=#{status}
+			</if>
+			<if test="createTime!=null">
+				AND SS.create_time=#{createTime}
+			</if>
+			<if test="creatorId!=null and creatorId!=''">
+				AND SS.creator_id LIKE CONCAT('%', #{creatorId}, '%')
+			</if>
+			<if test="creatorName!=null and creatorName!=''">
+				AND SS.creator_name LIKE CONCAT('%', #{creatorName}, '%')
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="dynamicSet">
+		<set>
+           <if test="id!=null">
+				SS.id=#{id}, 
+		   </if>
+           <if test="type!=null">
+				SS.type=#{type}, 
+		   </if>
+           <if test="goodsId!=null">
+				SS.goods_id=#{goodsId}, 
+		   </if>
+           <if test="name!=null">
+				SS.name=#{name}, 
+		   </if>
+           <if test="url!=null">
+				SS.url=#{url}, 
+		   </if>
+           <if test="sharePlatform!=null">
+				SS.share_platform=#{sharePlatform}, 
+		   </if>
+           <if test="shareDevice!=null">
+				SS.share_device=#{shareDevice}, 
+		   </if>
+           <if test="status!=null">
+				SS.status=#{status}, 
+		   </if>
+           <if test="createTime!=null">
+				SS.create_time=#{createTime}, 
+		   </if>
+           <if test="creatorId!=null">
+				SS.creator_id=#{creatorId}, 
+		   </if>
+           <if test="creatorName!=null">
+				SS.creator_name=#{creatorName}, 
+		   </if>
+		</set>
+	</sql>
+	
+	<sql id="orderby">
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+	</sql>
+
+	<resultMap id="shareStatistics" type="com.jinpaihushi.jphs.share.model.ShareStatistics">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="type" column="type" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="goodsId" column="goods_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="name" column="name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="url" column="url" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="sharePlatform" column="share_platform" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="shareDevice" column="share_device" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="creator_name" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<resultMap id="shareStatisticsGlobal" type="com.jinpaihushi.jphs.share.model.ShareStatistics">
+		<result property="id" column="SS_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="type" column="SS_type" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="goodsId" column="SS_goods_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="name" column="SS_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="url" column="SS_url" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="sharePlatform" column="SS_share_platform" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="shareDevice" column="SS_share_device" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="status" column="SS_status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="SS_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="SS_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="SS_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.jinpaihushi.jphs.share.model.ShareStatistics">
+		INSERT INTO `SHARE_STATISTICS`(
+			id, type, 
+			goods_id, name, 
+			url, share_platform, 
+			share_device, status, 
+			create_time, creator_id, 
+			creator_name
+		)VALUES(
+			#{id,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
+			#{goodsId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+			#{url,jdbcType=VARCHAR}, #{sharePlatform,jdbcType=INTEGER}, 
+			#{shareDevice,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+			#{createTime,jdbcType=TIMESTAMP}, #{creatorId,jdbcType=VARCHAR}, 
+			#{creatorName,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<insert id="inserts" useGeneratedKeys="false"
+		parameterType="list">
+        <![CDATA[
+        INSERT INTO `SHARE_STATISTICS`(
+			id, type, 
+			goods_id, name, 
+			url, share_platform, 
+			share_device, status, 
+			create_time, creator_id, 
+			creator_name
+        )]]>
+       	VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id,jdbcType=VARCHAR}, #{item.type,jdbcType=INTEGER}, 
+			#{item.goodsId,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR}, 
+			#{item.url,jdbcType=VARCHAR}, #{item.sharePlatform,jdbcType=INTEGER}, 
+			#{item.shareDevice,jdbcType=INTEGER}, #{item.status,jdbcType=INTEGER}, 
+			#{item.createTime,jdbcType=TIMESTAMP}, #{item.creatorId,jdbcType=VARCHAR}, 
+			#{item.creatorName,jdbcType=VARCHAR}
+			)
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById">
+		DELETE SS FROM `SHARE_STATISTICS` SS WHERE SS.ID = #{id} 
+	</delete>
+	
+	<update id="disableById">
+	    UPDATE `SHARE_STATISTICS` SS
+		SET 
+		SS.STATUS = -1
+		WHERE SS.ID = #{id}
+	</update>
+
+	<update id="update">
+		UPDATE `SHARE_STATISTICS` SS
+		<include refid="dynamicSet" /> 
+	    WHERE SS.ID = #{id}
+	</update>
+
+	<select id="load" resultMap="shareStatistics">
+		SELECT <include refid="field"/>
+		FROM `SHARE_STATISTICS` SS
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `SHARE_STATISTICS` SS
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="list" resultMap="shareStatistics">
+		SELECT <include refid="field"/>
+		FROM `SHARE_STATISTICS` SS
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="query" resultMap="shareStatistics">
+		SELECT <include refid="field"/>
+		FROM `SHARE_STATISTICS` SS
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadById" resultMap="shareStatistics">
+		SELECT <include refid="field"/>
+		FROM `SHARE_STATISTICS` SS
+		WHERE SS.ID = #{id}
+	</select>
+	
+</mapper>

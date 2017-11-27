@@ -1,0 +1,412 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	wangwenteng
+	date	:	2017-11-21 17:01:26
+	version	:	1.0
+-->
+<mapper namespace="com.jinpaihushi.jphs.jkwy.dao.JkwyOrderDao">
+	
+	<sql id="field">
+		JO.id, JO.no, JO.jkwy_package_id, JO.jkwy_package_price_id, 
+		JO.voucher_user_id, JO.voucher_price, JO.activity_promotion_id, JO.activity_promotion_price, 
+		JO.code, JO.old_price, JO.price, JO.pay_price, 
+		JO.pay_time,JO.schedule, JO.end_time,JO.address, JO.detail_address, 
+		JO.status, JO.create_time, JO.creator_id, JO.creator_name
+	</sql>
+
+	<sql id="fieldGlobal">
+		JO.id JO_id, JO.no JO_no, 
+		JO.jkwy_package_id JO_jkwy_package_id, JO.jkwy_package_price_id JO_jkwy_package_price_id, 
+		JO.voucher_user_id JO_voucher_user_id, JO.voucher_price JO_voucher_price, 
+		JO.activity_promotion_id JO_activity_promotion_id, JO.activity_promotion_price JO_activity_promotion_price, 
+		JO.code JO_code, JO.old_price JO_old_price, 
+		JO.price JO_price, JO.pay_price JO_pay_price, 
+		JO.pay_time JO_pay_time, JO.schedule JO_schedule , JO.end_time JO_end_time, 
+		JO.address JO_address, JO.detail_address JO_detail_address, 
+		JO.status JO_status, JO.create_time JO_create_time, 
+		JO.creator_id JO_creator_id, JO.creator_name JO_creator_name
+	</sql>
+	
+	<sql id="fieldWithAlias">
+		JO.id id, JO.no no, 
+		JO.jkwy_package_id jkwyPackageId, JO.jkwy_package_price_id jkwyPackagePriceId, 
+		JO.voucher_user_id voucherUserId, JO.voucher_price voucherPrice, 
+		JO.activity_promotion_id activityPromotionId, JO.activity_promotion_price activityPromotionPrice, 
+		JO.code code, JO.old_price oldPrice, 
+		JO.price price, JO.pay_price payPrice, 
+		JO.pay_time payTime,JO.schedule schedule, JO.end_time endTime, 
+		JO.address address, JO.detail_address detailAddress, 
+		JO.status status, JO.create_time createTime, 
+		JO.creator_id creatorId, JO.creator_name creatorName
+	</sql>
+	
+	<sql id="condition">
+		<if test="id!=null and id!=''">
+			AND JO.id=#{id}
+		</if>
+		<if test="no!=null and no!=''">
+			AND JO.no=#{no}
+		</if>
+		<if test="jkwyPackageId!=null and jkwyPackageId!=''">
+			AND JO.jkwy_package_id=#{jkwyPackageId}
+		</if>
+		<if test="jkwyPackagePriceId!=null and jkwyPackagePriceId!=''">
+			AND JO.jkwy_package_price_id=#{jkwyPackagePriceId}
+		</if>
+		<if test="voucherUserId!=null and voucherUserId!=''">
+			AND JO.voucher_user_id=#{voucherUserId}
+		</if>
+		<if test="voucherPrice!=null">
+			AND JO.voucher_price=#{voucherPrice}
+		</if>
+		<if test="activityPromotionId!=null and activityPromotionId!=''">
+			AND JO.activity_promotion_id=#{activityPromotionId}
+		</if>
+		<if test="activityPromotionPrice!=null">
+			AND JO.activity_promotion_price=#{activityPromotionPrice}
+		</if>
+		<if test="code!=null and code!=''">
+			AND JO.code=#{code}
+		</if>
+		<if test="oldPrice!=null">
+			AND JO.old_price=#{oldPrice}
+		</if>
+		<if test="price!=null">
+			AND JO.price=#{price}
+		</if>
+		<if test="payPrice!=null">
+			AND JO.pay_price=#{payPrice}
+		</if>
+		<if test="payTime!=null">
+			AND JO.pay_time=#{payTime}
+		</if>
+		<if test="schedule!=null">
+			AND JO.schedule=#{schedule}
+		</if>
+		<if test="endTime!=null">
+			AND JO.end_time=#{endTime}
+		</if>
+		<if test="address!=null and address!=''">
+			AND JO.address=#{address}
+		</if>
+		<if test="detailAddress!=null and detailAddress!=''">
+			AND JO.detail_address=#{detailAddress}
+		</if>
+		<if test="status!=null">
+			AND JO.status=#{status}
+		</if>
+		<if test="createTime!=null">
+			AND JO.create_time=#{createTime}
+		</if>
+		<if test="creatorId!=null and creatorId!=''">
+			AND JO.creator_id=#{creatorId}
+		</if>
+		<if test="creatorName!=null and creatorName!=''">
+			AND JO.creator_name=#{creatorName}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="queryWhere">
+		<where>
+			<if test="id!=null and id!=''">
+				AND JO.id  =#{id} 
+			</if>
+			<if test="no!=null and no!=''">
+				AND JO.no LIKE CONCAT(#{no}, '%')
+			</if>
+			<if test="jkwyPackageId!=null and jkwyPackageId!=''">
+				AND JO.jkwy_package_id  = #{jkwyPackageId} 
+			</if>
+			<if test="jkwyPackagePriceId!=null and jkwyPackagePriceId!=''">
+				AND JO.jkwy_package_price_id = #{jkwyPackagePriceId}
+			</if>
+			<if test="voucherUserId!=null and voucherUserId!=''">
+				AND JO.voucher_user_id = #{voucherUserId}
+			</if>
+			<if test="voucherPrice!=null">
+				AND JO.voucher_price=#{voucherPrice}
+			</if>
+			<if test="activityPromotionId!=null and activityPromotionId!=''">
+				AND JO.activity_promotion_id = #{activityPromotionId} 
+			</if>
+			<if test="activityPromotionPrice!=null">
+				AND JO.activity_promotion_price=#{activityPromotionPrice}
+			</if>
+			<if test="code!=null and code!=''">
+				AND JO.code LIKE CONCAT('%', #{code}, '%')
+			</if>
+			<if test="oldPrice!=null">
+				AND JO.old_price=#{oldPrice}
+			</if>
+			<if test="price!=null">
+				AND JO.price=#{price}
+			</if>
+			<if test="payPrice!=null">
+				AND JO.pay_price=#{payPrice}
+			</if>
+			<if test="payTime!=null">
+				AND JO.pay_time=#{payTime}
+			</if>
+			<if test="endTime!=null">
+				AND JO.end_time=#{endTime}
+			</if>
+			<if test="address!=null and address!=''">
+				AND JO.address LIKE CONCAT('%', #{address}, '%')
+			</if>
+			<if test="detailAddress!=null and detailAddress!=''">
+				AND JO.detail_address LIKE CONCAT('%', #{detailAddress}, '%')
+			</if>
+			<if test="status!=null">
+				AND JO.status=#{status}
+			</if>
+			<if test="createTime!=null">
+				AND JO.create_time=#{createTime}
+			</if>
+			<if test="creatorId!=null and creatorId!=''">
+				AND JO.creator_id = #{creatorId} 
+			</if>
+			<if test="creatorName!=null and creatorName!=''">
+				AND JO.creator_name LIKE CONCAT('%', #{creatorName}, '%')
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="dynamicSet">
+		<set>
+           <if test="id!=null">
+				JO.id=#{id}, 
+		   </if>
+           <if test="no!=null">
+				JO.no=#{no}, 
+		   </if>
+           <if test="jkwyPackageId!=null">
+				JO.jkwy_package_id=#{jkwyPackageId}, 
+		   </if>
+           <if test="jkwyPackagePriceId!=null">
+				JO.jkwy_package_price_id=#{jkwyPackagePriceId}, 
+		   </if>
+           <if test="voucherUserId!=null">
+				JO.voucher_user_id=#{voucherUserId}, 
+		   </if>
+           <if test="voucherPrice!=null">
+				JO.voucher_price=#{voucherPrice}, 
+		   </if>
+           <if test="activityPromotionId!=null">
+				JO.activity_promotion_id=#{activityPromotionId}, 
+		   </if>
+           <if test="activityPromotionPrice!=null">
+				JO.activity_promotion_price=#{activityPromotionPrice}, 
+		   </if>
+           <if test="code!=null">
+				JO.code=#{code}, 
+		   </if>
+           <if test="oldPrice!=null">
+				JO.old_price=#{oldPrice}, 
+		   </if>
+           <if test="price!=null">
+				JO.price=#{price}, 
+		   </if>
+           <if test="payPrice!=null">
+				JO.pay_price=#{payPrice}, 
+		   </if>
+           <if test="payTime!=null">
+				JO.pay_time=#{payTime}, 
+		   </if>
+		    <if test="schedule!=null">
+				JO.schedule=#{schedule}, 
+		   </if>
+           <if test="endTime!=null">
+				JO.end_time=#{endTime}, 
+		   </if>
+           <if test="address!=null">
+				JO.address=#{address}, 
+		   </if>
+           <if test="detailAddress!=null">
+				JO.detail_address=#{detailAddress}, 
+		   </if>
+           <if test="status!=null">
+				JO.status=#{status}, 
+		   </if>
+           <if test="createTime!=null">
+				JO.create_time=#{createTime}, 
+		   </if>
+           <if test="creatorId!=null">
+				JO.creator_id=#{creatorId}, 
+		   </if>
+           <if test="creatorName!=null">
+				JO.creator_name=#{creatorName}, 
+		   </if>
+		</set>
+	</sql>
+	
+	<sql id="orderby">
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+	</sql>
+
+	<resultMap id="jkwyOrder" type="com.jinpaihushi.jphs.jkwy.model.JkwyOrder">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="no" column="no" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="jkwyPackageId" column="jkwy_package_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="jkwyPackagePriceId" column="jkwy_package_price_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="voucherUserId" column="voucher_user_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="voucherPrice" column="voucher_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="activityPromotionId" column="activity_promotion_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="activityPromotionPrice" column="activity_promotion_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="code" column="code" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="oldPrice" column="old_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="price" column="price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="payPrice" column="pay_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="payTime" column="pay_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="schedule" column="schedule" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="endTime" column="end_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="address" column="address" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="detailAddress" column="detail_address" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="creator_name" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<resultMap id="jkwyOrderGlobal" type="com.jinpaihushi.jphs.jkwy.model.JkwyOrder">
+		<result property="id" column="JO_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="no" column="JO_no" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="jkwyPackageId" column="JO_jkwy_package_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="jkwyPackagePriceId" column="JO_jkwy_package_price_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="voucherUserId" column="JO_voucher_user_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="voucherPrice" column="JO_voucher_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="activityPromotionId" column="JO_activity_promotion_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="activityPromotionPrice" column="JO_activity_promotion_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="code" column="JO_code" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="oldPrice" column="JO_old_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="price" column="JO_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="payPrice" column="JO_pay_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="payTime" column="JO_pay_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="schedule" column="JO_schedule" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="endTime" column="JO_end_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="address" column="JO_address" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="detailAddress" column="JO_detail_address" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="JO_status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="JO_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="JO_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="JO_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.jinpaihushi.jphs.jkwy.model.JkwyOrder">
+		INSERT INTO `JKWY_ORDER`(
+			id, no, 
+			jkwy_package_id, jkwy_package_price_id, 
+			voucher_user_id, voucher_price, 
+			activity_promotion_id, activity_promotion_price, 
+			code, old_price, 
+			price, pay_price, 
+			pay_time,schedule, end_time, 
+			address, detail_address, 
+			status, create_time, 
+			creator_id, creator_name
+		)VALUES(
+			#{id,jdbcType=VARCHAR}, #{no,jdbcType=VARCHAR}, 
+			#{jkwyPackageId,jdbcType=VARCHAR}, #{jkwyPackagePriceId,jdbcType=VARCHAR}, 
+			#{voucherUserId,jdbcType=VARCHAR}, #{voucherPrice,jdbcType=DECIMAL}, 
+			#{activityPromotionId,jdbcType=VARCHAR}, #{activityPromotionPrice,jdbcType=DECIMAL}, 
+			#{code,jdbcType=VARCHAR}, #{oldPrice,jdbcType=DECIMAL}, 
+			#{price,jdbcType=DECIMAL}, #{payPrice,jdbcType=DECIMAL}, 
+			#{payTime,jdbcType=TIMESTAMP},#{schedule,jdbcType=INTEGER}, #{endTime,jdbcType=TIMESTAMP}, 
+			#{address,jdbcType=VARCHAR}, #{detailAddress,jdbcType=VARCHAR}, 
+			#{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+			#{creatorId,jdbcType=VARCHAR}, #{creatorName,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<insert id="inserts" useGeneratedKeys="false"
+		parameterType="list">
+        <![CDATA[
+        INSERT INTO `JKWY_ORDER`(
+			id, no, 
+			jkwy_package_id, jkwy_package_price_id, 
+			voucher_user_id, voucher_price, 
+			activity_promotion_id, activity_promotion_price, 
+			code, old_price, 
+			price, pay_price, 
+			pay_time,schedule, end_time, 
+			address, detail_address, 
+			status, create_time, 
+			creator_id, creator_name
+        )]]>
+       	VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id,jdbcType=VARCHAR}, #{item.no,jdbcType=VARCHAR}, 
+			#{item.jkwyPackageId,jdbcType=VARCHAR}, #{item.jkwyPackagePriceId,jdbcType=VARCHAR}, 
+			#{item.voucherUserId,jdbcType=VARCHAR}, #{item.voucherPrice,jdbcType=DECIMAL}, 
+			#{item.activityPromotionId,jdbcType=VARCHAR}, #{item.activityPromotionPrice,jdbcType=DECIMAL}, 
+			#{item.code,jdbcType=VARCHAR}, #{item.oldPrice,jdbcType=DECIMAL}, 
+			#{item.price,jdbcType=DECIMAL}, #{item.payPrice,jdbcType=DECIMAL}, 
+			#{item.payTime,jdbcType=TIMESTAMP},#{item.schedule,jdbcType=INTEGER},  #{item.endTime,jdbcType=TIMESTAMP}, 
+			#{item.address,jdbcType=VARCHAR}, #{item.detailAddress,jdbcType=VARCHAR}, 
+			#{item.status,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP}, 
+			#{item.creatorId,jdbcType=VARCHAR}, #{item.creatorName,jdbcType=VARCHAR}
+			)
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById">
+		DELETE JO FROM `JKWY_ORDER` JO WHERE JO.ID = #{id} 
+	</delete>
+	
+	<update id="disableById">
+	    UPDATE `JKWY_ORDER` JO
+		SET 
+		JO.STATUS = -1
+		WHERE JO.ID = #{id}
+	</update>
+
+	<update id="update">
+		UPDATE `JKWY_ORDER` JO
+		<include refid="dynamicSet" /> 
+	    WHERE JO.ID = #{id}
+	</update>
+
+	<select id="load" resultMap="jkwyOrder">
+		SELECT <include refid="field"/>
+		FROM `JKWY_ORDER` JO
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `JKWY_ORDER` JO
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="list" resultMap="jkwyOrder">
+		SELECT <include refid="field"/>
+		FROM `JKWY_ORDER` JO
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="query" resultMap="jkwyOrder">
+		SELECT <include refid="field"/>
+		FROM `JKWY_ORDER` JO
+		<include refid="queryWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadById" resultMap="jkwyOrder">
+		SELECT <include refid="field"/>
+		FROM `JKWY_ORDER` JO
+		WHERE JO.ID = #{id}
+	</select>
+	
+</mapper>

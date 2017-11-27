@@ -1,0 +1,347 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	scj
+	date	:	2017-10-16 15:00:33
+	version	:	1.0
+-->
+<mapper namespace="com.jinpaihushi.jphs.operate.dao.OperateLogDao">
+	
+	<sql id="field">
+		OL.id, OL.type, OL.module_one, OL.module_one_name, 
+		OL.module_two, OL.module_two_name, OL.sql, OL.path, 
+		OL.remark, OL.creator_ip, OL.creator_id, OL.creator_name, 
+		OL.creator_phone, OL.create_time, OL.result, OL.status
+	</sql>
+
+	<sql id="fieldGlobal">
+		OL.id OL_id, OL.type OL_type, 
+		OL.module_one OL_module_one, OL.module_one_name OL_module_one_name, 
+		OL.module_two OL_module_two, OL.module_two_name OL_module_two_name, 
+		OL.sql OL_sql, OL.path OL_path, 
+		OL.remark OL_remark, OL.creator_ip OL_creator_ip, 
+		OL.creator_id OL_creator_id, OL.creator_name OL_creator_name, 
+		OL.creator_phone OL_creator_phone, OL.create_time OL_create_time, 
+		OL.result OL_result, OL.status OL_status
+	</sql>
+	
+	<sql id="fieldWithAlias">
+		OL.id id, OL.type type, 
+		OL.module_one moduleOne, OL.module_one_name moduleOneName, 
+		OL.module_two moduleTwo, OL.module_two_name moduleTwoName, 
+		OL.sql sql, OL.path path, 
+		OL.remark remark, OL.creator_ip creatorIp, 
+		OL.creator_id creatorId, OL.creator_name creatorName, 
+		OL.creator_phone creatorPhone, OL.create_time createTime, 
+		OL.result result, OL.status status
+	</sql>
+	
+	<sql id="condition">
+		<if test="id!=null and id!=''">
+			AND OL.id=#{id}
+		</if>
+		<if test="type!=null">
+			AND OL.type=#{type}
+		</if>
+		<if test="moduleOne!=null">
+			AND OL.module_one=#{moduleOne}
+		</if>
+		<if test="moduleOneName!=null and moduleOneName!=''">
+			AND OL.module_one_name=#{moduleOneName}
+		</if>
+		<if test="moduleTwo!=null">
+			AND OL.module_two=#{moduleTwo}
+		</if>
+		<if test="moduleTwoName!=null and moduleTwoName!=''">
+			AND OL.module_two_name=#{moduleTwoName}
+		</if>
+		<if test="sql!=null and sql!=''">
+			AND OL.sql=#{sql}
+		</if>
+		<if test="path!=null and path!=''">
+			AND OL.path=#{path}
+		</if>
+		<if test="remark!=null and remark!=''">
+			AND OL.remark=#{remark}
+		</if>
+		<if test="creatorIp!=null and creatorIp!=''">
+			AND OL.creator_ip=#{creatorIp}
+		</if>
+		<if test="creatorId!=null and creatorId!=''">
+			AND OL.creator_id=#{creatorId}
+		</if>
+		<if test="creatorName!=null and creatorName!=''">
+			AND OL.creator_name=#{creatorName}
+		</if>
+		<if test="creatorPhone!=null and creatorPhone!=''">
+			AND OL.creator_phone=#{creatorPhone}
+		</if>
+		<if test="createTime!=null">
+			AND OL.create_time=#{createTime}
+		</if>
+		<if test="result!=null">
+			AND OL.result=#{result}
+		</if>
+		<if test="status!=null">
+			AND OL.status=#{status}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="queryWhere">
+		<where>
+			<if test="id!=null and id!=''">
+				AND OL.id LIKE CONCAT('%', #{id}, '%')
+			</if>
+			<if test="type!=null">
+				AND OL.type=#{type}
+			</if>
+			<if test="moduleOne!=null">
+				AND OL.module_one=#{moduleOne}
+			</if>
+			<if test="moduleOneName!=null and moduleOneName!=''">
+				AND OL.module_one_name LIKE CONCAT('%', #{moduleOneName}, '%')
+			</if>
+			<if test="moduleTwo!=null">
+				AND OL.module_two=#{moduleTwo}
+			</if>
+			<if test="moduleTwoName!=null and moduleTwoName!=''">
+				AND OL.module_two_name LIKE CONCAT('%', #{moduleTwoName}, '%')
+			</if>
+			<if test="sql!=null and sql!=''">
+				AND OL.sql LIKE CONCAT('%', #{sql}, '%')
+			</if>
+			<if test="path!=null and path!=''">
+				AND OL.path LIKE CONCAT('%', #{path}, '%')
+			</if>
+			<if test="remark!=null and remark!=''">
+				AND OL.remark LIKE CONCAT('%', #{remark}, '%')
+			</if>
+			<if test="creatorIp!=null and creatorIp!=''">
+				AND OL.creator_ip LIKE CONCAT('%', #{creatorIp}, '%')
+			</if>
+			<if test="creatorId!=null and creatorId!=''">
+				AND OL.creator_id LIKE CONCAT('%', #{creatorId}, '%')
+			</if>
+			<if test="creatorName!=null and creatorName!=''">
+				AND OL.creator_name LIKE CONCAT('%', #{creatorName}, '%')
+			</if>
+			<if test="creatorPhone!=null and creatorPhone!=''">
+				AND OL.creator_phone LIKE CONCAT('%', #{creatorPhone}, '%')
+			</if>
+			<if test="createTime!=null">
+				AND OL.create_time=#{createTime}
+			</if>
+			<if test="result!=null">
+				AND OL.result=#{result}
+			</if>
+			<if test="status!=null">
+				AND OL.status=#{status}
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="dynamicSet">
+		<set>
+           <if test="id!=null">
+				OL.id=#{id}, 
+		   </if>
+           <if test="type!=null">
+				OL.type=#{type}, 
+		   </if>
+           <if test="moduleOne!=null">
+				OL.module_one=#{moduleOne}, 
+		   </if>
+           <if test="moduleOneName!=null">
+				OL.module_one_name=#{moduleOneName}, 
+		   </if>
+           <if test="moduleTwo!=null">
+				OL.module_two=#{moduleTwo}, 
+		   </if>
+           <if test="moduleTwoName!=null">
+				OL.module_two_name=#{moduleTwoName}, 
+		   </if>
+           <if test="sql!=null">
+				OL.sql=#{sql}, 
+		   </if>
+           <if test="path!=null">
+				OL.path=#{path}, 
+		   </if>
+           <if test="remark!=null">
+				OL.remark=#{remark}, 
+		   </if>
+           <if test="creatorIp!=null">
+				OL.creator_ip=#{creatorIp}, 
+		   </if>
+           <if test="creatorId!=null">
+				OL.creator_id=#{creatorId}, 
+		   </if>
+           <if test="creatorName!=null">
+				OL.creator_name=#{creatorName}, 
+		   </if>
+           <if test="creatorPhone!=null">
+				OL.creator_phone=#{creatorPhone}, 
+		   </if>
+           <if test="createTime!=null">
+				OL.create_time=#{createTime}, 
+		   </if>
+           <if test="result!=null">
+				OL.result=#{result}, 
+		   </if>
+           <if test="status!=null">
+				OL.status=#{status}, 
+		   </if>
+		</set>
+	</sql>
+	
+	<sql id="orderby">
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+	</sql>
+
+	<resultMap id="operateLog" type="com.jinpaihushi.jphs.operate.model.OperateLog">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="type" column="type" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="moduleOne" column="module_one" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="moduleOneName" column="module_one_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="moduleTwo" column="module_two" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="moduleTwoName" column="module_two_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="sql" column="sql" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="path" column="path" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="remark" column="remark" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorIp" column="creator_ip" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorId" column="creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="creator_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorPhone" column="creator_phone" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="createTime" column="create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="result" column="result" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"></result>
+	</resultMap>
+	
+	<resultMap id="operateLogGlobal" type="com.jinpaihushi.jphs.operate.model.OperateLog">
+		<result property="id" column="OL_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="type" column="OL_type" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="moduleOne" column="OL_module_one" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="moduleOneName" column="OL_module_one_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="moduleTwo" column="OL_module_two" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="moduleTwoName" column="OL_module_two_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="sql" column="OL_sql" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="path" column="OL_path" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="remark" column="OL_remark" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorIp" column="OL_creator_ip" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorId" column="OL_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="OL_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorPhone" column="OL_creator_phone" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="createTime" column="OL_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="result" column="OL_result" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="status" column="OL_status" javaType="Integer" jdbcType="INTEGER"></result>
+	</resultMap>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.jinpaihushi.jphs.operate.model.OperateLog">
+		INSERT INTO `OPERATE_LOG`(
+			id, type, 
+			module_one, module_one_name, 
+			module_two, module_two_name, 
+			sql, path, 
+			remark, creator_ip, 
+			creator_id, creator_name, 
+			creator_phone, create_time, 
+			result, status
+		)VALUES(
+			#{id,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
+			#{moduleOne,jdbcType=INTEGER}, #{moduleOneName,jdbcType=VARCHAR}, 
+			#{moduleTwo,jdbcType=INTEGER}, #{moduleTwoName,jdbcType=VARCHAR}, 
+			#{sql,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, 
+			#{remark,jdbcType=VARCHAR}, #{creatorIp,jdbcType=VARCHAR}, 
+			#{creatorId,jdbcType=VARCHAR}, #{creatorName,jdbcType=VARCHAR}, 
+			#{creatorPhone,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+			#{result,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}
+		)
+	</insert>
+	
+	<insert id="inserts" useGeneratedKeys="false"
+		parameterType="list">
+        <![CDATA[
+        INSERT INTO `OPERATE_LOG`(
+			id, type, 
+			module_one, module_one_name, 
+			module_two, module_two_name, 
+			sql, path, 
+			remark, creator_ip, 
+			creator_id, creator_name, 
+			creator_phone, create_time, 
+			result, status
+        )]]>
+       	VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id,jdbcType=VARCHAR}, #{item.type,jdbcType=INTEGER}, 
+			#{item.moduleOne,jdbcType=INTEGER}, #{item.moduleOneName,jdbcType=VARCHAR}, 
+			#{item.moduleTwo,jdbcType=INTEGER}, #{item.moduleTwoName,jdbcType=VARCHAR}, 
+			#{item.sql,jdbcType=VARCHAR}, #{item.path,jdbcType=VARCHAR}, 
+			#{item.remark,jdbcType=VARCHAR}, #{item.creatorIp,jdbcType=VARCHAR}, 
+			#{item.creatorId,jdbcType=VARCHAR}, #{item.creatorName,jdbcType=VARCHAR}, 
+			#{item.creatorPhone,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
+			#{item.result,jdbcType=INTEGER}, #{item.status,jdbcType=INTEGER}
+			)
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById">
+		DELETE OL FROM `OPERATE_LOG` OL WHERE OL.ID = #{id} 
+	</delete>
+	
+	<update id="disableById">
+	    UPDATE `OPERATE_LOG` OL
+		SET 
+		OL.STATUS = -1
+		WHERE OL.ID = #{id}
+	</update>
+
+	<update id="update">
+		UPDATE `OPERATE_LOG` OL
+		<include refid="dynamicSet" /> 
+	    WHERE OL.ID = #{id}
+	</update>
+
+	<select id="load" resultMap="operateLog">
+		SELECT <include refid="field"/>
+		FROM `OPERATE_LOG` OL
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `OPERATE_LOG` OL
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="list" resultMap="operateLog">
+		SELECT <include refid="field"/>
+		FROM `OPERATE_LOG` OL
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="query" resultMap="operateLog">
+		SELECT <include refid="field"/>
+		FROM `OPERATE_LOG` OL
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadById" resultMap="operateLog">
+		SELECT <include refid="field"/>
+		FROM `OPERATE_LOG` OL
+		WHERE OL.ID = #{id}
+	</select>
+	
+</mapper>

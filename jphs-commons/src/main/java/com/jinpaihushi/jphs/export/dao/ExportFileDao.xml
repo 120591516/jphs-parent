@@ -1,0 +1,251 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	scj
+	date	:	2017-10-12 14:13:45
+	version	:	1.0
+-->
+<mapper namespace="com.jinpaihushi.jphs.export.dao.ExportFileDao">
+	
+	<sql id="field">
+		EF.id, EF.file_name, EF.execute_sql, EF.creator_ip, 
+		EF.creator_name, EF.creator_phone, EF.creator_id, EF.create_time, 
+		EF.status
+	</sql>
+
+	<sql id="fieldGlobal">
+		EF.id EF_id, EF.file_name EF_file_name, 
+		EF.execute_sql EF_execute_sql, EF.creator_ip EF_creator_ip, 
+		EF.creator_name EF_creator_name, EF.creator_phone EF_creator_phone, 
+		EF.creator_id EF_creator_id, EF.create_time EF_create_time, 
+		EF.status EF_status
+	</sql>
+	
+	<sql id="fieldWithAlias">
+		EF.id id, EF.file_name fileName, 
+		EF.execute_sql executeSql, EF.creator_ip creatorIp, 
+		EF.creator_name creatorName, EF.creator_phone creatorPhone, 
+		EF.creator_id creatorId, EF.create_time createTime, 
+		EF.status status
+	</sql>
+	
+	<sql id="condition">
+		<if test="id!=null and id!=''">
+			AND EF.id=#{id}
+		</if>
+		<if test="fileName!=null and fileName!=''">
+			AND EF.file_name=#{fileName}
+		</if>
+		<if test="executeSql!=null and executeSql!=''">
+			AND EF.execute_sql=#{executeSql}
+		</if>
+		<if test="creatorIp!=null and creatorIp!=''">
+			AND EF.creator_ip=#{creatorIp}
+		</if>
+		<if test="creatorName!=null and creatorName!=''">
+			AND EF.creator_name=#{creatorName}
+		</if>
+		<if test="creatorPhone!=null and creatorPhone!=''">
+			AND EF.creator_phone=#{creatorPhone}
+		</if>
+		<if test="creatorId!=null and creatorId!=''">
+			AND EF.creator_id=#{creatorId}
+		</if>
+		<if test="createTime!=null">
+			AND EF.create_time=#{createTime}
+		</if>
+		<if test="status!=null">
+			AND EF.status=#{status}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="queryWhere">
+		<where>
+			<if test="id!=null and id!=''">
+				AND EF.id LIKE CONCAT('%', #{id}, '%')
+			</if>
+			<if test="fileName!=null and fileName!=''">
+				AND EF.file_name LIKE CONCAT('%', #{fileName}, '%')
+			</if>
+			<if test="executeSql!=null and executeSql!=''">
+				AND EF.execute_sql LIKE CONCAT('%', #{executeSql}, '%')
+			</if>
+			<if test="creatorIp!=null and creatorIp!=''">
+				AND EF.creator_ip LIKE CONCAT('%', #{creatorIp}, '%')
+			</if>
+			<if test="creatorName!=null and creatorName!=''">
+				AND EF.creator_name LIKE CONCAT('%', #{creatorName}, '%')
+			</if>
+			<if test="creatorPhone!=null and creatorPhone!=''">
+				AND EF.creator_phone LIKE CONCAT('%', #{creatorPhone}, '%')
+			</if>
+			<if test="creatorId!=null and creatorId!=''">
+				AND EF.creator_id LIKE CONCAT('%', #{creatorId}, '%')
+			</if>
+			<if test="createTime!=null">
+				AND EF.create_time=#{createTime}
+			</if>
+			<if test="status!=null">
+				AND EF.status=#{status}
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="dynamicSet">
+		<set>
+           <if test="id!=null">
+				EF.id=#{id}, 
+		   </if>
+           <if test="fileName!=null">
+				EF.file_name=#{fileName}, 
+		   </if>
+           <if test="executeSql!=null">
+				EF.execute_sql=#{executeSql}, 
+		   </if>
+           <if test="creatorIp!=null">
+				EF.creator_ip=#{creatorIp}, 
+		   </if>
+           <if test="creatorName!=null">
+				EF.creator_name=#{creatorName}, 
+		   </if>
+           <if test="creatorPhone!=null">
+				EF.creator_phone=#{creatorPhone}, 
+		   </if>
+           <if test="creatorId!=null">
+				EF.creator_id=#{creatorId}, 
+		   </if>
+           <if test="createTime!=null">
+				EF.create_time=#{createTime}, 
+		   </if>
+           <if test="status!=null">
+				EF.status=#{status}, 
+		   </if>
+		</set>
+	</sql>
+	
+	<sql id="orderby">
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+	</sql>
+
+	<resultMap id="exportFile" type="com.jinpaihushi.jphs.export.model.ExportFile">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="fileName" column="file_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="executeSql" column="execute_sql" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorIp" column="creator_ip" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="creator_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorPhone" column="creator_phone" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorId" column="creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="createTime" column="create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"></result>
+	</resultMap>
+	
+	<resultMap id="exportFileGlobal" type="com.jinpaihushi.jphs.export.model.ExportFile">
+		<result property="id" column="EF_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="fileName" column="EF_file_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="executeSql" column="EF_execute_sql" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorIp" column="EF_creator_ip" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="EF_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorPhone" column="EF_creator_phone" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorId" column="EF_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="createTime" column="EF_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="status" column="EF_status" javaType="Integer" jdbcType="INTEGER"></result>
+	</resultMap>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.jinpaihushi.jphs.export.model.ExportFile">
+		INSERT INTO `EXPORT_FILE`(
+			id, file_name, 
+			execute_sql, creator_ip, 
+			creator_name, creator_phone, 
+			creator_id, create_time, 
+			status
+		)VALUES(
+			#{id,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, 
+			#{executeSql,jdbcType=VARCHAR}, #{creatorIp,jdbcType=VARCHAR}, 
+			#{creatorName,jdbcType=VARCHAR}, #{creatorPhone,jdbcType=VARCHAR}, 
+			#{creatorId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+			#{status,jdbcType=INTEGER}
+		)
+	</insert>
+	
+	<insert id="inserts" useGeneratedKeys="false"
+		parameterType="list">
+        <![CDATA[
+        INSERT INTO `EXPORT_FILE`(
+			id, file_name, 
+			execute_sql, creator_ip, 
+			creator_name, creator_phone, 
+			creator_id, create_time, 
+			status
+        )]]>
+       	VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id,jdbcType=VARCHAR}, #{item.fileName,jdbcType=VARCHAR}, 
+			#{item.executeSql,jdbcType=VARCHAR}, #{item.creatorIp,jdbcType=VARCHAR}, 
+			#{item.creatorName,jdbcType=VARCHAR}, #{item.creatorPhone,jdbcType=VARCHAR}, 
+			#{item.creatorId,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
+			#{item.status,jdbcType=INTEGER}
+			)
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById">
+		DELETE EF FROM `EXPORT_FILE` EF WHERE EF.ID = #{id} 
+	</delete>
+	
+	<update id="disableById">
+	    UPDATE `EXPORT_FILE` EF
+		SET 
+		EF.STATUS = -1
+		WHERE EF.ID = #{id}
+	</update>
+
+	<update id="update">
+		UPDATE `EXPORT_FILE` EF
+		<include refid="dynamicSet" /> 
+	    WHERE EF.ID = #{id}
+	</update>
+
+	<select id="load" resultMap="exportFile">
+		SELECT <include refid="field"/>
+		FROM `EXPORT_FILE` EF
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `EXPORT_FILE` EF
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="list" resultMap="exportFile">
+		SELECT <include refid="field"/>
+		FROM `EXPORT_FILE` EF
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="query" resultMap="exportFile">
+		SELECT <include refid="field"/>
+		FROM `EXPORT_FILE` EF
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadById" resultMap="exportFile">
+		SELECT <include refid="field"/>
+		FROM `EXPORT_FILE` EF
+		WHERE EF.ID = #{id}
+	</select>
+	
+</mapper>

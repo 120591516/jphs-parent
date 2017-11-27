@@ -1,0 +1,421 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	wangwenteng
+	date	:	2017-11-21 17:01:27
+	version	:	1.0
+-->
+<mapper namespace="com.jinpaihushi.jphs.jkwy.dao.JkwyPackagePriceDao">
+	
+	<sql id="field">
+		JPP.id, JPP.jkwy_package_id, JPP.title, JPP.old_price, 
+		JPP.price, JPP.service_time, JPP.unit, JPP.support_number, 
+		JPP.support_fee, JPP.support_change, JPP.status, JPP.create_time, 
+		JPP.creator_id, JPP.creator_name
+	</sql>
+
+	<sql id="fieldGlobal">
+		JPP.id JPP_id, JPP.jkwy_package_id JPP_jkwy_package_id, 
+		JPP.title JPP_title, JPP.old_price JPP_old_price, 
+		JPP.price JPP_price, JPP.service_time JPP_service_time, 
+		JPP.unit JPP_unit, JPP.support_number JPP_support_number, 
+		JPP.support_fee JPP_support_fee, JPP.support_change JPP_support_change, 
+		JPP.status JPP_status, JPP.create_time JPP_create_time, 
+		JPP.creator_id JPP_creator_id, JPP.creator_name JPP_creator_name
+	</sql>
+	
+	<sql id="fieldWithAlias">
+		JPP.id id, JPP.jkwy_package_id jkwyPackageId, 
+		JPP.title title, JPP.old_price oldPrice, 
+		JPP.price price, JPP.service_time serviceTime, 
+		JPP.unit unit, JPP.support_number supportNumber, 
+		JPP.support_fee supportFee, JPP.support_change supportChange, 
+		JPP.status status, JPP.create_time createTime, 
+		JPP.creator_id creatorId, JPP.creator_name creatorName
+	</sql>
+	
+	<sql id="condition">
+		<if test="id!=null and id!=''">
+			AND JPP.id=#{id}
+		</if>
+		<if test="jkwyPackageId!=null and jkwyPackageId!=''">
+			AND JPP.jkwy_package_id=#{jkwyPackageId}
+		</if>
+		<if test="title!=null and title!=''">
+			AND JPP.title=#{title}
+		</if>
+		<if test="oldPrice!=null">
+			AND JPP.old_price=#{oldPrice}
+		</if>
+		<if test="price!=null">
+			AND JPP.price=#{price}
+		</if>
+		<if test="serviceTime!=null">
+			AND JPP.service_time=#{serviceTime}
+		</if>
+		<if test="unit!=null and unit!=''">
+			AND JPP.unit=#{unit}
+		</if>
+		<if test="supportNumber!=null">
+			AND JPP.support_number=#{supportNumber}
+		</if>
+		<if test="supportFee!=null">
+			AND JPP.support_fee=#{supportFee}
+		</if>
+		<if test="supportChange!=null">
+			AND JPP.support_change=#{supportChange}
+		</if>
+		<if test="status!=null">
+			AND JPP.status=#{status}
+		</if>
+		<if test="createTime!=null">
+			AND JPP.create_time=#{createTime}
+		</if>
+		<if test="creatorId!=null and creatorId!=''">
+			AND JPP.creator_id=#{creatorId}
+		</if>
+		<if test="creatorName!=null and creatorName!=''">
+			AND JPP.creator_name=#{creatorName}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="queryWhere">
+		<where>
+			<if test="id!=null and id!=''">
+				AND JPP.id LIKE CONCAT('%', #{id}, '%')
+			</if>
+			<if test="jkwyPackageId!=null and jkwyPackageId!=''">
+				AND JPP.jkwy_package_id LIKE CONCAT('%', #{jkwyPackageId}, '%')
+			</if>
+			<if test="title!=null and title!=''">
+				AND JPP.title LIKE CONCAT('%', #{title}, '%')
+			</if>
+			<if test="oldPrice!=null">
+				AND JPP.old_price=#{oldPrice}
+			</if>
+			<if test="price!=null">
+				AND JPP.price=#{price}
+			</if>
+			<if test="serviceTime!=null">
+				AND JPP.service_time=#{serviceTime}
+			</if>
+			<if test="unit!=null and unit!=''">
+				AND JPP.unit LIKE CONCAT('%', #{unit}, '%')
+			</if>
+			<if test="supportNumber!=null">
+				AND JPP.support_number=#{supportNumber}
+			</if>
+			<if test="supportFee!=null">
+				AND JPP.support_fee=#{supportFee}
+			</if>
+			<if test="supportChange!=null">
+				AND JPP.support_change=#{supportChange}
+			</if>
+			<if test="status!=null">
+				AND JPP.status=#{status}
+			</if>
+			<if test="createTime!=null">
+				AND JPP.create_time=#{createTime}
+			</if>
+			<if test="creatorId!=null and creatorId!=''">
+				AND JPP.creator_id LIKE CONCAT('%', #{creatorId}, '%')
+			</if>
+			<if test="creatorName!=null and creatorName!=''">
+				AND JPP.creator_name LIKE CONCAT('%', #{creatorName}, '%')
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="dynamicSet">
+		<set>
+           <if test="id!=null">
+				JPP.id=#{id}, 
+		   </if>
+           <if test="jkwyPackageId!=null">
+				JPP.jkwy_package_id=#{jkwyPackageId}, 
+		   </if>
+           <if test="title!=null">
+				JPP.title=#{title}, 
+		   </if>
+           <if test="oldPrice!=null">
+				JPP.old_price=#{oldPrice}, 
+		   </if>
+           <if test="price!=null">
+				JPP.price=#{price}, 
+		   </if>
+           <if test="serviceTime!=null">
+				JPP.service_time=#{serviceTime}, 
+		   </if>
+           <if test="unit!=null">
+				JPP.unit=#{unit}, 
+		   </if>
+           <if test="supportNumber!=null">
+				JPP.support_number=#{supportNumber}, 
+		   </if>
+           <if test="supportFee!=null">
+				JPP.support_fee=#{supportFee}, 
+		   </if>
+           <if test="supportChange!=null">
+				JPP.support_change=#{supportChange}, 
+		   </if>
+           <if test="status!=null">
+				JPP.status=#{status}, 
+		   </if>
+           <if test="createTime!=null">
+				JPP.create_time=#{createTime}, 
+		   </if>
+           <if test="creatorId!=null">
+				JPP.creator_id=#{creatorId}, 
+		   </if>
+           <if test="creatorName!=null">
+				JPP.creator_name=#{creatorName}, 
+		   </if>
+		</set>
+	</sql>
+	
+	<sql id="orderby">
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+	</sql>
+
+	<resultMap id="jkwyPackagePrice" type="com.jinpaihushi.jphs.jkwy.model.JkwyPackagePrice">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="jkwyPackageId" column="jkwy_package_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="title" column="title" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="oldPrice" column="old_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="price" column="price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="serviceTime" column="service_time" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="unit" column="unit" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="supportNumber" column="support_number" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="supportFee" column="support_fee" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="supportChange" column="support_change" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="creator_name" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<resultMap id="jkwyPackagePriceGlobal" type="com.jinpaihushi.jphs.jkwy.model.JkwyPackagePrice">
+		<result property="id" column="JPP_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="jkwyPackageId" column="JPP_jkwy_package_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="title" column="JPP_title" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="oldPrice" column="JPP_old_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="price" column="JPP_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="serviceTime" column="JPP_service_time" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="unit" column="JPP_unit" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="supportNumber" column="JPP_support_number" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="supportFee" column="JPP_support_fee" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="supportChange" column="JPP_support_change" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="status" column="JPP_status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="JPP_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="JPP_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="JPP_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.jinpaihushi.jphs.jkwy.model.JkwyPackagePrice">
+		INSERT INTO `JKWY_PACKAGE_PRICE`(
+			id, jkwy_package_id, 
+			title, old_price, 
+			price, service_time, 
+			unit, support_number, 
+			support_fee, support_change, 
+			status, create_time, 
+			creator_id, creator_name
+		)VALUES(
+			#{id,jdbcType=VARCHAR}, #{jkwyPackageId,jdbcType=VARCHAR}, 
+			#{title,jdbcType=VARCHAR}, #{oldPrice,jdbcType=DECIMAL}, 
+			#{price,jdbcType=DECIMAL}, #{serviceTime,jdbcType=INTEGER}, 
+			#{unit,jdbcType=VARCHAR}, #{supportNumber,jdbcType=INTEGER}, 
+			#{supportFee,jdbcType=INTEGER}, #{supportChange,jdbcType=INTEGER}, 
+			#{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+			#{creatorId,jdbcType=VARCHAR}, #{creatorName,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<insert id="inserts" useGeneratedKeys="false"
+		parameterType="list">
+        <![CDATA[
+        INSERT INTO `JKWY_PACKAGE_PRICE`(
+			id, jkwy_package_id, 
+			title, old_price, 
+			price, service_time, 
+			unit, support_number, 
+			support_fee, support_change, 
+			status, create_time, 
+			creator_id, creator_name
+        )]]>
+       	VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id,jdbcType=VARCHAR}, #{item.jkwyPackageId,jdbcType=VARCHAR}, 
+			#{item.title,jdbcType=VARCHAR}, #{item.oldPrice,jdbcType=DECIMAL}, 
+			#{item.price,jdbcType=DECIMAL}, #{item.serviceTime,jdbcType=INTEGER}, 
+			#{item.unit,jdbcType=VARCHAR}, #{item.supportNumber,jdbcType=INTEGER}, 
+			#{item.supportFee,jdbcType=INTEGER}, #{item.supportChange,jdbcType=INTEGER}, 
+			#{item.status,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP}, 
+			#{item.creatorId,jdbcType=VARCHAR}, #{item.creatorName,jdbcType=VARCHAR}
+			)
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById">
+		DELETE JPP FROM `JKWY_PACKAGE_PRICE` JPP WHERE JPP.ID = #{id} 
+	</delete>
+	
+	<update id="disableById">
+	    UPDATE `JKWY_PACKAGE_PRICE` JPP
+		SET 
+		JPP.STATUS = -1
+		WHERE JPP.ID = #{id}
+	</update>
+
+	<update id="update">
+		UPDATE `JKWY_PACKAGE_PRICE` JPP
+		<include refid="dynamicSet" /> 
+	    WHERE JPP.ID = #{id}
+	</update>
+
+	<select id="load" resultMap="jkwyPackagePrice">
+		SELECT <include refid="field"/>
+		FROM `JKWY_PACKAGE_PRICE` JPP
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `JKWY_PACKAGE_PRICE` JPP
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="list" resultMap="jkwyPackagePrice">
+		SELECT <include refid="field"/>
+		FROM `JKWY_PACKAGE_PRICE` JPP
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="query" resultMap="jkwyPackagePrice">
+		SELECT <include refid="field"/>
+		FROM `JKWY_PACKAGE_PRICE` JPP
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadById" resultMap="jkwyPackagePrice">
+		SELECT <include refid="field"/>
+		FROM `JKWY_PACKAGE_PRICE` JPP
+		WHERE JPP.ID = #{id}
+	</select>
+	
+	<select id="getHealthyArchives" resultMap="getHealthyArchives">
+		SELECT 
+		JPP.id JPP_id, JPP.jkwy_package_id JPP_jkwy_package_id, 
+		JPP.title JPP_title, JPP.old_price JPP_old_price, 
+		JPP.price JPP_price, JPP.service_time JPP_service_time, 
+		JPP.unit JPP_unit, JPP.support_number JPP_support_number, 
+		JPP.support_fee JPP_support_fee, JPP.support_change JPP_support_change, 
+		JPP.status JPP_status, JPP.create_time JPP_create_time,
+		JP.id JP_id, JP.title JP_title, 
+		JP.sub_title JP_sub_title, JP.content JP_content, 
+		JP.sort JP_sort, JP.status JP_status, 
+		JP.create_time JP_create_time, 
+		JO.id JO_id, JO.no JO_no, 
+		JO.jkwy_package_id JO_jkwy_package_id, JO.jkwy_package_price_id JO_jkwy_package_price_id, 
+		JO.voucher_user_id JO_voucher_user_id, JO.voucher_price JO_voucher_price, 
+		JO.activity_promotion_id JO_activity_promotion_id, JO.activity_promotion_price JO_activity_promotion_price, 
+		JO.code JO_code, JO.old_price JO_old_price, 
+		JO.price JO_price, JO.pay_price JO_pay_price, 
+		JO.pay_time JO_pay_time, JO.schedule JO_schedule , JO.end_time JO_end_time, 
+		JO.address JO_address, JO.detail_address JO_detail_address, 
+		JO.status JO_status, JO.create_time JO_create_time, 
+		JO.creator_id JO_creator_id, JO.creator_name JO_creator_name,
+		JR.id JR_id, JR.name JR_name, 
+		JR.phone JR_phone, JR.sex JR_sex, 
+		JR.relation JR_relation, JR.sfz JR_sfz, 
+		JR.birthday JR_birthday, JR.status JR_status, 
+		JR.create_time JR_create_time, JR.creator_id JR_creator_id, 
+		JR.creator_name JR_creator_name 
+		FROM `jkwy_package_price` `JPP` 
+		LEFT JOIN `jkwy_package` `JP` ON `JPP`.`jkwy_package_id`=`JP`.`id` 
+		LEFT JOIN `jkwy_order` `JO` ON `JPP`.`id`=`JO`.`jkwy_package_price_id` AND `JP`.`id`=`JPP`.`jkwy_package_id` 
+		AND `JO`.schedule=1 AND `JO`.status=0 
+		LEFT JOIN `jkwy_order_relation` `JOR` ON `JO`.`id`=`JOR`.`jkwy_order_id` 
+		LEFT JOIN `jkwy_relation` `JR` ON `JOR`.`jkwy_relation`=`JR`.`id` 
+		WHERE `JO`.`creator_id`=#{creatorId} ORDER BY `JO`.create_time DESC 
+	</select>
+	
+	<resultMap id="getHealthyArchives" type="com.jinpaihushi.jphs.jkwy.model.JkwyPackagePrice">
+		<result property="id" column="JPP_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="jkwyPackageId" column="JPP_jkwy_package_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="title" column="JPP_title" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="oldPrice" column="JPP_old_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="price" column="JPP_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="serviceTime" column="JPP_service_time" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="unit" column="JPP_unit" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="supportNumber" column="JPP_support_number" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="supportFee" column="JPP_support_fee" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="supportChange" column="JPP_support_change" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="status" column="JPP_status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="JPP_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="JPP_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="JPP_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+		<association property="jkwyPackage" javaType="com.jinpaihushi.jphs.jkwy.model.JkwyPackage">
+			<result property="id" column="JP_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="title" column="JP_title" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="subTitle" column="JP_sub_title" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="content" column="JP_content" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="imgUrl" column="JP_img_url" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="sort" column="JP_sort" javaType="Integer" jdbcType="INTEGER"></result>
+			<result property="status" column="JP_status" javaType="Integer" jdbcType="INTEGER"></result>
+			<result property="createTime" column="JP_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+			<result property="creatorId" column="JP_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="creatorName" column="JP_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+		</association>
+		<collection property="jkwyOrderList" ofType="com.jinpaihushi.jphs.jkwy.model.JkwyOrder">
+			<result property="id" column="JO_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="no" column="JO_no" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="jkwyPackageId" column="JO_jkwy_package_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="jkwyPackagePriceId" column="JO_jkwy_package_price_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="voucherUserId" column="JO_voucher_user_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="voucherPrice" column="JO_voucher_price" javaType="Double" jdbcType="DECIMAL"></result>
+			<result property="activityPromotionId" column="JO_activity_promotion_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="activityPromotionPrice" column="JO_activity_promotion_price" javaType="Double" jdbcType="DECIMAL"></result>
+			<result property="code" column="JO_code" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="oldPrice" column="JO_old_price" javaType="Double" jdbcType="DECIMAL"></result>
+			<result property="price" column="JO_price" javaType="Double" jdbcType="DECIMAL"></result>
+			<result property="payPrice" column="JO_pay_price" javaType="Double" jdbcType="DECIMAL"></result>
+			<result property="payTime" column="JO_pay_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+			<result property="schedule" column="JO_schedule" javaType="Integer" jdbcType="INTEGER"></result>
+			<result property="endTime" column="JO_end_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+			<result property="address" column="JO_address" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="detailAddress" column="JO_detail_address" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="status" column="JO_status" javaType="Integer" jdbcType="INTEGER"></result>
+			<result property="createTime" column="JO_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+			<result property="creatorId" column="JO_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="creatorName" column="JO_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+			<collection property="jkwyRelationList" ofType="com.jinpaihushi.jphs.jkwy.model.JkwyRelation" >
+				<result property="id" column="JR_id" javaType="String" jdbcType="VARCHAR"></result>
+				<result property="name" column="JR_name" javaType="String" jdbcType="VARCHAR"></result>
+				<result property="phone" column="JR_phone" javaType="String" jdbcType="VARCHAR"></result>
+				<result property="sex" column="JR_sex" javaType="Integer" jdbcType="INTEGER"></result>
+				<result property="relation" column="JR_relation" javaType="String" jdbcType="VARCHAR"></result>
+				<result property="sfz" column="JR_sfz" javaType="String" jdbcType="VARCHAR"></result>
+				<result property="birthday" column="JR_birthday" javaType="Date" jdbcType="TIMESTAMP"></result>
+				<result property="status" column="JR_status" javaType="Integer" jdbcType="INTEGER"></result>
+				<result property="createTime" column="JR_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+				<result property="creatorId" column="JR_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+				<result property="creatorName" column="JR_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+			</collection>
+		</collection>
+	</resultMap>
+	
+</mapper>

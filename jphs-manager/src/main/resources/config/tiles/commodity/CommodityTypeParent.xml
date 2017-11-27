@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+	
+	<definition name="shop/commodity/type/parent/list" extends="default.layout">
+		<put-attribute type="string" name="title" value="管理" />
+		<put-attribute type="template" name="body"
+			value="/WEB-INF/view/shop/commodity/type/parent/list/index.jsp" />
+		<put-attribute type="template" name="left"
+			value="/WEB-INF/view/product/left.jsp" />
+		<put-list-attribute name="scripts" inherit="true">
+			<add-attribute value="/static/js/shop/commodity/type/parent/list.js" />
+		</put-list-attribute>
+	</definition>
+	
+	<definition name="shop/commodity/type/parent/edit" extends="default.layout">
+		<put-attribute type="string" name="title" value="编辑" />
+		<put-attribute type="template" name="body"
+			value="/WEB-INF/view/shop/commodity/type/parent/edit/index.jsp" />
+		<put-attribute type="template" name="left"
+			value="/WEB-INF/view/product/left.jsp" />
+		<put-list-attribute name="scripts" inherit="true">
+			<add-attribute value="/static/js/shop/commodity/type/parent/edit.js" />
+		</put-list-attribute>
+	</definition>
+	
+	<definition name="shop/commodity/type/parent/detail" extends="default.layout">
+		<put-attribute type="string" name="title" value="详情" />
+		<put-attribute type="template" name="body"
+			value="/WEB-INF/view/shop/commodity/type/parent/detail/index.jsp" />
+		<put-attribute type="template" name="left"
+			value="/WEB-INF/view/product/left.jsp" />
+		<put-list-attribute name="scripts" inherit="true">
+			<add-attribute value="/static/js/shop/commodity/type/parent/detail.js" />
+		</put-list-attribute>
+	</definition>
+	
+</tiles-definitions>

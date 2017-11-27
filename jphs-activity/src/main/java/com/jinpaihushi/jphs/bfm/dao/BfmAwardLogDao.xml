@@ -1,0 +1,233 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	scj
+	date	:	2017-10-26 16:45:32
+	version	:	1.0
+-->
+<mapper namespace="com.jinpaihushi.jphs.bfm.dao.BfmAwardLogDao">
+	
+	<sql id="field">
+		BAL.id, BAL.transaction_id, BAL.price, BAL.bmonth, 
+		BAL.order_number, BAL.creator_id, BAL.create_time, BAL.status
+	</sql>
+
+	<sql id="fieldGlobal">
+		BAL.id BAL_id, BAL.transaction_id BAL_transaction_id, 
+		BAL.price BAL_price, BAL.bmonth BAL_bmonth, 
+		BAL.order_number BAL_order_number, BAL.creator_id BAL_creator_id, 
+		BAL.create_time BAL_create_time, BAL.status BAL_status
+	</sql>
+	
+	<sql id="fieldWithAlias">
+		BAL.id id, BAL.transaction_id transactionId, 
+		BAL.price price, BAL.bmonth bmonth, 
+		BAL.order_number orderNumber, BAL.creator_id creatorId, 
+		BAL.create_time createTime, BAL.status status
+	</sql>
+	
+	<sql id="condition">
+		<if test="id!=null and id!=''">
+			AND BAL.id=#{id}
+		</if>
+		<if test="transactionId!=null and transactionId!=''">
+			AND BAL.transaction_id=#{transactionId}
+		</if>
+		<if test="price!=null">
+			AND BAL.price=#{price}
+		</if>
+		<if test="bmonth!=null">
+			AND BAL.bmonth=#{bmonth}
+		</if>
+		<if test="orderNumber!=null">
+			AND BAL.order_number=#{orderNumber}
+		</if>
+		<if test="creatorId!=null and creatorId!=''">
+			AND BAL.creator_id=#{creatorId}
+		</if>
+		<if test="createTime!=null">
+			AND BAL.create_time=#{createTime}
+		</if>
+		<if test="status!=null">
+			AND BAL.status=#{status}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="queryWhere">
+		<where>
+			<if test="id!=null and id!=''">
+				AND BAL.id LIKE CONCAT('%', #{id}, '%')
+			</if>
+			<if test="transactionId!=null and transactionId!=''">
+				AND BAL.transaction_id LIKE CONCAT('%', #{transactionId}, '%')
+			</if>
+			<if test="price!=null">
+				AND BAL.price=#{price}
+			</if>
+			<if test="bmonth!=null">
+				AND BAL.bmonth=#{bmonth}
+			</if>
+			<if test="orderNumber!=null">
+				AND BAL.order_number=#{orderNumber}
+			</if>
+			<if test="creatorId!=null and creatorId!=''">
+				AND BAL.creator_id LIKE CONCAT('%', #{creatorId}, '%')
+			</if>
+			<if test="createTime!=null">
+				AND BAL.create_time=#{createTime}
+			</if>
+			<if test="status!=null">
+				AND BAL.status=#{status}
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="dynamicSet">
+		<set>
+           <if test="id!=null">
+				BAL.id=#{id}, 
+		   </if>
+           <if test="transactionId!=null">
+				BAL.transaction_id=#{transactionId}, 
+		   </if>
+           <if test="price!=null">
+				BAL.price=#{price}, 
+		   </if>
+           <if test="bmonth!=null">
+				BAL.bmonth=#{bmonth}, 
+		   </if>
+           <if test="orderNumber!=null">
+				BAL.order_number=#{orderNumber}, 
+		   </if>
+           <if test="creatorId!=null">
+				BAL.creator_id=#{creatorId}, 
+		   </if>
+           <if test="createTime!=null">
+				BAL.create_time=#{createTime}, 
+		   </if>
+           <if test="status!=null">
+				BAL.status=#{status}, 
+		   </if>
+		</set>
+	</sql>
+	
+	<sql id="orderby">
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+	</sql>
+
+	<resultMap id="bfmAwardLog" type="com.jinpaihushi.jphs.bfm.model.BfmAwardLog">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="transactionId" column="transaction_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="price" column="price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="bmonth" column="bmonth" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="orderNumber" column="order_number" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="creatorId" column="creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="createTime" column="create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"></result>
+	</resultMap>
+	
+	<resultMap id="bfmAwardLogGlobal" type="com.jinpaihushi.jphs.bfm.model.BfmAwardLog">
+		<result property="id" column="BAL_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="transactionId" column="BAL_transaction_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="price" column="BAL_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="bmonth" column="BAL_bmonth" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="orderNumber" column="BAL_order_number" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="creatorId" column="BAL_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="createTime" column="BAL_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="status" column="BAL_status" javaType="Integer" jdbcType="INTEGER"></result>
+	</resultMap>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.jinpaihushi.jphs.bfm.model.BfmAwardLog">
+		INSERT INTO `BFM_AWARD_LOG`(
+			id, transaction_id, 
+			price, bmonth, 
+			order_number, creator_id, 
+			create_time, status
+		)VALUES(
+			#{id,jdbcType=VARCHAR}, #{transactionId,jdbcType=VARCHAR}, 
+			#{price,jdbcType=DECIMAL}, #{bmonth,jdbcType=INTEGER}, 
+			#{orderNumber,jdbcType=INTEGER}, #{creatorId,jdbcType=VARCHAR}, 
+			#{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}
+		)
+	</insert>
+	
+	<insert id="inserts" useGeneratedKeys="false"
+		parameterType="list">
+        <![CDATA[
+        INSERT INTO `BFM_AWARD_LOG`(
+			id, transaction_id, 
+			price, bmonth, 
+			order_number, creator_id, 
+			create_time, status
+        )]]>
+       	VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id,jdbcType=VARCHAR}, #{item.transactionId,jdbcType=VARCHAR}, 
+			#{item.price,jdbcType=DECIMAL}, #{item.bmonth,jdbcType=INTEGER}, 
+			#{item.orderNumber,jdbcType=INTEGER}, #{item.creatorId,jdbcType=VARCHAR}, 
+			#{item.createTime,jdbcType=TIMESTAMP}, #{item.status,jdbcType=INTEGER}
+			)
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById">
+		DELETE BAL FROM `BFM_AWARD_LOG` BAL WHERE BAL.ID = #{id} 
+	</delete>
+	
+	<update id="disableById">
+	    UPDATE `BFM_AWARD_LOG` BAL
+		SET 
+		BAL.STATUS = -1
+		WHERE BAL.ID = #{id}
+	</update>
+
+	<update id="update">
+		UPDATE `BFM_AWARD_LOG` BAL
+		<include refid="dynamicSet" /> 
+	    WHERE BAL.ID = #{id}
+	</update>
+
+	<select id="load" resultMap="bfmAwardLog">
+		SELECT <include refid="field"/>
+		FROM `BFM_AWARD_LOG` BAL
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `BFM_AWARD_LOG` BAL
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="list" resultMap="bfmAwardLog">
+		SELECT <include refid="field"/>
+		FROM `BFM_AWARD_LOG` BAL
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="query" resultMap="bfmAwardLog">
+		SELECT <include refid="field"/>
+		FROM `BFM_AWARD_LOG` BAL
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadById" resultMap="bfmAwardLog">
+		SELECT <include refid="field"/>
+		FROM `BFM_AWARD_LOG` BAL
+		WHERE BAL.ID = #{id}
+	</select>
+	
+</mapper>

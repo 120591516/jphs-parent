@@ -1,0 +1,233 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	scj
+	date	:	2017-11-13 16:28:56
+	version	:	1.0
+-->
+<mapper namespace="com.jinpaihushi.jphs.city.dao.CityDao">
+	
+	<sql id="field">
+		C.id, C.name, C.lon, C.lat, 
+		C.type, C.create_time, C.creator_id, C.status
+	</sql>
+
+	<sql id="fieldGlobal">
+		C.id C_id, C.name C_name, 
+		C.lon C_lon, C.lat C_lat, 
+		C.type C_type, C.create_time C_create_time, 
+		C.creator_id C_creator_id, C.status C_status
+	</sql>
+	
+	<sql id="fieldWithAlias">
+		C.id id, C.name name, 
+		C.lon lon, C.lat lat, 
+		C.type type, C.create_time createTime, 
+		C.creator_id creatorId, C.status status
+	</sql>
+	
+	<sql id="condition">
+		<if test="id!=null and id!=''">
+			AND C.id=#{id}
+		</if>
+		<if test="name!=null and name!=''">
+			AND C.name=#{name}
+		</if>
+		<if test="lon!=null and lon!=''">
+			AND C.lon=#{lon}
+		</if>
+		<if test="lat!=null and lat!=''">
+			AND C.lat=#{lat}
+		</if>
+		<if test="type!=null">
+			AND C.type=#{type}
+		</if>
+		<if test="createTime!=null">
+			AND C.create_time=#{createTime}
+		</if>
+		<if test="creatorId!=null and creatorId!=''">
+			AND C.creator_id=#{creatorId}
+		</if>
+		<if test="status!=null">
+			AND C.status=#{status}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="queryWhere">
+		<where>
+			<if test="id!=null and id!=''">
+				AND C.id LIKE CONCAT('%', #{id}, '%')
+			</if>
+			<if test="name!=null and name!=''">
+				AND C.name LIKE CONCAT('%', #{name}, '%')
+			</if>
+			<if test="lon!=null and lon!=''">
+				AND C.lon LIKE CONCAT('%', #{lon}, '%')
+			</if>
+			<if test="lat!=null and lat!=''">
+				AND C.lat LIKE CONCAT('%', #{lat}, '%')
+			</if>
+			<if test="type!=null">
+				AND C.type=#{type}
+			</if>
+			<if test="createTime!=null">
+				AND C.create_time=#{createTime}
+			</if>
+			<if test="creatorId!=null and creatorId!=''">
+				AND C.creator_id LIKE CONCAT('%', #{creatorId}, '%')
+			</if>
+			<if test="status!=null">
+				AND C.status=#{status}
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="dynamicSet">
+		<set>
+           <if test="id!=null">
+				C.id=#{id}, 
+		   </if>
+           <if test="name!=null">
+				C.name=#{name}, 
+		   </if>
+           <if test="lon!=null">
+				C.lon=#{lon}, 
+		   </if>
+           <if test="lat!=null">
+				C.lat=#{lat}, 
+		   </if>
+           <if test="type!=null">
+				C.type=#{type}, 
+		   </if>
+           <if test="createTime!=null">
+				C.create_time=#{createTime}, 
+		   </if>
+           <if test="creatorId!=null">
+				C.creator_id=#{creatorId}, 
+		   </if>
+           <if test="status!=null">
+				C.status=#{status}, 
+		   </if>
+		</set>
+	</sql>
+	
+	<sql id="orderby">
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+	</sql>
+
+	<resultMap id="city" type="com.jinpaihushi.jphs.city.model.City">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="name" column="name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="lon" column="lon" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="lat" column="lat" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="type" column="type" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"></result>
+	</resultMap>
+	
+	<resultMap id="cityGlobal" type="com.jinpaihushi.jphs.city.model.City">
+		<result property="id" column="C_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="name" column="C_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="lon" column="C_lon" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="lat" column="C_lat" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="type" column="C_type" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="C_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="C_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="C_status" javaType="Integer" jdbcType="INTEGER"></result>
+	</resultMap>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.jinpaihushi.jphs.city.model.City">
+		INSERT INTO `CITY`(
+			id, name, 
+			lon, lat, 
+			type, create_time, 
+			creator_id, status
+		)VALUES(
+			#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+			#{lon,jdbcType=VARCHAR}, #{lat,jdbcType=VARCHAR}, 
+			#{type,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+			#{creatorId,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}
+		)
+	</insert>
+	
+	<insert id="inserts" useGeneratedKeys="false"
+		parameterType="list">
+        <![CDATA[
+        INSERT INTO `CITY`(
+			id, name, 
+			lon, lat, 
+			type, create_time, 
+			creator_id, status
+        )]]>
+       	VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR}, 
+			#{item.lon,jdbcType=VARCHAR}, #{item.lat,jdbcType=VARCHAR}, 
+			#{item.type,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP}, 
+			#{item.creatorId,jdbcType=VARCHAR}, #{item.status,jdbcType=INTEGER}
+			)
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById">
+		DELETE C FROM `CITY` C WHERE C.ID = #{id} 
+	</delete>
+	
+	<update id="disableById">
+	    UPDATE `CITY` C
+		SET 
+		C.STATUS = -1
+		WHERE C.ID = #{id}
+	</update>
+
+	<update id="update">
+		UPDATE `CITY` C
+		<include refid="dynamicSet" /> 
+	    WHERE C.ID = #{id}
+	</update>
+
+	<select id="load" resultMap="city">
+		SELECT <include refid="field"/>
+		FROM `CITY` C
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `CITY` C
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="list" resultMap="city">
+		SELECT <include refid="field"/>
+		FROM `CITY` C
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="query" resultMap="city">
+		SELECT <include refid="field"/>
+		FROM `CITY` C
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadById" resultMap="city">
+		SELECT <include refid="field"/>
+		FROM `CITY` C
+		WHERE C.ID = #{id}
+	</select>
+	
+</mapper>

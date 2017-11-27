@@ -1,0 +1,262 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	wangwenteng
+	date	:	2017-11-21 17:01:27
+	version	:	1.0
+-->
+<mapper namespace="com.jinpaihushi.jphs.jkwy.dao.JkwyOrderContentDao">
+	
+	<sql id="field">
+		JOC.id, JOC.jkwy_order_id, JOC.title, JOC.content, 
+		JOC.number, JOC.surplus_number, JOC.status, JOC.create_time, 
+		JOC.creator_id, JOC.creator_name
+	</sql>
+
+	<sql id="fieldGlobal">
+		JOC.id JOC_id, JOC.jkwy_order_id JOC_jkwy_order_id, 
+		JOC.title JOC_title, JOC.content JOC_content, 
+		JOC.number JOC_number, JOC.surplus_number JOC_surplus_number, 
+		JOC.status JOC_status, JOC.create_time JOC_create_time, 
+		JOC.creator_id JOC_creator_id, JOC.creator_name JOC_creator_name
+	</sql>
+	
+	<sql id="fieldWithAlias">
+		JOC.id id, JOC.jkwy_order_id jkwyOrderId, 
+		JOC.title title, JOC.content content, 
+		JOC.number number, JOC.surplus_number surplusNumber, 
+		JOC.status status, JOC.create_time createTime, 
+		JOC.creator_id creatorId, JOC.creator_name creatorName
+	</sql>
+	
+	<sql id="condition">
+		<if test="id!=null and id!=''">
+			AND JOC.id=#{id}
+		</if>
+		<if test="jkwyOrderId!=null and jkwyOrderId!=''">
+			AND JOC.jkwy_order_id=#{jkwyOrderId}
+		</if>
+		<if test="title!=null and title!=''">
+			AND JOC.title=#{title}
+		</if>
+		<if test="content!=null and content!=''">
+			AND JOC.content=#{content}
+		</if>
+		<if test="number!=null">
+			AND JOC.number=#{number}
+		</if>
+		<if test="surplusNumber!=null">
+			AND JOC.surplus_number=#{surplusNumber}
+		</if>
+		<if test="status!=null">
+			AND JOC.status=#{status}
+		</if>
+		<if test="createTime!=null">
+			AND JOC.create_time=#{createTime}
+		</if>
+		<if test="creatorId!=null and creatorId!=''">
+			AND JOC.creator_id=#{creatorId}
+		</if>
+		<if test="creatorName!=null and creatorName!=''">
+			AND JOC.creator_name=#{creatorName}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="queryWhere">
+		<where>
+			<if test="id!=null and id!=''">
+				AND JOC.id LIKE CONCAT('%', #{id}, '%')
+			</if>
+			<if test="jkwyOrderId!=null and jkwyOrderId!=''">
+				AND JOC.jkwy_order_id LIKE CONCAT('%', #{jkwyOrderId}, '%')
+			</if>
+			<if test="title!=null and title!=''">
+				AND JOC.title LIKE CONCAT('%', #{title}, '%')
+			</if>
+			<if test="content!=null and content!=''">
+				AND JOC.content LIKE CONCAT('%', #{content}, '%')
+			</if>
+			<if test="number!=null">
+				AND JOC.number=#{number}
+			</if>
+			<if test="surplusNumber!=null">
+				AND JOC.surplus_number=#{surplusNumber}
+			</if>
+			<if test="status!=null">
+				AND JOC.status=#{status}
+			</if>
+			<if test="createTime!=null">
+				AND JOC.create_time=#{createTime}
+			</if>
+			<if test="creatorId!=null and creatorId!=''">
+				AND JOC.creator_id LIKE CONCAT('%', #{creatorId}, '%')
+			</if>
+			<if test="creatorName!=null and creatorName!=''">
+				AND JOC.creator_name LIKE CONCAT('%', #{creatorName}, '%')
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="dynamicSet">
+		<set>
+           <if test="id!=null">
+				JOC.id=#{id}, 
+		   </if>
+           <if test="jkwyOrderId!=null">
+				JOC.jkwy_order_id=#{jkwyOrderId}, 
+		   </if>
+           <if test="title!=null">
+				JOC.title=#{title}, 
+		   </if>
+           <if test="content!=null">
+				JOC.content=#{content}, 
+		   </if>
+           <if test="number!=null">
+				JOC.number=#{number}, 
+		   </if>
+           <if test="surplusNumber!=null">
+				JOC.surplus_number=#{surplusNumber}, 
+		   </if>
+           <if test="status!=null">
+				JOC.status=#{status}, 
+		   </if>
+           <if test="createTime!=null">
+				JOC.create_time=#{createTime}, 
+		   </if>
+           <if test="creatorId!=null">
+				JOC.creator_id=#{creatorId}, 
+		   </if>
+           <if test="creatorName!=null">
+				JOC.creator_name=#{creatorName}, 
+		   </if>
+		</set>
+	</sql>
+	
+	<sql id="orderby">
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+	</sql>
+
+	<resultMap id="jkwyOrderContent" type="com.jinpaihushi.jphs.jkwy.model.JkwyOrderContent">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="jkwyOrderId" column="jkwy_order_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="title" column="title" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="content" column="content" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="number" column="number" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="surplusNumber" column="surplus_number" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="creator_name" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<resultMap id="jkwyOrderContentGlobal" type="com.jinpaihushi.jphs.jkwy.model.JkwyOrderContent">
+		<result property="id" column="JOC_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="jkwyOrderId" column="JOC_jkwy_order_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="title" column="JOC_title" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="content" column="JOC_content" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="number" column="JOC_number" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="surplusNumber" column="JOC_surplus_number" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="status" column="JOC_status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="JOC_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="JOC_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="JOC_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.jinpaihushi.jphs.jkwy.model.JkwyOrderContent">
+		INSERT INTO `JKWY_ORDER_CONTENT`(
+			id, jkwy_order_id, 
+			title, content, 
+			number, surplus_number, 
+			status, create_time, 
+			creator_id, creator_name
+		)VALUES(
+			#{id,jdbcType=VARCHAR}, #{jkwyOrderId,jdbcType=VARCHAR}, 
+			#{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+			#{number,jdbcType=INTEGER}, #{surplusNumber,jdbcType=INTEGER}, 
+			#{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+			#{creatorId,jdbcType=VARCHAR}, #{creatorName,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<insert id="inserts" useGeneratedKeys="false"
+		parameterType="list">
+        <![CDATA[
+        INSERT INTO `JKWY_ORDER_CONTENT`(
+			id, jkwy_order_id, 
+			title, content, 
+			number, surplus_number, 
+			status, create_time, 
+			creator_id, creator_name
+        )]]>
+       	VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id,jdbcType=VARCHAR}, #{item.jkwyOrderId,jdbcType=VARCHAR}, 
+			#{item.title,jdbcType=VARCHAR}, #{item.content,jdbcType=VARCHAR}, 
+			#{item.number,jdbcType=INTEGER}, #{item.surplusNumber,jdbcType=INTEGER}, 
+			#{item.status,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP}, 
+			#{item.creatorId,jdbcType=VARCHAR}, #{item.creatorName,jdbcType=VARCHAR}
+			)
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById">
+		DELETE JOC FROM `JKWY_ORDER_CONTENT` JOC WHERE JOC.ID = #{id} 
+	</delete>
+	
+	<update id="disableById">
+	    UPDATE `JKWY_ORDER_CONTENT` JOC
+		SET 
+		JOC.STATUS = -1
+		WHERE JOC.ID = #{id}
+	</update>
+
+	<update id="update">
+		UPDATE `JKWY_ORDER_CONTENT` JOC
+		<include refid="dynamicSet" /> 
+	    WHERE JOC.ID = #{id}
+	</update>
+
+	<select id="load" resultMap="jkwyOrderContent">
+		SELECT <include refid="field"/>
+		FROM `JKWY_ORDER_CONTENT` JOC
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `JKWY_ORDER_CONTENT` JOC
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="list" resultMap="jkwyOrderContent">
+		SELECT <include refid="field"/>
+		FROM `JKWY_ORDER_CONTENT` JOC
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="query" resultMap="jkwyOrderContent">
+		SELECT <include refid="field"/>
+		FROM `JKWY_ORDER_CONTENT` JOC
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadById" resultMap="jkwyOrderContent">
+		SELECT <include refid="field"/>
+		FROM `JKWY_ORDER_CONTENT` JOC
+		WHERE JOC.ID = #{id}
+	</select>
+	
+</mapper>

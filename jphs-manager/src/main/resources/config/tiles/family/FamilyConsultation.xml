@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+	
+	<definition name="family/consultation/list" extends="default.layout">
+		<put-attribute type="string" name="title" value="管理" />
+		<put-attribute type="template" name="body"
+			value="/WEB-INF/view/family/consultation/list/index.jsp" />
+		<put-attribute type="template" name="left"
+			value="/WEB-INF/view/order/left.jsp" />
+		<put-list-attribute name="scripts" inherit="true">
+			<add-attribute value="/static/js/family/consultation/list.js" />
+		</put-list-attribute>
+	</definition>
+	
+	<definition name="family/consultation/edit" extends="default.layout">
+		<put-attribute type="string" name="title" value="编辑" />
+		<put-attribute type="template" name="body"
+			value="/WEB-INF/view/family/consultation/edit/index.jsp" />
+		<put-attribute type="template" name="left"
+			value="/WEB-INF/view/order/left.jsp" />
+		<put-list-attribute name="scripts" inherit="true">
+			<add-attribute value="/static/js/family/consultation/edit.js" />
+		</put-list-attribute>
+	</definition>
+	
+	<definition name="family/consultation/detail" extends="default.layout">
+		<put-attribute type="string" name="title" value="详情" />
+		<put-attribute type="template" name="body"
+			value="/WEB-INF/view/family/consultation/detail/index.jsp" />
+		<put-attribute type="template" name="left"
+			value="/WEB-INF/view/order/left.jsp" />
+		<put-list-attribute name="scripts" inherit="true">
+			<add-attribute value="/static/js/family/consultation/detail.js" />
+		</put-list-attribute>
+	</definition>
+	
+</tiles-definitions>

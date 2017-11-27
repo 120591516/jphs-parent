@@ -1,0 +1,279 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	wangwenteng
+	date	:	2017-11-25 15:47:42
+	version	:	1.0
+-->
+<mapper namespace="com.jinpaihushi.jphs.jkwy.dao.JkwyPackageContentDao">
+	
+	<sql id="field">
+		JPC.id, JPC.jkwy_package_price_id, JPC.title, JPC.sub_title, 
+		JPC.content, JPC.number, JPC.surplus_number, JPC.status, 
+		JPC.create_time, JPC.creator_id, JPC.creator_name
+	</sql>
+
+	<sql id="fieldGlobal">
+		JPC.id JPC_id, JPC.jkwy_package_price_id JPC_jkwy_package_price_id, 
+		JPC.title JPC_title, JPC.sub_title JPC_sub_title, 
+		JPC.content JPC_content, JPC.number JPC_number, 
+		JPC.surplus_number JPC_surplus_number, JPC.status JPC_status, 
+		JPC.create_time JPC_create_time, JPC.creator_id JPC_creator_id, 
+		JPC.creator_name JPC_creator_name
+	</sql>
+	
+	<sql id="fieldWithAlias">
+		JPC.id id, JPC.jkwy_package_price_id jkwyPackagePriceId, 
+		JPC.title title, JPC.sub_title subTitle, 
+		JPC.content content, JPC.number number, 
+		JPC.surplus_number surplusNumber, JPC.status status, 
+		JPC.create_time createTime, JPC.creator_id creatorId, 
+		JPC.creator_name creatorName
+	</sql>
+	
+	<sql id="condition">
+		<if test="id!=null and id!=''">
+			AND JPC.id=#{id}
+		</if>
+		<if test="jkwyPackagePriceId!=null and jkwyPackagePriceId!=''">
+			AND JPC.jkwy_package_price_id=#{jkwyPackagePriceId}
+		</if>
+		<if test="title!=null and title!=''">
+			AND JPC.title=#{title}
+		</if>
+		<if test="subTitle!=null and subTitle!=''">
+			AND JPC.sub_title=#{subTitle}
+		</if>
+		<if test="content!=null and content!=''">
+			AND JPC.content=#{content}
+		</if>
+		<if test="number!=null">
+			AND JPC.number=#{number}
+		</if>
+		<if test="surplusNumber!=null">
+			AND JPC.surplus_number=#{surplusNumber}
+		</if>
+		<if test="status!=null">
+			AND JPC.status=#{status}
+		</if>
+		<if test="createTime!=null">
+			AND JPC.create_time=#{createTime}
+		</if>
+		<if test="creatorId!=null and creatorId!=''">
+			AND JPC.creator_id=#{creatorId}
+		</if>
+		<if test="creatorName!=null and creatorName!=''">
+			AND JPC.creator_name=#{creatorName}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="queryWhere">
+		<where>
+			<if test="id!=null and id!=''">
+				AND JPC.id LIKE CONCAT('%', #{id}, '%')
+			</if>
+			<if test="jkwyPackagePriceId!=null and jkwyPackagePriceId!=''">
+				AND JPC.jkwy_package_price_id LIKE CONCAT('%', #{jkwyPackagePriceId}, '%')
+			</if>
+			<if test="title!=null and title!=''">
+				AND JPC.title LIKE CONCAT('%', #{title}, '%')
+			</if>
+			<if test="subTitle!=null and subTitle!=''">
+				AND JPC.sub_title LIKE CONCAT('%', #{subTitle}, '%')
+			</if>
+			<if test="content!=null and content!=''">
+				AND JPC.content LIKE CONCAT('%', #{content}, '%')
+			</if>
+			<if test="number!=null">
+				AND JPC.number=#{number}
+			</if>
+			<if test="surplusNumber!=null">
+				AND JPC.surplus_number=#{surplusNumber}
+			</if>
+			<if test="status!=null">
+				AND JPC.status=#{status}
+			</if>
+			<if test="createTime!=null">
+				AND JPC.create_time=#{createTime}
+			</if>
+			<if test="creatorId!=null and creatorId!=''">
+				AND JPC.creator_id LIKE CONCAT('%', #{creatorId}, '%')
+			</if>
+			<if test="creatorName!=null and creatorName!=''">
+				AND JPC.creator_name LIKE CONCAT('%', #{creatorName}, '%')
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="dynamicSet">
+		<set>
+           <if test="id!=null">
+				JPC.id=#{id}, 
+		   </if>
+           <if test="jkwyPackagePriceId!=null">
+				JPC.jkwy_package_price_id=#{jkwyPackagePriceId}, 
+		   </if>
+           <if test="title!=null">
+				JPC.title=#{title}, 
+		   </if>
+           <if test="subTitle!=null">
+				JPC.sub_title=#{subTitle}, 
+		   </if>
+           <if test="content!=null">
+				JPC.content=#{content}, 
+		   </if>
+           <if test="number!=null">
+				JPC.number=#{number}, 
+		   </if>
+           <if test="surplusNumber!=null">
+				JPC.surplus_number=#{surplusNumber}, 
+		   </if>
+           <if test="status!=null">
+				JPC.status=#{status}, 
+		   </if>
+           <if test="createTime!=null">
+				JPC.create_time=#{createTime}, 
+		   </if>
+           <if test="creatorId!=null">
+				JPC.creator_id=#{creatorId}, 
+		   </if>
+           <if test="creatorName!=null">
+				JPC.creator_name=#{creatorName}, 
+		   </if>
+		</set>
+	</sql>
+	
+	<sql id="orderby">
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+	</sql>
+
+	<resultMap id="jkwyPackageContent" type="com.jinpaihushi.jphs.jkwy.model.JkwyPackageContent">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="jkwyPackagePriceId" column="jkwy_package_price_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="title" column="title" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="subTitle" column="sub_title" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="content" column="content" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="number" column="number" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="surplusNumber" column="surplus_number" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="creator_name" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<resultMap id="jkwyPackageContentGlobal" type="com.jinpaihushi.jphs.jkwy.model.JkwyPackageContent">
+		<result property="id" column="JPC_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="jkwyPackagePriceId" column="JPC_jkwy_package_price_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="title" column="JPC_title" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="subTitle" column="JPC_sub_title" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="content" column="JPC_content" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="number" column="JPC_number" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="surplusNumber" column="JPC_surplus_number" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="status" column="JPC_status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="JPC_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="JPC_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="JPC_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.jinpaihushi.jphs.jkwy.model.JkwyPackageContent">
+		INSERT INTO `JKWY_PACKAGE_CONTENT`(
+			id, jkwy_package_price_id, 
+			title, sub_title, 
+			content, number, 
+			surplus_number, status, 
+			create_time, creator_id, 
+			creator_name
+		)VALUES(
+			#{id,jdbcType=VARCHAR}, #{jkwyPackagePriceId,jdbcType=VARCHAR}, 
+			#{title,jdbcType=VARCHAR}, #{subTitle,jdbcType=VARCHAR}, 
+			#{content,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, 
+			#{surplusNumber,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+			#{createTime,jdbcType=TIMESTAMP}, #{creatorId,jdbcType=VARCHAR}, 
+			#{creatorName,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<insert id="inserts" useGeneratedKeys="false"
+		parameterType="list">
+        <![CDATA[
+        INSERT INTO `JKWY_PACKAGE_CONTENT`(
+			id, jkwy_package_price_id, 
+			title, sub_title, 
+			content, number, 
+			surplus_number, status, 
+			create_time, creator_id, 
+			creator_name
+        )]]>
+       	VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id,jdbcType=VARCHAR}, #{item.jkwyPackagePriceId,jdbcType=VARCHAR}, 
+			#{item.title,jdbcType=VARCHAR}, #{item.subTitle,jdbcType=VARCHAR}, 
+			#{item.content,jdbcType=VARCHAR}, #{item.number,jdbcType=INTEGER}, 
+			#{item.surplusNumber,jdbcType=INTEGER}, #{item.status,jdbcType=INTEGER}, 
+			#{item.createTime,jdbcType=TIMESTAMP}, #{item.creatorId,jdbcType=VARCHAR}, 
+			#{item.creatorName,jdbcType=VARCHAR}
+			)
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById">
+		DELETE JPC FROM `JKWY_PACKAGE_CONTENT` JPC WHERE JPC.ID = #{id} 
+	</delete>
+	
+	<update id="disableById">
+	    UPDATE `JKWY_PACKAGE_CONTENT` JPC
+		SET 
+		JPC.STATUS = -1
+		WHERE JPC.ID = #{id}
+	</update>
+
+	<update id="update">
+		UPDATE `JKWY_PACKAGE_CONTENT` JPC
+		<include refid="dynamicSet" /> 
+	    WHERE JPC.ID = #{id}
+	</update>
+
+	<select id="load" resultMap="jkwyPackageContent">
+		SELECT <include refid="field"/>
+		FROM `JKWY_PACKAGE_CONTENT` JPC
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `JKWY_PACKAGE_CONTENT` JPC
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="list" resultMap="jkwyPackageContent">
+		SELECT <include refid="field"/>
+		FROM `JKWY_PACKAGE_CONTENT` JPC
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="query" resultMap="jkwyPackageContent">
+		SELECT <include refid="field"/>
+		FROM `JKWY_PACKAGE_CONTENT` JPC
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadById" resultMap="jkwyPackageContent">
+		SELECT <include refid="field"/>
+		FROM `JKWY_PACKAGE_CONTENT` JPC
+		WHERE JPC.ID = #{id}
+	</select>
+	
+</mapper>

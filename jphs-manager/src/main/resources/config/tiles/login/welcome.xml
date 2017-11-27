@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+
+	<definition name="/welcome/index" extends="default.layout">
+		<put-attribute type="string" name="title" value="后台管理系统" />
+		<put-attribute type="template" name="body"
+			value="/WEB-INF/view/login/welcome.jsp" />
+		<put-attribute type="template" name="left"
+			value="/WEB-INF/view/login/left.jsp" />
+	</definition>
+	<definition name="/welcome/user" extends="default.layout">
+		<put-attribute type="string" name="title" value="会员管理" />
+		<put-attribute type="template" name="left"
+			value="/WEB-INF/view/user/left.jsp" />
+	</definition>
+	<definition name="/welcome/nurse" extends="default.layout">
+		<put-attribute type="string" name="title" value="护士管理" />
+		<put-attribute type="template" name="left"
+			value="/WEB-INF/view/nurse/left.jsp" />
+	</definition>
+	<definition name="/welcome/order" extends="default.layout">
+		<put-attribute type="string" name="title" value="订单管理" />
+		<put-attribute type="template" name="left"
+			value="/WEB-INF/view/order/left.jsp" />
+	</definition>
+	<definition name="/welcome/product" extends="default.layout">
+		<put-attribute type="string" name="title" value="产品管理" />
+		<put-attribute type="template" name="left"
+			value="/WEB-INF/view/product/left.jsp" />
+	</definition>
+	<definition name="/welcome/activity" extends="default.layout">
+		<put-attribute type="string" name="title" value="活动管理" />
+		<put-attribute type="template" name="left"
+			value="/WEB-INF/view/activity/left.jsp" />
+	</definition>
+	<definition name="/welcome/information" extends="default.layout">
+		<put-attribute type="string" name="title" value="信息管理" />
+		<put-attribute type="template" name="left"
+			value="/WEB-INF/view/information/left.jsp" />
+	</definition>
+	<definition name="/welcome/withdraw" extends="default.layout">
+		<put-attribute type="string" name="title" value="数据统计" />
+		<put-attribute type="template" name="left"
+			value="/WEB-INF/view/withdraw/left.jsp" />
+	</definition>
+	<definition name="/welcome/statistics" extends="default.layout">
+		<put-attribute type="string" name="title" value="账户管理" />
+		<put-attribute type="template" name="left"
+			value="/WEB-INF/view/statistics/left.jsp" />
+	</definition>
+	<definition name="/welcome/system" extends="default.layout">
+		<put-attribute type="string" name="title" value="系统管理" />
+		<put-attribute type="template" name="left"
+			value="/WEB-INF/view/system/left.jsp" />
+	</definition>
+</tiles-definitions>

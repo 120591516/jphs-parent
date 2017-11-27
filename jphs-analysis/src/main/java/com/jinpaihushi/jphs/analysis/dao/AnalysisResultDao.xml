@@ -1,0 +1,205 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	wangwenteng
+	date	:	2017-11-21 10:44:26
+	version	:	1.0
+-->
+<mapper namespace="com.jinpaihushi.jphs.analysis.dao.AnalysisResultDao">
+	
+	<sql id="field">
+		AR.id, AR.analysis_task_id, AR.ip, AR.province, 
+		AR.visit_time, AR.create_time
+	</sql>
+
+	<sql id="fieldGlobal">
+		AR.id AR_id, AR.analysis_task_id AR_analysis_task_id, 
+		AR.ip AR_ip, AR.province AR_province, 
+		AR.visit_time AR_visit_time, AR.create_time AR_create_time
+	</sql>
+	
+	<sql id="fieldWithAlias">
+		AR.id id, AR.analysis_task_id analysisTaskId, 
+		AR.ip ip, AR.province province, 
+		AR.visit_time visitTime, AR.create_time createTime
+	</sql>
+	
+	<sql id="condition">
+		<if test="id!=null and id!=''">
+			AND AR.id=#{id}
+		</if>
+		<if test="analysisTaskId!=null and analysisTaskId!=''">
+			AND AR.analysis_task_id=#{analysisTaskId}
+		</if>
+		<if test="ip!=null and ip!=''">
+			AND AR.ip=#{ip}
+		</if>
+		<if test="province!=null and province!=''">
+			AND AR.province=#{province}
+		</if>
+		<if test="visitTime!=null">
+			AND AR.visit_time=#{visitTime}
+		</if>
+		<if test="createTime!=null">
+			AND AR.create_time=#{createTime}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="queryWhere">
+		<where>
+			<if test="id!=null and id!=''">
+				AND AR.id LIKE CONCAT('%', #{id}, '%')
+			</if>
+			<if test="analysisTaskId!=null and analysisTaskId!=''">
+				AND AR.analysis_task_id LIKE CONCAT('%', #{analysisTaskId}, '%')
+			</if>
+			<if test="ip!=null and ip!=''">
+				AND AR.ip LIKE CONCAT('%', #{ip}, '%')
+			</if>
+			<if test="province!=null and province!=''">
+				AND AR.province LIKE CONCAT('%', #{province}, '%')
+			</if>
+			<if test="visitTime!=null">
+				AND AR.visit_time=#{visitTime}
+			</if>
+			<if test="createTime!=null">
+				AND AR.create_time=#{createTime}
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="dynamicSet">
+		<set>
+           <if test="id!=null">
+				AR.id=#{id}, 
+		   </if>
+           <if test="analysisTaskId!=null">
+				AR.analysis_task_id=#{analysisTaskId}, 
+		   </if>
+           <if test="ip!=null">
+				AR.ip=#{ip}, 
+		   </if>
+           <if test="province!=null">
+				AR.province=#{province}, 
+		   </if>
+           <if test="visitTime!=null">
+				AR.visit_time=#{visitTime}, 
+		   </if>
+           <if test="createTime!=null">
+				AR.create_time=#{createTime}, 
+		   </if>
+		</set>
+	</sql>
+	
+	<sql id="orderby">
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+	</sql>
+
+	<resultMap id="analysisResult" type="com.jinpaihushi.jphs.analysis.model.AnalysisResult">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="analysisTaskId" column="analysis_task_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="ip" column="ip" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="province" column="province" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="visitTime" column="visit_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="createTime" column="create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+	</resultMap>
+	
+	<resultMap id="analysisResultGlobal" type="com.jinpaihushi.jphs.analysis.model.AnalysisResult">
+		<result property="id" column="AR_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="analysisTaskId" column="AR_analysis_task_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="ip" column="AR_ip" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="province" column="AR_province" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="visitTime" column="AR_visit_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="createTime" column="AR_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+	</resultMap>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.jinpaihushi.jphs.analysis.model.AnalysisResult">
+		INSERT INTO `ANALYSIS_RESULT`(
+			id, analysis_task_id, 
+			ip, province, 
+			visit_time, create_time
+		)VALUES(
+			#{id,jdbcType=VARCHAR}, #{analysisTaskId,jdbcType=VARCHAR}, 
+			#{ip,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
+			#{visitTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<insert id="inserts" useGeneratedKeys="false"
+		parameterType="list">
+        <![CDATA[
+        INSERT INTO `ANALYSIS_RESULT`(
+			id, analysis_task_id, 
+			ip, province, 
+			visit_time, create_time
+        )]]>
+       	VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id,jdbcType=VARCHAR}, #{item.analysisTaskId,jdbcType=VARCHAR}, 
+			#{item.ip,jdbcType=VARCHAR}, #{item.province,jdbcType=VARCHAR}, 
+			#{item.visitTime,jdbcType=TIMESTAMP}, #{item.createTime,jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById">
+		DELETE AR FROM `ANALYSIS_RESULT` AR WHERE AR.ID = #{id} 
+	</delete>
+	
+	<update id="disableById">
+	    UPDATE `ANALYSIS_RESULT` AR
+		SET 
+		AR.STATUS = -1
+		WHERE AR.ID = #{id}
+	</update>
+
+	<update id="update">
+		UPDATE `ANALYSIS_RESULT` AR
+		<include refid="dynamicSet" /> 
+	    WHERE AR.ID = #{id}
+	</update>
+
+	<select id="load" resultMap="analysisResult">
+		SELECT <include refid="field"/>
+		FROM `ANALYSIS_RESULT` AR
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `ANALYSIS_RESULT` AR
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="list" resultMap="analysisResult">
+		SELECT <include refid="field"/>
+		FROM `ANALYSIS_RESULT` AR
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="query" resultMap="analysisResult">
+		SELECT <include refid="field"/>
+		FROM `ANALYSIS_RESULT` AR
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadById" resultMap="analysisResult">
+		SELECT <include refid="field"/>
+		FROM `ANALYSIS_RESULT` AR
+		WHERE AR.ID = #{id}
+	</select>
+	
+</mapper>

@@ -1,0 +1,395 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	scj
+	date	:	2017-10-30 16:29:17
+	version	:	1.0
+-->
+<mapper namespace="com.jinpaihushi.jphs.activity.dao.ActivityPromotionDao">
+	
+	<sql id="field">
+		AP.id, AP.resource_id, AP.price_id, AP.resource_type, 
+		AP.type, AP.price, AP.begin_time, AP.end_time, 
+		AP.site_id, AP.platform_id, AP.status, AP.create_time, 
+		AP.creator_id, AP.creator_name
+	</sql>
+
+	<sql id="fieldGlobal">
+		AP.id AP_id, AP.resource_id AP_resource_id, 
+		AP.price_id AP_price_id, AP.resource_type AP_resource_type, 
+		AP.type AP_type, AP.price AP_price, 
+		AP.begin_time AP_begin_time, AP.end_time AP_end_time, 
+		AP.site_id AP_site_id, AP.platform_id AP_platform_id, 
+		AP.status AP_status, AP.create_time AP_create_time, 
+		AP.creator_id AP_creator_id, AP.creator_name AP_creator_name
+	</sql>
+	
+	<sql id="fieldWithAlias">
+		AP.id id, AP.resource_id resourceId, 
+		AP.price_id priceId, AP.resource_type resourceType, 
+		AP.type type, AP.price price, 
+		AP.begin_time beginTime, AP.end_time endTime, 
+		AP.site_id siteId, AP.platform_id platformId, 
+		AP.status status, AP.create_time createTime, 
+		AP.creator_id creatorId, AP.creator_name creatorName
+	</sql>
+	
+	<sql id="condition">
+		<if test="id!=null and id!=''">
+			AND AP.id=#{id}
+		</if>
+		<if test="resourceId!=null and resourceId!=''">
+			AND AP.resource_id=#{resourceId}
+		</if>
+		<if test="priceId!=null and priceId!=''">
+			AND AP.price_id=#{priceId}
+		</if>
+		<if test="resourceType!=null">
+			AND AP.resource_type=#{resourceType}
+		</if>
+		<if test="type!=null">
+			AND AP.type=#{type}
+		</if>
+		<if test="price!=null">
+			AND AP.price=#{price}
+		</if>
+		<if test="beginTime!=null">
+			AND AP.begin_time=#{beginTime}
+		</if>
+		<if test="endTime!=null">
+			AND AP.end_time=#{endTime}
+		</if>
+		<if test="siteId!=null and siteId!=''">
+			AND AP.site_id=#{siteId}
+		</if>
+		<if test="platformId!=null and platformId!=''">
+			AND AP.platform_id=#{platformId}
+		</if>
+		<if test="status!=null">
+			AND AP.status=#{status}
+		</if>
+		<if test="createTime!=null">
+			AND AP.create_time=#{createTime}
+		</if>
+		<if test="creatorId!=null and creatorId!=''">
+			AND AP.creator_id=#{creatorId}
+		</if>
+		<if test="creatorName!=null and creatorName!=''">
+			AND AP.creator_name=#{creatorName}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="queryWhere">
+		<where>
+			<if test="id!=null and id!=''">
+				AND AP.id LIKE CONCAT('%', #{id}, '%')
+			</if>
+			<if test="resourceId!=null and resourceId!=''">
+				AND AP.resource_id LIKE CONCAT('%', #{resourceId}, '%')
+			</if>
+			<if test="priceId!=null and priceId!=''">
+				AND AP.price_id LIKE CONCAT('%', #{priceId}, '%')
+			</if>
+			<if test="resourceType!=null">
+				AND AP.resource_type=#{resourceType}
+			</if>
+			<if test="type!=null">
+				AND AP.type=#{type}
+			</if>
+			<if test="price!=null">
+				AND AP.price=#{price}
+			</if>
+			<if test="beginTime!=null">
+				AND AP.begin_time=#{beginTime}
+			</if>
+			<if test="endTime!=null">
+				AND AP.end_time=#{endTime}
+			</if>
+			<if test="siteId!=null and siteId!=''">
+				AND AP.site_id LIKE CONCAT('%', #{siteId}, '%')
+			</if>
+			<if test="platformId!=null and platformId!=''">
+				AND AP.platform_id LIKE CONCAT('%', #{platformId}, '%')
+			</if>
+			<if test="status!=null">
+				AND AP.status=#{status}
+			</if>
+			<if test="createTime!=null">
+				AND AP.create_time=#{createTime}
+			</if>
+			<if test="creatorId!=null and creatorId!=''">
+				AND AP.creator_id LIKE CONCAT('%', #{creatorId}, '%')
+			</if>
+			<if test="creatorName!=null and creatorName!=''">
+				AND AP.creator_name LIKE CONCAT('%', #{creatorName}, '%')
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="dynamicSet">
+		<set>
+           <if test="id!=null">
+				AP.id=#{id}, 
+		   </if>
+           <if test="resourceId!=null">
+				AP.resource_id=#{resourceId}, 
+		   </if>
+           <if test="priceId!=null">
+				AP.price_id=#{priceId}, 
+		   </if>
+           <if test="resourceType!=null">
+				AP.resource_type=#{resourceType}, 
+		   </if>
+           <if test="type!=null">
+				AP.type=#{type}, 
+		   </if>
+           <if test="price!=null">
+				AP.price=#{price}, 
+		   </if>
+           <if test="beginTime!=null">
+				AP.begin_time=#{beginTime}, 
+		   </if>
+           <if test="endTime!=null">
+				AP.end_time=#{endTime}, 
+		   </if>
+           <if test="siteId!=null">
+				AP.site_id=#{siteId}, 
+		   </if>
+           <if test="platformId!=null">
+				AP.platform_id=#{platformId}, 
+		   </if>
+           <if test="status!=null">
+				AP.status=#{status}, 
+		   </if>
+           <if test="createTime!=null">
+				AP.create_time=#{createTime}, 
+		   </if>
+           <if test="creatorId!=null">
+				AP.creator_id=#{creatorId}, 
+		   </if>
+           <if test="creatorName!=null">
+				AP.creator_name=#{creatorName}, 
+		   </if>
+		</set>
+	</sql>
+	
+	<sql id="orderby">
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+	</sql>
+
+	<resultMap id="activityPromotion" type="com.jinpaihushi.jphs.activity.model.ActivityPromotion">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="resourceId" column="resource_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="priceId" column="price_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="resourceType" column="resource_type" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="type" column="type" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="price" column="price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="beginTime" column="begin_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="endTime" column="end_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="siteId" column="site_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="platformId" column="platform_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="creator_name" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<resultMap id="activityPromotionGlobal" type="com.jinpaihushi.jphs.activity.model.ActivityPromotion">
+		<result property="id" column="AP_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="resourceId" column="AP_resource_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="priceId" column="AP_price_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="resourceType" column="AP_resource_type" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="type" column="AP_type" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="price" column="AP_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="beginTime" column="AP_begin_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="endTime" column="AP_end_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="siteId" column="AP_site_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="platformId" column="AP_platform_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="AP_status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="AP_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="AP_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="AP_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.jinpaihushi.jphs.activity.model.ActivityPromotion">
+		INSERT INTO `ACTIVITY_PROMOTION`(
+			id, resource_id, 
+			price_id, resource_type, 
+			type, price, 
+			begin_time, end_time, 
+			site_id, platform_id, 
+			status, create_time, 
+			creator_id, creator_name
+		)VALUES(
+			#{id,jdbcType=VARCHAR}, #{resourceId,jdbcType=VARCHAR}, 
+			#{priceId,jdbcType=VARCHAR}, #{resourceType,jdbcType=INTEGER}, 
+			#{type,jdbcType=INTEGER}, #{price,jdbcType=DECIMAL}, 
+			#{beginTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+			#{siteId,jdbcType=VARCHAR}, #{platformId,jdbcType=VARCHAR}, 
+			#{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+			#{creatorId,jdbcType=VARCHAR}, #{creatorName,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<insert id="inserts" useGeneratedKeys="false"
+		parameterType="list">
+        <![CDATA[
+        INSERT INTO `ACTIVITY_PROMOTION`(
+			id, resource_id, 
+			price_id, resource_type, 
+			type, price, 
+			begin_time, end_time, 
+			site_id, platform_id, 
+			status, create_time, 
+			creator_id, creator_name
+        )]]>
+       	VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id,jdbcType=VARCHAR}, #{item.resourceId,jdbcType=VARCHAR}, 
+			#{item.priceId,jdbcType=VARCHAR}, #{item.resourceType,jdbcType=INTEGER}, 
+			#{item.type,jdbcType=INTEGER}, #{item.price,jdbcType=DECIMAL}, 
+			#{item.beginTime,jdbcType=TIMESTAMP}, #{item.endTime,jdbcType=TIMESTAMP}, 
+			#{item.siteId,jdbcType=VARCHAR}, #{item.platformId,jdbcType=VARCHAR}, 
+			#{item.status,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP}, 
+			#{item.creatorId,jdbcType=VARCHAR}, #{item.creatorName,jdbcType=VARCHAR}
+			)
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById">
+		DELETE AP FROM `ACTIVITY_PROMOTION` AP WHERE AP.ID = #{id} 
+	</delete>
+	
+	<update id="disableById">
+	    UPDATE `ACTIVITY_PROMOTION` AP
+		SET 
+		AP.STATUS = -1
+		WHERE AP.ID = #{id}
+	</update>
+
+	<update id="update">
+		UPDATE `ACTIVITY_PROMOTION` AP
+		<include refid="dynamicSet" /> 
+	    WHERE AP.ID = #{id}
+	</update>
+
+	<select id="load" resultMap="activityPromotion">
+		SELECT <include refid="field"/>
+		FROM `ACTIVITY_PROMOTION` AP
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `ACTIVITY_PROMOTION` AP
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="list" resultMap="activityPromotion">
+		SELECT <include refid="field"/>
+		FROM `ACTIVITY_PROMOTION` AP
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="query" resultMap="activityPromotion">
+		SELECT <include refid="field"/>,G.title goodsTitle,C.title commodityTitle 
+		FROM `ACTIVITY_PROMOTION` AP 
+		LEFT JOIN `goods` G ON AP.resource_id=G.id 
+		LEFT JOIN `commodity` C ON AP.resource_id=C.id 
+		<include refid="dynamicWhereSS" />
+		<include refid="orderby" />
+	</select>
+	<sql id="dynamicWhereSS">
+		<where>
+			<if test="id!=null and id!=''">
+				AND AP.id LIKE CONCAT('%', #{id}, '%')
+			</if>
+			<if test="resourceId!=null and resourceId!=''">
+				AND AP.resource_id LIKE CONCAT('%', #{resourceId}, '%')
+			</if>
+			<if test="priceId!=null and priceId!=''">
+				AND AP.price_id LIKE CONCAT('%', #{priceId}, '%')
+			</if>
+			<if test="resourceType!=null">
+				AND AP.resource_type=#{resourceType}
+			</if>
+			<if test="type!=null">
+				AND AP.type=#{type}
+			</if>
+			<if test="price!=null">
+				AND AP.price=#{price}
+			</if>
+			<if test="beginTime!=null">
+				AND AP.begin_time=#{beginTime}
+			</if>
+			<if test="endTime!=null">
+				AND AP.end_time=#{endTime}
+			</if>
+			<if test="siteId!=null and siteId!=''">
+				AND AP.site_id LIKE CONCAT('%', #{siteId}, '%')
+			</if>
+			<if test="platformId!=null and platformId!=''">
+				AND AP.platform_id LIKE CONCAT('%', #{platformId}, '%')
+			</if>
+			<if test="status!=null">
+				AND AP.status=#{status}
+			</if>
+			<if test="createTime!=null">
+				AND AP.create_time=#{createTime}
+			</if>
+			<if test="creatorId!=null and creatorId!=''">
+				AND AP.creator_id LIKE CONCAT('%', #{creatorId}, '%')
+			</if>
+			<if test="creatorName!=null and creatorName!=''">
+				AND AP.creator_name LIKE CONCAT('%', #{creatorName}, '%')
+			</if>
+			<if test="goodsTitle!=null and goodsTitle!=''">
+				AND (G.title LIKE CONCAT('%', #{goodsTitle}, '%') OR C.title LIKE CONCAT('%', #{goodsTitle}, '%'))
+			</if>
+			AND AP.status!=-1 
+		</where>
+	</sql>
+	
+	<select id="getIndexNumberP" resultType="java.lang.Integer">
+		select COUNT(O.id) FROM `activity_promotion` AP 
+		LEFT JOIN `order_goods` OG ON AP.resource_id = OG.goods_id 
+		LEFT JOIN `order` O ON OG.order_id = O.id 
+		WHERE OG.goods_id=#{goodsId} and O.creator_id=#{userId} 
+	</select>
+	
+	<select id="loadById" resultMap="activityPromotion">
+		SELECT <include refid="field"/>,G.title goodsTitle,C.title commodityTitle,P.name platformName,S.name siteName 
+		FROM `ACTIVITY_PROMOTION` AP 
+		LEFT JOIN `goods` G ON AP.resource_id=G.id 
+		LEFT JOIN `commodity` C ON AP.resource_id=C.id 
+		LEFT JOIN `platform` P ON AP.platform_id=P.id 
+		LEFT JOIN `site` S ON AP.site_id=S.id 
+		WHERE AP.ID = #{id}
+	</select>
+	<select id="getActivityForGoods" resultMap="activityPromotion">
+		SELECT
+			<include refid="field"/>
+		FROM
+			activity_promotion ap
+		WHERE
+			ap.resource_id = #{resourceId}
+		AND (ap.begin_time &lt; NOW())
+		AND (ap.end_time &gt; NOW())
+		AND ap.platform_id = #{platformId}
+		AND FIND_IN_SET(#{priceId},ap.price_id)
+		AND ap.resource_type =#{resourceType}
+		AND ap.`status` =1
+	</select>
+</mapper>

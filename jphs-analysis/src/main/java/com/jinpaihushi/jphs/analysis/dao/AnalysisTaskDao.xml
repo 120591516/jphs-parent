@@ -1,0 +1,260 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	wangwenteng
+	date	:	2017-11-21 10:44:27
+	version	:	1.0
+-->
+<mapper namespace="com.jinpaihushi.jphs.analysis.dao.AnalysisTaskDao">
+	
+	<sql id="field">
+		AT.id, AT.name, AT.url, AT.begin_time, 
+		AT.end_time, AT.status, AT.create_time, AT.creator_id, 
+		AT.creator_name
+	</sql>
+
+	<sql id="fieldGlobal">
+		AT.id AT_id, AT.name AT_name, 
+		AT.url AT_url, AT.begin_time AT_begin_time, 
+		AT.end_time AT_end_time, AT.status AT_status, 
+		AT.create_time AT_create_time, AT.creator_id AT_creator_id, 
+		AT.creator_name AT_creator_name
+	</sql>
+	
+	<sql id="fieldWithAlias">
+		AT.id id, AT.name name, 
+		AT.url url, AT.begin_time beginTime, 
+		AT.end_time endTime, AT.status status, 
+		AT.create_time createTime, AT.creator_id creatorId, 
+		AT.creator_name creatorName
+	</sql>
+	
+	<sql id="condition">
+		<if test="id!=null and id!=''">
+			AND AT.id=#{id}
+		</if>
+		<if test="name!=null and name!=''">
+			AND AT.name=#{name}
+		</if>
+		<if test="url!=null and url!=''">
+			AND AT.url=#{url}
+		</if>
+		<if test="beginTime!=null">
+			AND AT.begin_time=#{beginTime}
+		</if>
+		<if test="endTime!=null">
+			AND AT.end_time=#{endTime}
+		</if>
+		<if test="status!=null">
+			AND AT.status=#{status}
+		</if>
+		<if test="createTime!=null">
+			AND AT.create_time=#{createTime}
+		</if>
+		<if test="creatorId!=null and creatorId!=''">
+			AND AT.creator_id=#{creatorId}
+		</if>
+		<if test="creatorName!=null and creatorName!=''">
+			AND AT.creator_name=#{creatorName}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="queryWhere">
+		<where>
+			<if test="id!=null and id!=''">
+				AND AT.id LIKE CONCAT('%', #{id}, '%')
+			</if>
+			<if test="name!=null and name!=''">
+				AND AT.name LIKE CONCAT('%', #{name}, '%')
+			</if>
+			<if test="url!=null and url!=''">
+				AND AT.url LIKE CONCAT('%', #{url}, '%')
+			</if>
+			<if test="beginTime!=null">
+				AND AT.begin_time=#{beginTime}
+			</if>
+			<if test="endTime!=null">
+				AND AT.end_time=#{endTime}
+			</if>
+			<if test="status!=null">
+				AND AT.status=#{status}
+			</if>
+			<if test="createTime!=null">
+				AND AT.create_time=#{createTime}
+			</if>
+			<if test="creatorId!=null and creatorId!=''">
+				AND AT.creator_id LIKE CONCAT('%', #{creatorId}, '%')
+			</if>
+			<if test="creatorName!=null and creatorName!=''">
+				AND AT.creator_name LIKE CONCAT('%', #{creatorName}, '%')
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="dynamicSet">
+		<set>
+           <if test="id!=null">
+				AT.id=#{id}, 
+		   </if>
+           <if test="name!=null">
+				AT.name=#{name}, 
+		   </if>
+           <if test="url!=null">
+				AT.url=#{url}, 
+		   </if>
+           <if test="beginTime!=null">
+				AT.begin_time=#{beginTime}, 
+		   </if>
+           <if test="endTime!=null">
+				AT.end_time=#{endTime}, 
+		   </if>
+           <if test="status!=null">
+				AT.status=#{status}, 
+		   </if>
+           <if test="createTime!=null">
+				AT.create_time=#{createTime}, 
+		   </if>
+           <if test="creatorId!=null">
+				AT.creator_id=#{creatorId}, 
+		   </if>
+           <if test="creatorName!=null">
+				AT.creator_name=#{creatorName}, 
+		   </if>
+		</set>
+	</sql>
+	
+	<sql id="orderby">
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+	</sql>
+
+	<resultMap id="analysisTask" type="com.jinpaihushi.jphs.analysis.model.AnalysisTask">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="name" column="name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="url" column="url" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="beginTime" column="begin_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="endTime" column="end_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="creator_name" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<resultMap id="analysisTaskGlobal" type="com.jinpaihushi.jphs.analysis.model.AnalysisTask">
+		<result property="id" column="AT_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="name" column="AT_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="url" column="AT_url" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="beginTime" column="AT_begin_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="endTime" column="AT_end_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="status" column="AT_status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="AT_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="AT_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="AT_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.jinpaihushi.jphs.analysis.model.AnalysisTask">
+		INSERT INTO `ANALYSIS_TASK`(
+			id, name, 
+			url, begin_time, 
+			end_time, status, 
+			create_time, creator_id, 
+			creator_name
+		)VALUES(
+			#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+			#{url,jdbcType=VARCHAR}, #{beginTime,jdbcType=TIMESTAMP}, 
+			#{endTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
+			#{createTime,jdbcType=TIMESTAMP}, #{creatorId,jdbcType=VARCHAR}, 
+			#{creatorName,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<insert id="inserts" useGeneratedKeys="false"
+		parameterType="list">
+        <![CDATA[
+        INSERT INTO `ANALYSIS_TASK`(
+			id, name, 
+			url, begin_time, 
+			end_time, status, 
+			create_time, creator_id, 
+			creator_name
+        )]]>
+       	VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR}, 
+			#{item.url,jdbcType=VARCHAR}, #{item.beginTime,jdbcType=TIMESTAMP}, 
+			#{item.endTime,jdbcType=TIMESTAMP}, #{item.status,jdbcType=INTEGER}, 
+			#{item.createTime,jdbcType=TIMESTAMP}, #{item.creatorId,jdbcType=VARCHAR}, 
+			#{item.creatorName,jdbcType=VARCHAR}
+			)
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById">
+		DELETE AT FROM `ANALYSIS_TASK` AT WHERE AT.ID = #{id} 
+	</delete>
+	
+	<update id="disableById">
+	    UPDATE `ANALYSIS_TASK` AT
+		SET 
+		AT.STATUS = -1
+		WHERE AT.ID = #{id}
+	</update>
+
+	<update id="update">
+		UPDATE `ANALYSIS_TASK` AT
+		<include refid="dynamicSet" /> 
+	    WHERE AT.ID = #{id}
+	</update>
+
+	<select id="load" resultMap="analysisTask">
+		SELECT <include refid="field"/>
+		FROM `ANALYSIS_TASK` AT
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `ANALYSIS_TASK` AT
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="list" resultMap="analysisTask">
+		SELECT <include refid="field"/>
+		FROM `ANALYSIS_TASK` AT
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="query" resultMap="analysisTask">
+		SELECT <include refid="field"/>
+		FROM `ANALYSIS_TASK` AT
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadById" resultMap="analysisTask">
+		SELECT <include refid="field"/>
+		FROM `ANALYSIS_TASK` AT
+		WHERE AT.ID = #{id}
+	</select>
+	<select id="queryTaskToStart" resultMap="analysisTask">
+		SELECT <include refid="field"/>
+		FROM `ANALYSIS_TASK` AT
+		WHERE AT.begin_time &lt; NOW() AND AT.end_time &gt;NOW() AND AT.`status` = 0;
+	</select>
+	<select id="queryTaskToStop" resultMap="analysisTask">
+		SELECT <include refid="field"/>
+		FROM `ANALYSIS_TASK` AT
+		WHERE AT.begin_time &lt; NOW() AND AT.end_time &lt;NOW() AND AT.`status` = 1;
+	</select>
+</mapper>

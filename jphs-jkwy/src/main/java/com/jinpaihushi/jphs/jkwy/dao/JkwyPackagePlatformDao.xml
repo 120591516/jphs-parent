@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	wangwenteng
+	date	:	2017-11-22 11:06:05
+	version	:	1.0
+-->
+<mapper namespace="com.jinpaihushi.jphs.jkwy.dao.JkwyPackagePlatformDao">
+	
+	<sql id="field">
+		JPP.id, JPP.jkwy_package_id, JPP.platform_id, JPP.status
+	</sql>
+
+	<sql id="fieldGlobal">
+		JPP.id JPP_id, JPP.jkwy_package_id JPP_jkwy_package_id, 
+		JPP.platform_id JPP_platform_id, JPP.status JPP_status
+	</sql>
+	
+	<sql id="fieldWithAlias">
+		JPP.id id, JPP.jkwy_package_id jkwyPackageId, 
+		JPP.platform_id platformId, JPP.status status
+	</sql>
+	
+	<sql id="condition">
+		<if test="id!=null and id!=''">
+			AND JPP.id=#{id}
+		</if>
+		<if test="jkwyPackageId!=null and jkwyPackageId!=''">
+			AND JPP.jkwy_package_id=#{jkwyPackageId}
+		</if>
+		<if test="platformId!=null and platformId!=''">
+			AND JPP.platform_id=#{platformId}
+		</if>
+		<if test="status!=null">
+			AND JPP.status=#{status}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="queryWhere">
+		<where>
+			<if test="id!=null and id!=''">
+				AND JPP.id LIKE CONCAT('%', #{id}, '%')
+			</if>
+			<if test="jkwyPackageId!=null and jkwyPackageId!=''">
+				AND JPP.jkwy_package_id LIKE CONCAT('%', #{jkwyPackageId}, '%')
+			</if>
+			<if test="platformId!=null and platformId!=''">
+				AND JPP.platform_id LIKE CONCAT('%', #{platformId}, '%')
+			</if>
+			<if test="status!=null">
+				AND JPP.status=#{status}
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="dynamicSet">
+		<set>
+           <if test="id!=null">
+				JPP.id=#{id}, 
+		   </if>
+           <if test="jkwyPackageId!=null">
+				JPP.jkwy_package_id=#{jkwyPackageId}, 
+		   </if>
+           <if test="platformId!=null">
+				JPP.platform_id=#{platformId}, 
+		   </if>
+           <if test="status!=null">
+				JPP.status=#{status}, 
+		   </if>
+		</set>
+	</sql>
+	
+	<sql id="orderby">
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+	</sql>
+
+	<resultMap id="jkwyPackagePlatform" type="com.jinpaihushi.jphs.jkwy.model.JkwyPackagePlatform">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="jkwyPackageId" column="jkwy_package_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="platformId" column="platform_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"></result>
+	</resultMap>
+	
+	<resultMap id="jkwyPackagePlatformGlobal" type="com.jinpaihushi.jphs.jkwy.model.JkwyPackagePlatform">
+		<result property="id" column="JPP_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="jkwyPackageId" column="JPP_jkwy_package_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="platformId" column="JPP_platform_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="JPP_status" javaType="Integer" jdbcType="INTEGER"></result>
+	</resultMap>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.jinpaihushi.jphs.jkwy.model.JkwyPackagePlatform">
+		INSERT INTO `JKWY_PACKAGE_PLATFORM`(
+			id, jkwy_package_id, 
+			platform_id, status
+		)VALUES(
+			#{id,jdbcType=VARCHAR}, #{jkwyPackageId,jdbcType=VARCHAR}, 
+			#{platformId,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}
+		)
+	</insert>
+	
+	<insert id="inserts" useGeneratedKeys="false"
+		parameterType="list">
+        <![CDATA[
+        INSERT INTO `JKWY_PACKAGE_PLATFORM`(
+			id, jkwy_package_id, 
+			platform_id, status
+        )]]>
+       	VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id,jdbcType=VARCHAR}, #{item.jkwyPackageId,jdbcType=VARCHAR}, 
+			#{item.platformId,jdbcType=VARCHAR}, #{item.status,jdbcType=INTEGER}
+			)
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById">
+		DELETE JPP FROM `JKWY_PACKAGE_PLATFORM` JPP WHERE JPP.ID = #{id} 
+	</delete>
+	
+	<update id="disableById">
+	    UPDATE `JKWY_PACKAGE_PLATFORM` JPP
+		SET 
+		JPP.STATUS = -1
+		WHERE JPP.ID = #{id}
+	</update>
+
+	<update id="update">
+		UPDATE `JKWY_PACKAGE_PLATFORM` JPP
+		<include refid="dynamicSet" /> 
+	    WHERE JPP.ID = #{id}
+	</update>
+
+	<select id="load" resultMap="jkwyPackagePlatform">
+		SELECT <include refid="field"/>
+		FROM `JKWY_PACKAGE_PLATFORM` JPP
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `JKWY_PACKAGE_PLATFORM` JPP
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="list" resultMap="jkwyPackagePlatform">
+		SELECT <include refid="field"/>
+		FROM `JKWY_PACKAGE_PLATFORM` JPP
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="query" resultMap="jkwyPackagePlatform">
+		SELECT <include refid="field"/>
+		FROM `JKWY_PACKAGE_PLATFORM` JPP
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadById" resultMap="jkwyPackagePlatform">
+		SELECT <include refid="field"/>
+		FROM `JKWY_PACKAGE_PLATFORM` JPP
+		WHERE JPP.ID = #{id}
+	</select>
+	<delete id="deleteByPackageId">
+		DELETE JPP FROM `JKWY_PACKAGE_PLATFORM` JPP WHERE JPP.jkwy_package_id = #{id}
+	</delete>
+</mapper>

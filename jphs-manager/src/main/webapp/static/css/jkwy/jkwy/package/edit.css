@@ -1,0 +1,28 @@
+td input {
+	width: 100%;
+	border: none;
+}
+.price{
+width:902px;
+border-color:#0000FF;
+border: 1px solid ;
+margin-left: 40px;
+margin-top: 5px;
+}
+/*
+	移除HTML5 input在type="number"时的上下小箭头
+*/
+/*
+Firefox下：
+*/
+input[type="number"]{
+  -moz-appearance: textfield;
+}
+/*
+在chrome下：
+*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button{
+    -webkit-appearance: none !important;
+    margin: 0; 
+}

@@ -1,0 +1,222 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	wangwenteng
+	date	:	2017-11-21 17:01:27
+	version	:	1.0
+-->
+<mapper namespace="com.jinpaihushi.jphs.jkwy.dao.JkwyOrderRelationDao">
+	
+	<sql id="field">
+		JOR.id, JOR.jkwy_order_id, JOR.jkwy_relation, JOR.status, 
+		JOR.create_time, JOR.creator_id, JOR.creator_name
+	</sql>
+
+	<sql id="fieldGlobal">
+		JOR.id JOR_id, JOR.jkwy_order_id JOR_jkwy_order_id, 
+		JOR.jkwy_relation JOR_jkwy_relation, JOR.status JOR_status, 
+		JOR.create_time JOR_create_time, JOR.creator_id JOR_creator_id, 
+		JOR.creator_name JOR_creator_name
+	</sql>
+	
+	<sql id="fieldWithAlias">
+		JOR.id id, JOR.jkwy_order_id jkwyOrderId, 
+		JOR.jkwy_relation jkwyRelation, JOR.status status, 
+		JOR.create_time createTime, JOR.creator_id creatorId, 
+		JOR.creator_name creatorName
+	</sql>
+	
+	<sql id="condition">
+		<if test="id!=null and id!=''">
+			AND JOR.id=#{id}
+		</if>
+		<if test="jkwyOrderId!=null and jkwyOrderId!=''">
+			AND JOR.jkwy_order_id=#{jkwyOrderId}
+		</if>
+		<if test="jkwyRelation!=null and jkwyRelation!=''">
+			AND JOR.jkwy_relation=#{jkwyRelation}
+		</if>
+		<if test="status!=null">
+			AND JOR.status=#{status}
+		</if>
+		<if test="createTime!=null">
+			AND JOR.create_time=#{createTime}
+		</if>
+		<if test="creatorId!=null and creatorId!=''">
+			AND JOR.creator_id=#{creatorId}
+		</if>
+		<if test="creatorName!=null and creatorName!=''">
+			AND JOR.creator_name=#{creatorName}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="queryWhere">
+		<where>
+			<if test="id!=null and id!=''">
+				AND JOR.id LIKE CONCAT('%', #{id}, '%')
+			</if>
+			<if test="jkwyOrderId!=null and jkwyOrderId!=''">
+				AND JOR.jkwy_order_id LIKE CONCAT('%', #{jkwyOrderId}, '%')
+			</if>
+			<if test="jkwyRelation!=null and jkwyRelation!=''">
+				AND JOR.jkwy_relation LIKE CONCAT('%', #{jkwyRelation}, '%')
+			</if>
+			<if test="status!=null">
+				AND JOR.status=#{status}
+			</if>
+			<if test="createTime!=null">
+				AND JOR.create_time=#{createTime}
+			</if>
+			<if test="creatorId!=null and creatorId!=''">
+				AND JOR.creator_id LIKE CONCAT('%', #{creatorId}, '%')
+			</if>
+			<if test="creatorName!=null and creatorName!=''">
+				AND JOR.creator_name LIKE CONCAT('%', #{creatorName}, '%')
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="dynamicSet">
+		<set>
+           <if test="id!=null">
+				JOR.id=#{id}, 
+		   </if>
+           <if test="jkwyOrderId!=null">
+				JOR.jkwy_order_id=#{jkwyOrderId}, 
+		   </if>
+           <if test="jkwyRelation!=null">
+				JOR.jkwy_relation=#{jkwyRelation}, 
+		   </if>
+           <if test="status!=null">
+				JOR.status=#{status}, 
+		   </if>
+           <if test="createTime!=null">
+				JOR.create_time=#{createTime}, 
+		   </if>
+           <if test="creatorId!=null">
+				JOR.creator_id=#{creatorId}, 
+		   </if>
+           <if test="creatorName!=null">
+				JOR.creator_name=#{creatorName}, 
+		   </if>
+		</set>
+	</sql>
+	
+	<sql id="orderby">
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+	</sql>
+
+	<resultMap id="jkwyOrderRelation" type="com.jinpaihushi.jphs.jkwy.model.JkwyOrderRelation">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="jkwyOrderId" column="jkwy_order_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="jkwyRelation" column="jkwy_relation" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="creator_name" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<resultMap id="jkwyOrderRelationGlobal" type="com.jinpaihushi.jphs.jkwy.model.JkwyOrderRelation">
+		<result property="id" column="JOR_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="jkwyOrderId" column="JOR_jkwy_order_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="jkwyRelation" column="JOR_jkwy_relation" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="JOR_status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="JOR_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="JOR_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="JOR_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.jinpaihushi.jphs.jkwy.model.JkwyOrderRelation">
+		INSERT INTO `JKWY_ORDER_RELATION`(
+			id, jkwy_order_id, 
+			jkwy_relation, status, 
+			create_time, creator_id, 
+			creator_name
+		)VALUES(
+			#{id,jdbcType=VARCHAR}, #{jkwyOrderId,jdbcType=VARCHAR}, 
+			#{jkwyRelation,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+			#{createTime,jdbcType=TIMESTAMP}, #{creatorId,jdbcType=VARCHAR}, 
+			#{creatorName,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<insert id="inserts" useGeneratedKeys="false"
+		parameterType="list">
+        <![CDATA[
+        INSERT INTO `JKWY_ORDER_RELATION`(
+			id, jkwy_order_id, 
+			jkwy_relation, status, 
+			create_time, creator_id, 
+			creator_name
+        )]]>
+       	VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id,jdbcType=VARCHAR}, #{item.jkwyOrderId,jdbcType=VARCHAR}, 
+			#{item.jkwyRelation,jdbcType=VARCHAR}, #{item.status,jdbcType=INTEGER}, 
+			#{item.createTime,jdbcType=TIMESTAMP}, #{item.creatorId,jdbcType=VARCHAR}, 
+			#{item.creatorName,jdbcType=VARCHAR}
+			)
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById">
+		DELETE JOR FROM `JKWY_ORDER_RELATION` JOR WHERE JOR.ID = #{id} 
+	</delete>
+	
+	<update id="disableById">
+	    UPDATE `JKWY_ORDER_RELATION` JOR
+		SET 
+		JOR.STATUS = -1
+		WHERE JOR.ID = #{id}
+	</update>
+
+	<update id="update">
+		UPDATE `JKWY_ORDER_RELATION` JOR
+		<include refid="dynamicSet" /> 
+	    WHERE JOR.ID = #{id}
+	</update>
+
+	<select id="load" resultMap="jkwyOrderRelation">
+		SELECT <include refid="field"/>
+		FROM `JKWY_ORDER_RELATION` JOR
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `JKWY_ORDER_RELATION` JOR
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="list" resultMap="jkwyOrderRelation">
+		SELECT <include refid="field"/>
+		FROM `JKWY_ORDER_RELATION` JOR
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="query" resultMap="jkwyOrderRelation">
+		SELECT <include refid="field"/>
+		FROM `JKWY_ORDER_RELATION` JOR
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadById" resultMap="jkwyOrderRelation">
+		SELECT <include refid="field"/>
+		FROM `JKWY_ORDER_RELATION` JOR
+		WHERE JOR.ID = #{id}
+	</select>
+	
+</mapper>
