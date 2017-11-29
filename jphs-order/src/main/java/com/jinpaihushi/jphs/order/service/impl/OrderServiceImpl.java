@@ -470,9 +470,6 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
 
                     // 先获取商品的基本信息
                     Goods goods = goodsDao.getGoodsByPricePart(orderInfo.getPricePartId());
-                    if (goods.getType() == 0) {
-                        orderInfo.setExpectorId("10022");
-                    }
                     Double salePrice = 0.00;
                     Price price = priceDao.loadById(pricePart.getPriceId());
                     if (StringUtils.isNotEmpty(orderInfo.getExpectorId())) {
@@ -529,6 +526,10 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
                     String nurseId = null;
                     if (StringUtils.isNotEmpty(orderInfo.getExpectorId())) {
                         nurseId = orderInfo.getExpectorId();
+                    }
+                    if (goods.getType() == 0) {
+                        orderInfo.setExpectorId("10022");
+                        orderInfo.setExpectorDoctor("金牌护士");
                     }
                     //优惠后的价格
                     voucherUsePrice = voucherService.getGoodsPrice(orderInfo.getVoucherUseId(),

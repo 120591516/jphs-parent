@@ -36,7 +36,7 @@
             </label>
             <label class="radio radio-inline">
               <input type="radio" value="3" name="productType"  onclick="showPackage()">
-              	套餐
+              	健康无忧护
             </label>
           </div>
         </div>

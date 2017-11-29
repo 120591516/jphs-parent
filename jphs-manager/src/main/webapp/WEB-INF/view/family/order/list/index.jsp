@@ -14,7 +14,9 @@
 <div class="marage_right_content">
 	<!-- 左对齐按钮 -->
 	<!-- <button id="redirectAddPage" type="button" class="public-info public_btn">新建</button> -->
-	<button type="button" class="btn btn-info public_btn">导出</button>	
+	<jphs:hasPermission url="/family/order/redirectAddPage.jhtml">
+		<button type="button" class="btn btn-info public_btn">导出</button>	
+	</jphs:hasPermission>
 	<!-- 右对齐按钮 -->
 	<!-- <button type="button" class="btn btn-info public_btn public_btn_right">功能按钮</button> -->
 	<jsp:include page="list.jsp"></jsp:include>

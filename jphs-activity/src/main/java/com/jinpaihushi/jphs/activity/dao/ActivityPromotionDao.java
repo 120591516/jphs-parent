@@ -1,7 +1,6 @@
 package com.jinpaihushi.jphs.activity.dao;
 
 import java.util.Date;
-import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -30,11 +29,26 @@ public interface ActivityPromotionDao extends BaseDao<ActivityPromotion> {
     ActivityPromotion getActivityForGoods(ActivityPromotion activityPromotion);
 
     /**
-     * 查询用户下单数量
+     * 查询用户下单数量	服务
      * @param map
      * @return
      */
     Integer getIndexNumberP(@Param("activityId") String activityId, @Param("userId") String userId,
             @Param("startTime") Date startTime, @Param("endTime") Date endTime);
     
+    /**
+     * 查询用户下单数量	健康优护
+     * @param map
+     * @return
+     */
+    Integer getJkwyOrderNumberActivityPromotion(@Param("activityId") String activityId, @Param("userId") String userId,
+            @Param("startTime") Date startTime, @Param("endTime") Date endTime);
+    
+    /**
+     * 查询用户下单数量	商品
+     * @param map
+     * @return
+     */
+    Integer getIndexNumberCommodityOrder(@Param("activityId") String activityId, @Param("userId") String userId,
+            @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 }

@@ -9,7 +9,6 @@
 		<tr >
 			<th width="30"></th>
 			<th>标题</th>
-			<th>副标题</th>
 			<th>排序</th>
 			<th width="80">创建人</th>
 			<th width="120">创建时间</th>
@@ -24,7 +23,6 @@
 						<tr class="bg_list_body">
 							<td width="30">${s.index+1}</td>
 							<td><c:out value="${e.title}"/></td>
-							<td><c:out value="${e.subTitle}"/></td>
 							<td><c:out value="${e.sort}"/></td>
 							<td><c:out value="${e.creatorName}"/></td>
 							<td><fmt:formatDate value="${e.createTime}"

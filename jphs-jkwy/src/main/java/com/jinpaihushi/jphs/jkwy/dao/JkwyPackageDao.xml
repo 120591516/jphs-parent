@@ -280,7 +280,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		LEFT JOIN `jkwy_package_platform` `JPP` ON JP.`id`=`JPP`.`jkwy_package_id` 
 		LEFT JOIN `activity_promotion` `AP` ON JP.`id` =`AP`.`resource_id` AND (`AP`.begin_time &lt; NOW()) AND (`AP`.end_time &gt; NOW())
 		AND `AP`.`platform_id`=#{platformId} AND `AP`.status=1 AND `AP`.`resource_type`=3 
-		AND `JPP`.platform_id=#{platformId} AND `JPP`.status=0 
+		WHERE `JPP`.platform_id=#{platformId} AND `JPP`.status=0 AND JP.status=0 
 		<include refid="orderby" />
 	</select>
 

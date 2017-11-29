@@ -417,7 +417,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		AND JO.creator_id =  #{userId}
 		AND JO.activity_promotion_id = #{activityId}
 		AND JO.`schedule` != 1 
-		AND o.`status` =0  
+		AND JO.`status` =0  
 	</select>
 	<resultMap id="statistics" type="com.jinpaihushi.jphs.statistics.model.StatisticsModel">
 		<result property="device" column="device" javaType="String" jdbcType="VARCHAR"></result>

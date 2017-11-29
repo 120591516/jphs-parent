@@ -312,7 +312,6 @@ public class JkwyPackageServiceImpl extends BaseServiceImpl<JkwyPackage> impleme
                         	}
                         }
                     }
-            	
             }
         }
 
@@ -329,7 +328,7 @@ public class JkwyPackageServiceImpl extends BaseServiceImpl<JkwyPackage> impleme
         jkwyPackage.setStatus(0);
         jkwyPackage.setPlatformId(platformId);
         jkwyPackage.setDeviceType(type);
-        jkwyPackage.setOrderby("JP.sort DESC");
+        jkwyPackage.setOrderby("JP.sort ASC");
         List<JkwyPackage> jkwyPackageList = jkwyPackageDao.lists(jkwyPackage);
         return jkwyPackageList;
     }

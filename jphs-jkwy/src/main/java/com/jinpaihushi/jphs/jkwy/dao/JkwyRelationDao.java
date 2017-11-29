@@ -29,5 +29,12 @@ public interface JkwyRelationDao extends BaseDao<JkwyRelation> {
      * @return
      */
     List<JkwyRelation> getUserRelationByOrderId(String id);
+    
+    /**
+     * 查询未购买套餐的亲属
+     * @param jkwyRelation
+     * @return
+     */
+    List<JkwyRelation> getUserRelationIsNotOrder(JkwyRelation jkwyRelation);
 
 }

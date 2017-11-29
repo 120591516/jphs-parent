@@ -417,6 +417,15 @@ public class GoodsServiceImpl extends BaseServiceImpl<Goods> implements GoodsSer
                                              */
                                             pricePart.setProfit(priceList.get(a).getProfit());
                                             pricePartDao.update(pricePart);
+                                            
+                                            PricePart pricePart_up_one = new PricePart();
+                                            pricePart_up_one.setPriceId(pricePart.getPriceId());
+                                            List<PricePart> pricePart_up_list = pricePartDao.list(pricePart_up_one);
+                                            for(int pul = 0;pul<pricePart_up_list.size();pul++){
+                                            	PricePart pricePart_up_one_one = pricePart_up_list.get(pul);
+                                            	pricePart_up_one_one.setCostPrice(pricePart.getCostPrice());
+                                            	pricePartDao.update(pricePart_up_one_one);
+                                            }
                                         }
                                         else {
                                             // 隐藏数据

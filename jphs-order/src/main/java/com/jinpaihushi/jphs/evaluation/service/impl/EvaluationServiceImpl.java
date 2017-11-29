@@ -1,5 +1,6 @@
 package com.jinpaihushi.jphs.evaluation.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,15 @@ public class EvaluationServiceImpl extends BaseServiceImpl<Evaluation> implement
 		return evaluationDao;
 	}
 
+	/**
+	 * 查询评价数目
+	 * @param evaluation
+	 * @return
+	 */
+	public Evaluation getListCountLevel(Evaluation evaluation){
+		return evaluationDao.getListCountLevel(evaluation);
+	}
+	
 	public int insertEvaluation(Evaluation evaluation){
 		 TransactionTemplate transactionTemplate = TransactionTemplateUtils.getDefaultTransactionTemplate(txManager);
 	        String rs = (String) transactionTemplate.execute(new TransactionCallback<Object>() {
@@ -69,7 +79,8 @@ public class EvaluationServiceImpl extends BaseServiceImpl<Evaluation> implement
 	                	}
 	                	evaluation.setId(UUIDUtils.getId());
 	                	evaluation.setStatus(0);
-	                	evaluation.setGoodsId(orderGoods.getGoodsId());
+	                	evaluation.setCreateTime(new Date());
+	                	evaluation.setGoodsId(orderGoodsOne.getGoodsId());
 	                	evaluation.setNurseId(order.getAcceptUserId());
 	                	int ed = evaluationDao.insert(evaluation);
 	                	if(ed <=0){

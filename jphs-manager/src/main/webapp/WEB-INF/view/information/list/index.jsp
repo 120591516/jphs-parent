@@ -13,7 +13,9 @@
 
 <div class="marage_right_content">
 	<!-- 左对齐按钮 -->
-	<button id="redirectAddPage" type="button" class="public-info">新建资讯</button>
+	<jphs:hasPermission url="/information/redirectAddPage.jhtml">
+		<button id="redirectAddPage" type="button" class="public-info">新建资讯</button>
+	</jphs:hasPermission>
 	<!-- 右对齐按钮 -->
 	<jsp:include page="list.jsp"></jsp:include>
 

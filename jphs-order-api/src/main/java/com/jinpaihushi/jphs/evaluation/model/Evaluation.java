@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 import org.hibernate.validator.constraints.Length;
 
 import com.jinpaihushi.function.Updator;
+import com.jinpaihushi.jphs.user.model.User;
 import com.jinpaihushi.model.BaseModel;
 
 /**
@@ -55,18 +56,82 @@ public class Evaluation extends BaseModel implements Predicate<Evaluation>,
 	private Date stopTime; 
 	
 	private String title;
+	private Integer sex;
 	
 	private String nursePhone;
 	private String headPortrait;
+	
+	private Integer level_1;
+	private Integer level_2;
+	private Integer level_3;
+	private Integer level_4;
+	private Integer level_5;
+	
+	private User nurseUser;
     /** 内容 */
 	@Length(max = 65535, message = "{evaluation.content.illegal.length}")
 	private String content;
 	
+	public Integer getSex() {
+		return sex;
+	}
+
+	public void setSex(Integer sex) {
+		this.sex = sex;
+	}
+
+	public User getNurseUser() {
+		return nurseUser;
+	}
+
+	public void setNurseUser(User nurseUser) {
+		this.nurseUser = nurseUser;
+	}
 
 	public Evaluation(){}
 
 	public Evaluation(String id){
 		this.id = id;
+	}
+
+	public Integer getLevel_1() {
+		return level_1;
+	}
+
+	public void setLevel_1(Integer level_1) {
+		this.level_1 = level_1;
+	}
+
+	public Integer getLevel_2() {
+		return level_2;
+	}
+
+	public void setLevel_2(Integer level_2) {
+		this.level_2 = level_2;
+	}
+
+	public Integer getLevel_3() {
+		return level_3;
+	}
+
+	public void setLevel_3(Integer level_3) {
+		this.level_3 = level_3;
+	}
+
+	public Integer getLevel_4() {
+		return level_4;
+	}
+
+	public void setLevel_4(Integer level_4) {
+		this.level_4 = level_4;
+	}
+
+	public Integer getLevel_5() {
+		return level_5;
+	}
+
+	public void setLevel_5(Integer level_5) {
+		this.level_5 = level_5;
 	}
 
 	/**

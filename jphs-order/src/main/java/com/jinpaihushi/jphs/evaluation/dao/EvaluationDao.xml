@@ -176,27 +176,34 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			jdbcType="VARCHAR"></result>
 	</resultMap>
 
-	<resultMap id="evaluationGlobal"
-		type="com.jinpaihushi.jphs.evaluation.model.Evaluation">
+	<resultMap id="evaluationGlobal" type="com.jinpaihushi.jphs.evaluation.model.Evaluation">
 		<result property="id" column="E_id" javaType="String" jdbcType="VARCHAR"></result>
-		<result property="orderId" column="E_order_id" javaType="String"
-			jdbcType="VARCHAR"></result>
-		<result property="goodsId" column="E_goods_id" javaType="String"
-			jdbcType="VARCHAR"></result>
-		<result property="nurseId" column="E_nurse_id" javaType="String"
-			jdbcType="VARCHAR"></result>
-		<result property="level" column="E_level" javaType="Integer"
-			jdbcType="INTEGER"></result>
-		<result property="content" column="E_content" javaType="String"
-			jdbcType="VARCHAR"></result>
-		<result property="status" column="E_status" javaType="Integer"
-			jdbcType="INTEGER"></result>
-		<result property="createTime" column="E_create_time" javaType="Date"
-			jdbcType="TIMESTAMP"></result>
-		<result property="creatorId" column="E_creator_id" javaType="String"
-			jdbcType="VARCHAR"></result>
-		<result property="creatorName" column="E_creator_name"
-			javaType="String" jdbcType="VARCHAR"></result>
+		<result property="orderId" column="E_order_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="goodsId" column="E_goods_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="nurseId" column="E_nurse_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="level" column="E_level" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="content" column="E_content" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="userName" column="E_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="userPhone" column="E_phone" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="sex" column="E_sex" javaType="Integer" jdbcType="INTEGER"></result>
+		
+		<result property="level_1" column="level_1" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="level_2" column="level_2" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="level_3" column="level_3" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="level_4" column="level_4" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="level_5" column="level_5" javaType="Integer" jdbcType="INTEGER"></result>
+		
+		<result property="status" column="E_status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="E_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="E_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="E_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+		<association property="nurseUser" javaType="com.jinpaihushi.jphs.user.model.User">
+			<result property="id" column="US_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="type" column="US_type" javaType="Integer" jdbcType="INTEGER"></result>
+			<result property="name" column="US_name" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="sex" column="US_sex" javaType="Integer" jdbcType="INTEGER"></result>
+			<result property="phone" column="US_phone" javaType="String" jdbcType="VARCHAR"></result>
+		</association>
 	</resultMap>
 
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id"
@@ -270,12 +277,29 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<include refid="dynamicWhere" />
 	</select>
 
-	<select id="list" resultMap="evaluation">
+	<select id="list" resultMap="evaluationGlobal">
 		SELECT
-		<include refid="field" />
-		FROM `EVALUATION` E
+		<include refid="fieldGlobal" />,
+		U.name E_name, U.sex E_sex, 
+		U.phone E_phone,
+		US.id US_id, US.type US_type, 
+		US.name US_name, US.sex US_sex, 
+		US.phone US_phone 
+		FROM `EVALUATION` E 
+		LEFT JOIN `user` U ON E.creator_id=U.id 
+		LEFT JOIN `user` US ON E.nurse_id=US.id 
 		<include refid="dynamicWhere" />
 		<include refid="orderby" />
+	</select>
+	
+	<select id="getListCountLevel" resultMap="evaluationGlobal">
+		SELECT
+		(SELECT COUNT(*) FROM `EVALUATION` E1 WHERE E1.level = 1 AND E1.nurse_id=#{nurseId} AND E1.status=0) level_1 ,
+		(SELECT COUNT(*) FROM `EVALUATION` E2 WHERE E2.level = 2 AND E2.nurse_id=#{nurseId} AND E2.status=0) level_2 ,
+		(SELECT COUNT(*) FROM `EVALUATION` E3 WHERE E3.level = 3 AND E3.nurse_id=#{nurseId} AND E3.status=0) level_3 ,
+		(SELECT COUNT(*) FROM `EVALUATION` E4 WHERE E4.level = 4 AND E4.nurse_id=#{nurseId} AND E4.status=0) level_4 ,
+		(SELECT COUNT(*) FROM `EVALUATION` E5 WHERE E5.level = 5 AND E5.nurse_id=#{nurseId} AND E5.status=0) level_5 
+		FROM `EVALUATION` E 
 	</select>
 
 	<select id="query" resultMap="evaluation">

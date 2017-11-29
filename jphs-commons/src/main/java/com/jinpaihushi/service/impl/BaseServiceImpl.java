@@ -232,6 +232,34 @@ public abstract class BaseServiceImpl<T extends BaseModel>
             String[] days) {
         String[][] allData = new String[days.length][chMonth.length];
         for (int i = 0; i < allData.length; i++) {
+            Predicate daysPredicate = new MyPredicate("days", days[i]);
+            List<StatisticsModel> daysSelect = (List<StatisticsModel>) CollectionUtils.select(allNumByYear,
+                    daysPredicate);
+            for (int j = 0; j < allData[i].length; j++) {
+                Predicate monthPredicate = new MyPredicate("months", month[j]);
+                List<StatisticsModel> monthSelect = (List<StatisticsModel>) CollectionUtils.select(daysSelect,
+                        monthPredicate);
+                if (j == 0) {
+                    allData[i][j] = days[i];
+                }
+                else {
+                    if (monthSelect.size() == 0) {
+                        allData[i][j] = "0";
+                    }
+                    else {
+                        allData[i][j] = monthSelect.get(0).getNum() + "";
+                    }
+                }
+            }
+        }
+        return allData;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected String[][] getDataByAllDevice(List<StatisticsModel> allNumByYear, String[] month, String[] chMonth,
+            String[] days) {
+        String[][] allData = new String[days.length][chMonth.length];
+        for (int i = 0; i < allData.length; i++) {
             Predicate daysPredicate = new MyPredicate("device", days[i].replace("'", ""));
             List<StatisticsModel> daysSelect = (List<StatisticsModel>) CollectionUtils.select(allNumByYear,
                     daysPredicate);

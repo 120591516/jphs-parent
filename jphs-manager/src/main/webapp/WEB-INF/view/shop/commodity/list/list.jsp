@@ -69,6 +69,7 @@
 							</c:if>
 
 						<td width="10%">
+						<jphs:hasPermission url="/commodity/updateStatus.jhtml">
 						<a onclick=updateStatus('${e.id }','${e.status }')>
 								<c:if test="${e.status ==1}">
 								<span style="color: blue;text-decoration: underline;padding-left: 25px;padding-right: 8px;">下架</span>
@@ -80,13 +81,22 @@
 								<span style="color: blue;text-decoration: underline;padding-left: 25px;padding-right: 8px;">上架</span>
 								</c:if>
 							</a>
+						</jphs:hasPermission>
+						<jphs:hasPermission url="/commodity/detail.jhtml">
 						<a onclick="redirectDetailPage('${e.id}')"> <img
 								src="/static/images/chakan.png">
-						</a> <a onclick="redirectUpdatePage('${e.id}')"> <img
+						</a> 
+						</jphs:hasPermission>
+						<jphs:hasPermission url="/commodity/redirectUpdate.jhtml">
+						<a onclick="redirectUpdatePage('${e.id}')"> <img
 								src="/static/images/xiugai.png">
-						</a> <a onclick="deleteById('${e.id}')"> <img
+						</a> 
+						</jphs:hasPermission>
+						<jphs:hasPermission url="/commodity/delete.jhtml">
+						<a onclick="deleteById('${e.id}')"> <img
 								src="/static/images/shanchu.png">
 						</a>
+						</jphs:hasPermission>
 							
 						</td>
 					</tr>

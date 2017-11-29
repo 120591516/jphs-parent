@@ -51,18 +51,26 @@
 							<td><c:out value="${e.code}"/></td>
 							<td><c:out value="${e.user.phone}"/></td>
 							<td>
+							<jphs:hasPermission url="/family/consultation/redirectAddPage.jhtml">
 							<a onclick="putFamilyConsultation('${e.id}')">
 								<img style="width: 20px;height: 20px;" src="/static/images/wenda.png">
 							</a>
+							</jphs:hasPermission>
+							<jphs:hasPermission url="/family/register/redirectAddPage.jhtml">
 							<a onclick="putFamilyRegister('${e.id}')">
 								<img style="width: 20px;height: 20px;" src="/static/images/wenzhen.png">
 							</a>
+							</jphs:hasPermission>
+							<jphs:hasPermission url="/family/healthy/redirectAddPage.jhtml">
 							<a onclick="putFamilyHealthy('${e.id}')">
 								<img style="width: 20px;height: 20px;" src="/static/images/jiankangjihua.png">
 							</a>
+							</jphs:hasPermission>
+							<jphs:hasPermission url="/family/order/detail.jhtml">
 							<a onclick="redirectDetailPage('${e.id}')">
 								<img src="/static/images/chakan.png">
 							</a>									
+							</jphs:hasPermission>
 							<%-- <a onclick="deleteById('${e.id}')">
 								<img src="/static/images/shanchu.png">
 							</a> --%>

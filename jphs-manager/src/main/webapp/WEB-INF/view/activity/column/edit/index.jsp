@@ -14,7 +14,9 @@
 <form class="form-horizontal add_body" id="goodsForm" method="post" data-role="validate-form" action="/column/insert.jhtml">
 	<div class="marage_right_content">
 		<div class="clearfix">
+			<jphs:hasPermission url="/column/insert.jhtml">
 				<button id="save" class="public-info public_btn public_btn_left" data-role="save-btn">保存</button>
+			</jphs:hasPermission>
 			<input type="button" class="public-info public_btn public_btn_left" name="button1" id="button1"
 				value="返回" onclick="history.go(-1)">
 		</div>

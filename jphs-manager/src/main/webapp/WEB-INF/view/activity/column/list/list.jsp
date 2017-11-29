@@ -58,6 +58,7 @@
 								<c:if test="${e.status==-1}">已停用</c:if>
 							</td>
 							<td style="width: 80px;">
+							<jphs:hasPermission url="/column/updateStatus.jhtml">
 							<a onclick="updateStatus('${e.id}','${e.status }')">
 								<c:if test="${e.status==1}"><span style="color: blue;text-decoration: underline;padding-left: 25px;padding-right: 8px;">停用</span></c:if>  
 								 
@@ -65,6 +66,7 @@
 								 
 								<c:if test="${e.status==-1}"><span style="color: blue;text-decoration: underline;padding-left: 25px;padding-right: 8px;">启用</span></c:if>
 							</a><br>
+							</jphs:hasPermission>
 							<jphs:hasPermission url="/column/detail.jhtml">
 							<a onclick="redirectDetailPage('${e.id}')">
 								<img src="/static/images/chakan.png">

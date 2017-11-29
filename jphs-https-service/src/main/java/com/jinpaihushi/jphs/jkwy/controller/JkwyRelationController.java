@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jinpaihushi.jphs.jkwy.model.JkwyRelation;
 import com.jinpaihushi.jphs.jkwy.service.JkwyRelationService;
+import com.jinpaihushi.model.ResultDTO;
+import com.jinpaihushi.utils.CertificateNo;
 import com.jinpaihushi.utils.JSONUtil;
 import com.jinpaihushi.utils.UUIDUtils;
 import com.jinpaihushi.utils.Util;
@@ -97,13 +99,17 @@ public class JkwyRelationController {
 					|| StringUtils.isEmpty(jkwyRelation.getPhone())
 					|| jkwyRelation.getSex() == null 
 					|| StringUtils.isEmpty(jkwyRelation.getRelation())
-					|| StringUtils.isEmpty(jkwyRelation.getSfz())
-					|| jkwyRelation.getBirthday() == null){
+					|| StringUtils.isEmpty(jkwyRelation.getSfz())){
 				return JSONUtil.toJSONResult(0, "参数不能为空！", null);
 			}
 			if(jkwyRelation.getId() ==null ){
 				jkwyRelation.setId(UUIDUtils.getId());
 				jkwyRelation.setCreateTime(new Date());
+				ResultDTO resultDTO = CertificateNo.parseCertificateNo(jkwyRelation.getSfz());
+				if(resultDTO.getStatueMessage() != null){
+					return JSONUtil.toJSONResult(0, "操作失败,"+resultDTO.getStatueMessage()+"!", null);
+				}
+				jkwyRelation.setBirthday(resultDTO.getBirthdayTime());
 				String str_j = jkwyRelationService.insert(jkwyRelation);
 				if(str_j ==null || str_j.length() < 1){
 					return JSONUtil.toJSONResult(0, "操作失败！", null);

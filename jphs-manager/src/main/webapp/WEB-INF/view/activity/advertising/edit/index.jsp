@@ -12,7 +12,7 @@
 	data-role="validate-form" action="/advertising/insert.jhtml">
 	<div class="marage_right_content">
 		<div class="clearfix">
-			<jphs:hasPermission url="/jobtitle/insert.jhtml">
+			<jphs:hasPermission url="/advertising/insert.jhtml">
 				<button type="submit" id="save"
 					class="public-info public_btn public_btn_left" data-role="save-btn">保存</button>
 			</jphs:hasPermission>

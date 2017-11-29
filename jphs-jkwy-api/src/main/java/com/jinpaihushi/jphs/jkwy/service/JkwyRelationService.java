@@ -33,4 +33,12 @@ public interface JkwyRelationService extends BaseService<JkwyRelation> {
      * @return
      */
     int updateRelation(JkwyRelation jkwyRelation);
+    
+    /**
+     * 查询未购买套餐的亲属
+     * @param jkwyRelation
+     * @return
+     */
+    List<JkwyRelation> getUserRelationIsNotOrder(JkwyRelation jkwyRelation);
+    
 }

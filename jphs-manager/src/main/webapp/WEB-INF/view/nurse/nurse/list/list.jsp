@@ -67,6 +67,7 @@
 								<a onclick="redirectDetailPage('${e.id}')" title="详情"> <img
 									src="/static/images/chakan.png">
 								</a>
+							</jphs:hasPermission>
 							<%-- </jphs:hasPermission> <jphs:hasPermission url="/nurse/redirectUpdate.jhtml">
 								<a onclick="redirectUpdatePage('${e.id}')" title="编辑"> <img
 									src="/static/images/xiugai.png">
@@ -74,7 +75,7 @@
 							</jphs:hasPermission> --%> <%-- <a onclick="deleteById('${e.id}')" title="删除"> <img
 								src="/static/images/shanchu.png">
 						</a> --%>
-						</jphs:hasPermission></td>
+						</td>
 					</tr>
 				</c:forEach>
 			</c:when>

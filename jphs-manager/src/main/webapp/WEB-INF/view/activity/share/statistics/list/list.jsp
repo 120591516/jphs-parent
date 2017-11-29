@@ -48,9 +48,11 @@
 							</td>
 							<td><fmt:formatDate value="${e.createTime}" pattern="yy-MM-dd HH:mm" /></td>
 							<td>
+							<jphs:hasPermission url="/share/statistics/detail.jhtml">	
 							<a onclick="redirectDetailPage('${e.id}')">
 								<img src="/static/images/chakan.png">
-							</a>								
+							</a>
+							</jphs:hasPermission>								
 								<%-- <a onclick="redirectUpdatePage('${e.id}')">
 									<img  src="/static/images/xiugai.png">
 								</a>									

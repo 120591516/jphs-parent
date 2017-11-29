@@ -49,8 +49,10 @@
 			</jphs:hasPermission>
 			<input type="button" class="public-info public_btn public_btn_left"
 				name="button1" id="button1" value="返回" onclick="history.go(-1)" />
-					 <button class="public-info public_btn public_btn_center"
+			<%-- <jphs:hasPermission url=""> --%>
+				 <button class="public-info public_btn public_btn_center"
 					data-toggle="modal" data-target="#remarkModal">编辑订单备注</button>
+			<%-- </jphs:hasPermission> --%>		
 		</div>
 		
 

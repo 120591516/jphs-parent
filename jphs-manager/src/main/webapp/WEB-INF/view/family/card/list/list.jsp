@@ -35,9 +35,11 @@
 							<td><c:out value="${e.creator_name}"/></td>
 							<td><fmt:formatDate value="${e.create_time}" pattern="yy-MM-dd HH:mm"/></td>
 							<td>
-							<a onclick="redirectDetailPage('${e.batch_no}')">
-								<img src="/static/images/chakan.png">
-							</a>								
+							<jphs:hasPermission url="/family/card/detail.jhtml">
+								<a onclick="redirectDetailPage('${e.batch_no}')">
+									<img src="/static/images/chakan.png">
+								</a>
+							</jphs:hasPermission>								
 							<%-- <a onclick="redirectUpdatePage('${e.id}')">
 								<img  src="/static/images/xiugai.png">
 							</a> --%>									

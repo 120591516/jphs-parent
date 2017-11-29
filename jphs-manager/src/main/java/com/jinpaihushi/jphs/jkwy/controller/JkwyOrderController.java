@@ -213,7 +213,7 @@ public class JkwyOrderController extends BaseController<JkwyOrder> {
             String weeks) {
         List<Map<String, Object>> quantityByWeek = jkwyOrderService.getQuantityByWeek(weeks);
         pushDimensionalData(req, quantityByWeek, "weekTimeList", "weekDeviceName", "weekTotal");
-        return "order.statistics.quantityByWeek";
+        return "jkwy.order.statistics.quantityByWeek";
     }
 
     @RequestMapping(name = "订单量月统计", path = "/quantityByMonth.jhtml")
@@ -221,7 +221,7 @@ public class JkwyOrderController extends BaseController<JkwyOrder> {
             String month) {
         List<Map<String, Object>> quantityByMonth = jkwyOrderService.quantityByMonth(month);
         pushDimensionalData(req, quantityByMonth, "monthTimeList", "monthDeviceName", "monthTotal");
-        return "order.statistics.quantityByMonth";
+        return "jkwy.order.statistics.quantityByMonth";
     }
 
     @RequestMapping(name = "订单量年统计", path = "/quantityByYear.jhtml")
@@ -230,7 +230,7 @@ public class JkwyOrderController extends BaseController<JkwyOrder> {
         req.setAttribute("flag", true);
         List<Map<String, Object>> quantityByYear = jkwyOrderService.quantityByYear(year);
         pushDimensionalData(req, quantityByYear, "yearTimeList", "yearDeviceName", "yearTotal");
-        return "order.statistics.quantityByYear";
+        return "jkwy.order.statistics.quantityByYear";
     }
 
     @RequestMapping(name = "全年订单量统计", path = "/quantityByAnnual.jhtml")
@@ -239,7 +239,7 @@ public class JkwyOrderController extends BaseController<JkwyOrder> {
         req.setAttribute("flag", true);
         Map<String, Object> allDataByYear = jkwyOrderService.getAllNumByYear(year);
         getTableData(req, allDataByYear);
-        return "order.statistics.quantityByAnnual";
+        return "jkwy.order.statistics.quantityByAnnual";
     }
 
     /**

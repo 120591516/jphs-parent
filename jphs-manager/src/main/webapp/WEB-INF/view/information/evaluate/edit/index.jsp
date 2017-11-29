@@ -11,6 +11,7 @@
 	<div class="marage_right_content">
 		<div class="clearfix">
 			<input type="button" class="public-info public_btn public_btn_left" name="button1" id="button1" value="返回" onclick="history.go(-1)" />
+			<jphs:hasPermission url="/information/evaluate/insert.jhtml">
 			<input type="button" class="public-info public_btn public_btn_left" name="button2" id="button2" value="审核" data-toggle="modal" data-target="#myModal"/>
 			<c:if test="${informationEvaluate.essence == -1 }">
 				<input type="button" class="public-info public_btn public_btn_left" name="button2" id="button2" value="加精" onclick="essenceById('${informationEvaluate.id}','${informationEvaluate.essence }')"/>
@@ -18,6 +19,7 @@
 			<c:if test="${informationEvaluate.essence == 0 }">
 				<input type="button" class="public-info public_btn public_btn_left" name="button2" id="button2" value="取消加精" onclick="essenceById('${informationEvaluate.id}','${informationEvaluate.essence }')"/>
 			</c:if>
+			</jphs:hasPermission>
 		</div>
 		<hr class="mt-5" />
 		<jsp:include page="form.jsp"></jsp:include>

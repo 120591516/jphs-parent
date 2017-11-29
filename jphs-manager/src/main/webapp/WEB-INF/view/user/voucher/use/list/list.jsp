@@ -54,11 +54,13 @@
 							<c:if test="${e.status ==-1 }"><span >已停用</span></c:if>
 						</td>
 						<td>
-							<c:if test="${e.status ==0 }">
-								<a onclick="deleteById('${e.id}')">
-									<img src="/static/images/shanchu.png">
-								</a>
-							</c:if>
+							<jphs:hasPermission url="/voucher/user/delete.jhtml">
+								<c:if test="${e.status ==0 }">
+									<a onclick="deleteById('${e.id}')">
+										<img src="/static/images/shanchu.png">
+									</a>
+								</c:if>
+							</jphs:hasPermission>
 						</td>
 					</tr>
 				</c:forEach>

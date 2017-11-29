@@ -75,22 +75,27 @@ public class ActivityPromotionServiceImpl extends BaseServiceImpl<ActivityPromot
 		}
 		if(activityPromotionOne.getType() == 1){
 			return activityPromotionOne;
-		}
-		if(activityPromotionOne.getType() == 2){
-			int onumber = activityPromotionDao.getIndexNumberP(activityPromotionOne.getId(), userId,
-					activityPromotionOne.getBeginTime(), activityPromotionOne.getBeginTime());
-			if(onumber == 0){
-				return activityPromotionOne;
+		}else{
+			int onumber = 0;
+			if(resourceType == 1){
+				onumber = activityPromotionDao.getIndexNumberP(activityPromotionOne.getId(), userId, activityPromotionOne.getBeginTime(), activityPromotionOne.getBeginTime());
+			} else if (resourceType == 2){
+				onumber = activityPromotionDao.getIndexNumberCommodityOrder(activityPromotionOne.getId(), userId, activityPromotionOne.getBeginTime(), activityPromotionOne.getBeginTime());
+			} else if (resourceType == 3){
+				onumber = activityPromotionDao.getJkwyOrderNumberActivityPromotion(activityPromotionOne.getId(), userId, activityPromotionOne.getBeginTime(), activityPromotionOne.getBeginTime());
 			}
-			return null;
-		}
-		if(activityPromotionOne.getType() == 3){
-			int onumber = activityPromotionDao.getIndexNumberP(activityPromotionOne.getId(), userId,
-					activityPromotionOne.getBeginTime(), activityPromotionOne.getBeginTime());
-			if(onumber == 1){
-				return activityPromotionOne;
+			if(activityPromotionOne.getType() == 2){
+				if(onumber == 0){
+					return activityPromotionOne;
+				}
+				return null;
 			}
-			return null;
+			if(activityPromotionOne.getType() == 3){
+				if(onumber == 1){
+					return activityPromotionOne;
+				}
+				return null;
+			}
 		}
 		return null;
 	}

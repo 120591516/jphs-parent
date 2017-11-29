@@ -37,15 +37,21 @@
 							</td>
 							<td><c:out value="${e.creatorName}" /></td>
 							<td>
+							<jphs:hasPermission url="/sms/template/detail.jhtml">
 							<a onclick="redirectDetailPage('${e.id}')">
 								<img src="/static/images/chakan.png">
-							</a>								
+							</a>
+							</jphs:hasPermission>
+							<jphs:hasPermission url="/sms/template/redirectUpdate.jhtml">								
 							<a onclick="redirectUpdatePage('${e.id}')">
 								<img  src="/static/images/xiugai.png">
-							</a>									
+							</a>
+							</jphs:hasPermission>
+							<jphs:hasPermission url="/sms/template/delete.jhtml">									
 							<a onclick="deleteById('${e.id}')">
 								<img src="/static/images/shanchu.png">
 							</a>
+							</jphs:hasPermission>
 							</td>
 						</tr>
 					</c:forEach>

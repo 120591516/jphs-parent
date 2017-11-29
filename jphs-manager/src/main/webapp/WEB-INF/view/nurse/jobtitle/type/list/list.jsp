@@ -41,15 +41,18 @@
 										src="/static/images/startup.png">
 									</a>
 								</c:if>
-							</jphs:hasPermission> <jphs:hasPermission url="/jobtitle/type/detail.jhtml">
+							</jphs:hasPermission> 
+							<jphs:hasPermission url="/jobtitle/type/detail.jhtml">
 								<a onclick="redirectUpdatePage('${e.id}')" title="修改"> <img
 									src="/static/images/xiugai.png">
 								</a>
-							</jphs:hasPermission> <jphs:hasPermission url="/jobtitle/type/delete.jhtml">
+							</jphs:hasPermission> 
+							<jphs:hasPermission url="/jobtitle/type/delete.jhtml">
 								<a onclick="deleteById('${e.id}','-1')" title="删除"> <img
 									src="/static/images/shanchu.png">
 								</a>
-							</jphs:hasPermission></td>
+							</jphs:hasPermission>
+						</td>
 					</tr>
 				</c:forEach>
 			</c:when>

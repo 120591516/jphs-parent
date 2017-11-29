@@ -1,6 +1,5 @@
 package com.jinpaihushi.jphs.commodity.service.impl;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,14 +14,13 @@ import com.jinpaihushi.dao.BaseDao;
 import com.jinpaihushi.jphs.business.model.Business;
 import com.jinpaihushi.jphs.car.dao.CarDao;
 import com.jinpaihushi.jphs.car.model.ActivityPromotion;
-import com.jinpaihushi.jphs.car.model.Car;
 import com.jinpaihushi.jphs.commodity.dao.CommodityDao;
 import com.jinpaihushi.jphs.commodity.dao.CommodityImagesDao;
+import com.jinpaihushi.jphs.commodity.dao.CommodityOrderDao;
 import com.jinpaihushi.jphs.commodity.dao.CommodityOrderInfoDao;
 import com.jinpaihushi.jphs.commodity.model.Commodity;
 import com.jinpaihushi.jphs.commodity.model.CommodityImages;
 import com.jinpaihushi.jphs.commodity.model.CommodityMap;
-import com.jinpaihushi.jphs.commodity.model.CommodityOrderInfo;
 import com.jinpaihushi.jphs.commodity.model.CommodityPrice;
 import com.jinpaihushi.jphs.commodity.model.CommodityTreeNode;
 import com.jinpaihushi.jphs.commodity.service.CommodityService;
@@ -42,6 +40,9 @@ public class CommodityServiceImpl extends BaseServiceImpl<Commodity> implements 
 
     @Autowired
     private CommodityOrderInfoDao commodityOrderInfoDao;
+    
+    @Autowired
+    private CommodityOrderDao commodityOrderDao;
 
     @Autowired
     private CommodityImagesDao commodityImagesDao;
@@ -196,25 +197,16 @@ public class CommodityServiceImpl extends BaseServiceImpl<Commodity> implements 
         		ActivityPromotion activityPromotion = commodityPriceList.get(b).getActivityPromotion();
         		if(activityPromotion.getType() == 1){
         			continue;
-        		}else if(activityPromotion.getType() == 2){
-        			CommodityOrderInfo commodityOrderInfo =new CommodityOrderInfo();
-        			commodityOrderInfo.setCommodityId(activityPromotion.getResourceId());
-        			commodityOrderInfo.setCreatorId(userId);
-        			List<CommodityOrderInfo> commodityOrderInfoList = commodityOrderInfoDao.list(commodityOrderInfo);
-        			if(commodityOrderInfoList == null){
-        				continue;
-        			}else{
-        				commodityPriceList.get(b).getActivityPromotion().setPrice(0d);
-        			}
-        		}else if(activityPromotion.getType() == 3){
-        			CommodityOrderInfo commodityOrderInfo =new CommodityOrderInfo();
-        			commodityOrderInfo.setCommodityId(activityPromotion.getResourceId());
-        			commodityOrderInfo.setCreatorId(userId);
-        			List<CommodityOrderInfo> commodityOrderInfoList = commodityOrderInfoDao.list(commodityOrderInfo);
-        			if(commodityOrderInfoList !=null && commodityOrderInfoList.size() == 1){
-        				continue;
-        			}else{
-        				commodityPriceList.get(b).getActivityPromotion().setPrice(0d);
+        		}else{
+        			int countNum = commodityOrderDao.getIndexNumber(activityPromotion.getId(), userId, activityPromotion.getBeginTime(), activityPromotion.getEndTime());
+        			if(activityPromotion.getType() == 2){
+	        			if(countNum == 0){
+	        				commodityPriceList.get(b).getActivityPromotion().setPrice(0d);
+	        			}
+        			}else if(activityPromotion.getType() == 3){
+	        			if(countNum == 1){
+	        				commodityPriceList.get(b).getActivityPromotion().setPrice(0d);
+	        			}
         			}
         		}
         	}

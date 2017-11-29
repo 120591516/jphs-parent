@@ -64,6 +64,7 @@
 							</c:if>
 						</td>
 						<td>
+						<jphs:hasPermission url="/information/insert.jhtml">
 						<c:if test="${e.top == 1}">
 							<a onclick="stickId('${e.id}','0')">
 								<img style="width: 20px;height: 20px;" src="/static/images/xia.png">
@@ -74,7 +75,8 @@
 								<img style="width: 20px;height: 20px;" src="/static/images/shang.png">
 							</a>
 						</c:if>
-						
+						</jphs:hasPermission>
+						<jphs:hasPermission url="/information/delete.jhtml">
 						<c:if test="${e.status == 0}">
 								<a onclick="deleteById('${e.id}','1')"> 
 										<img style="width: 20px;height: 20px;" src="/static/images/blockup.png">
@@ -85,16 +87,22 @@
 									<img style="width: 20px;height: 20px;" src="/static/images/startup.png">
 								</a>
 							</c:if>
-						
+						</jphs:hasPermission>
+						<jphs:hasPermission url="/information/detail.jhtml">
 						<a onclick="redirectDetailPage('${e.id}')"> <img
 								src="/static/images/chakan.png">
-						</a> <a onclick="redirectUpdatePage('${e.id}')"> <img
+						</a> 
+						</jphs:hasPermission>
+						<jphs:hasPermission url="/information/redirectUpdate.jhtml">
+						<a onclick="redirectUpdatePage('${e.id}')"> <img
 								src="/static/images/xiugai.png">
 						</a> 
-							
+						</jphs:hasPermission>
+							<jphs:hasPermission url="/information/delete.jhtml">
 							<a onclick="deleteById('${e.id}','-1')"> 
 								<img style="width: 20px;height: 20px;" src="/static/images/shanchu.png">
 							</a>
+							</jphs:hasPermission>
 						</td>
 					</tr>
 					</c:if>

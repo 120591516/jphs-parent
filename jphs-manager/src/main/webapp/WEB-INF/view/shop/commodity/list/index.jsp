@@ -13,7 +13,9 @@
 
 <div class="marage_right_content">
 	<!-- 左对齐按钮 -->
-	<button id="redirectAddPage" type="button" class="public-info ">添加商品</button>
+	<jphs:hasPermission url="/commodity/redirectAddPage.jhtml">
+		<button id="redirectAddPage" type="button" class="public-info ">添加商品</button>
+	</jphs:hasPermission>
 	<!-- <button type="button" class="public-info ">导出</button>	 -->
 	<!-- 右对齐按钮 -->
 	<!-- <button type="button" class="btn btn-info public_btn public_btn_right" style="margin-right:15px">功能按钮</button> -->

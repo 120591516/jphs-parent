@@ -29,4 +29,11 @@ public interface EvaluationService extends BaseService<Evaluation> {
 	 */
 	int insertEvaluation(Evaluation evaluation);
 	
+	/**
+	 * 查询评价数目
+	 * @param evaluation
+	 * @return
+	 */
+	Evaluation getListCountLevel(Evaluation evaluation);
+	
 }

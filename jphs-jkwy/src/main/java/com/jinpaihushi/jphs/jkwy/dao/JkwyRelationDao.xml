@@ -304,7 +304,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		JP.sort JP_sort, JP.status JP_status, 
 		JP.create_time JP_create_time
 		FROM `jkwy_relation` `JR` 
-		LEFT JOIN `jkwy_order_relation` `JOR` ON `JR`.id=`JOR`.`jkwy_relation` AND `JOR`.status=0
+		LEFT JOIN `jkwy_order_relation` `JOR` ON `JR`.id=`JOR`.`jkwy_relation` AND `JOR`.status=1
 		LEFT JOIN `jkwy_order` `JO` ON `JOR`.`jkwy_order_id`=`JO`.`id` AND `JO`.`schedule`=1 AND `JO`.status=0 AND `JO`.`end_time` &gt; now() 
 		LEFT JOIN `jkwy_package_price` `JPP` ON `JO`.`jkwy_package_price_id`=`JPP`.`id` 
 		LEFT JOIN `jkwy_package` `JP` ON `JPP`.`jkwy_package_id`=`JP`.`id`
@@ -385,4 +385,11 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		LEFT JOIN jkwy_relation JR ON jor.jkwy_relation = JR.id
 		WHERE jor.jkwy_order_id = #{id}
 	</select>
+	
+	<select id="getUserRelationIsNotOrder" resultMap="jkwyRelation">
+		SELECT <include refid="field"/>
+		FROM jkwy_relation JR 
+		WHERE JR.`creator_id`=#{creatorId} AND JR.`status`=0 AND JR.id NOT IN (SELECT DISTINCT jkwy_relation FROM `jkwy_order_relation` JORS WHERE JORS.status=1 AND JORS.creator_id=#{creatorId})
+	</select>
+	
 </mapper>

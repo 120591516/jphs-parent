@@ -13,7 +13,9 @@
 
 <div class="marage_right_content">
 	<!-- 左对齐按钮 -->
+	<jphs:hasPermission url="/sms/template/insert.jhtml">
 	<button id="redirectAddPage" type="button" class="public-info public_btn">添加模板</button>
+	</jphs:hasPermission>
 	<jsp:include page="list.jsp"></jsp:include>
 
 </div>

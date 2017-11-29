@@ -11,7 +11,7 @@
 		
 	</div>
 
-	<form class="form-horizontal add_body" id="goodsForm" method="post" data-role="validate-form" action="/sms/history/insert.jhtml">
+	<form class="form-horizontal add_body" id="goodsForm" method="post" data-role="validate-form" action="/sms/history/insert.jhtml" onsubmit="return subValidate()">
 	<div class="marage_right_content">
 		<div class="clearfix">
 				<button id="save" class="public-info public_btn public_btn_left" data-role="save-btn">立即发送</button>

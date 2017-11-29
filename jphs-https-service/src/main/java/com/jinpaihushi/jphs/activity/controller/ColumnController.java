@@ -39,6 +39,7 @@ public class ColumnController {
 			ColumnService columnService = new ColumnService();
 			columnService.setColumnId(columnId);
 			columnService.setStatus(1);
+			columnService.setOrderby("sort asc");
 			List<ColumnService> list = columnServiceService.list(columnService);
 			// 1.根据 name，password,type查询完整信息
 			// 2.错误N种情况判断及返回前端

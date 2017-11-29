@@ -33,6 +33,16 @@ public class JkwyRelationServiceImpl extends BaseServiceImpl<JkwyRelation> imple
         return jkwyRelationDao;
     }
 
+    
+    /**
+     * 查询未购买套餐的亲属
+     * @param jkwyRelation
+     * @return
+     */
+    public List<JkwyRelation> getUserRelationIsNotOrder(JkwyRelation jkwyRelation){
+    	return jkwyRelationDao.getUserRelationIsNotOrder(jkwyRelation);
+    }
+    
     /**
      * 查询用户亲属
      * @param jkwyRelation

@@ -53,7 +53,7 @@ function addLogistics(id){
 				data:$('#logistics').serialize(),
 				dataType: "json",
 				success: function(data) {
-					location.reload();
+					window.location.reload();
 				}
 		 }); 
 		}	

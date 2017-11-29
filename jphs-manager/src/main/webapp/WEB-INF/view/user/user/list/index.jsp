@@ -13,7 +13,9 @@
 
 <div class="marage_right_content">
 	<!-- 左对齐按钮 -->
-	<button type="button" class="public-info" data-toggle="modal" data-target="#myModal">导出</button>
+	<jphs:hasPermission url="/user/getExcel.jhtml">
+		<button type="button" class="public-info" data-toggle="modal" data-target="#myModal">导出</button>
+	</jphs:hasPermission>
 	<!-- data-toggle="modal" data-target="#myModal" onclick="putcode();" -->
 	<!-- 右对齐按钮 -->
 	<jsp:include page="list.jsp"></jsp:include>

@@ -1,10 +1,10 @@
 package com.jinpaihushi.jphs.nurse.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,8 +22,11 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jinpaihushi.jphs.goods.model.Grade;
 import com.jinpaihushi.jphs.nurse.model.Nurse;
+import com.jinpaihushi.jphs.nurse.model.NurseJobtitle;
+import com.jinpaihushi.jphs.nurse.service.NurseJobtitleService;
 import com.jinpaihushi.jphs.nurse.service.NurseService;
 import com.jinpaihushi.jphs.price.service.PriceNurseService;
+import com.jinpaihushi.jphs.skills.service.SkillsService;
 import com.jinpaihushi.jphs.user.model.UserAddress;
 import com.jinpaihushi.jphs.user.service.UserAddressService;
 import com.jinpaihushi.jphs.worktime.model.Worktime;
@@ -43,6 +46,12 @@ public class NurseController {
 
     @Autowired
     private UserAddressService userAddressService;
+
+    @Autowired
+    NurseJobtitleService nurseJobtitleService;
+
+    @Autowired
+    SkillsService skillsService;
 
     @Autowired
     private NurseService nurseService;
@@ -106,6 +115,21 @@ public class NurseController {
                 serviceNumber = a * ((int) Math.pow(10, serviceNumber.length() - 1)) + "+";
                 basicInfo.get(0).put("serviceNumber", serviceNumber);
             }
+            //护士的技能标签
+            List<Map<String, Object>> skills_list_re = new ArrayList<Map<String, Object>>();
+            NurseJobtitle nurseJobtitle = new NurseJobtitle();
+            nurseJobtitle.setStatus(1);
+            nurseJobtitle.setCreatorId(userId);
+            List<NurseJobtitle> nurseJobtitle_list = nurseJobtitleService.list(nurseJobtitle);
+            if (nurseJobtitle_list != null && nurseJobtitle_list.size() > 0) {
+                for (int a = 0; a < nurseJobtitle_list.size(); a++) {
+                    Map<String, Object> map = new HashMap<String, Object>();
+                    map.put("nurseId", userId);
+                    map.put("type", nurseJobtitle_list.get(a).getType());
+                    List<Map<String, Object>> skills_list = skillsService.getNurseSkills(map);
+                    skills_list_re.addAll(skills_list);
+                }
+            }
             // 服务项目
             List<Map<String, Object>> serviceItems = priceNurseService.getServiceItems(userId);
             // 工作时间
@@ -120,6 +144,7 @@ public class NurseController {
             result.put("basicInfo", basicInfo);
             result.put("serviceItems", serviceItems);
             result.put("worktime", worktime);
+            result.put("skills", skills_list_re);
             return JSONUtil.toJSONResult(1, "操作成功！", result);
         }
         catch (Exception e) {
@@ -356,7 +381,7 @@ public class NurseController {
         return null;
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         System.out.println("请输入数字");
         Scanner sc = new Scanner(System.in);
         String ac = sc.next();
@@ -364,5 +389,5 @@ public class NurseController {
         System.out.println(ac.substring(0, 1));
         System.out.println(Integer.parseInt(ac) / (Math.pow(10, ac.length() - 1)));
         System.out.println(Math.pow(10, 3));
-    }
+    }*/
 }

@@ -77,12 +77,16 @@
 							<a onclick="byauditid('${e.id}');" data-toggle="modal" data-target="#myModal">
 								<img style="width: 20px;height: 20px;" src="/static/images/audit.png">
 							</a> --%>
+							<jphs:hasPermission url="/information/evaluate/redirectUpdate.jhtml">
 							<a onclick="redirectUpdatePage('${e.id}')">
 								<img style="width: 20px;height: 20px;"  src="/static/images/audit.png">
 							</a>
+							</jphs:hasPermission>
+							<jphs:hasPermission url="/information/evaluate/detail.jhtml">
 							<a onclick="redirectDetailPage('${e.id}')">
 								<img src="/static/images/chakan.png">
 							</a>								
+							</jphs:hasPermission>
 							<%-- <a onclick="deleteById('${e.id}')">
 								<img src="/static/images/shanchu.png">
 							</a> --%>

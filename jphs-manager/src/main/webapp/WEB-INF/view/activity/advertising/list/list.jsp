@@ -39,7 +39,7 @@
 										<c:if test="${e.status == 0}">禁用</c:if>
 								</td>
 								<td>
-								
+								<jphs:hasPermission url="/advertising/delete.jhtml">
 								<c:if test="${e.status == 0}">
 									<a onclick="deleteById('${e.id}','1')"> 
 											<img style="width: 20px;height: 20px;" src="/static/images/blockup.png">
@@ -50,7 +50,7 @@
 										<img style="width: 20px;height: 20px;" src="/static/images/startup.png">
 									</a>
 								</c:if>
-								
+								</jphs:hasPermission>
 								<jphs:hasPermission url="/advertising/detail.jhtml">
 								<a onclick="redirectDetailPage('${e.id}')">
 									<img src="/static/images/chakan.png">

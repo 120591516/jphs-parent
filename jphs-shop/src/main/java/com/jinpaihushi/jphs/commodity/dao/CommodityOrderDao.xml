@@ -1047,6 +1047,19 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		ORDER BY
 			create_time DESC
 	</select>
+	
+	<select id="getIndexNumber" resultType="java.lang.Integer">
+		SELECT
+			COUNT(*) countNum
+		FROM
+			`commodity_order` co
+		WHERE co.create_time BETWEEN #{startTime} AND #{endTime}
+		AND co.creator_id =#{userId}
+		AND co.activity_promotion_id = #{activityId}
+		AND co.`schedule` &lt; 5
+		AND co.`status`=1 
+	</select>
+	
 	<select id="getSendTransaction" resultType="java.util.HashMap">
 		SELECT
 			co.id,

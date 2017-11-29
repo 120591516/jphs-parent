@@ -1,5 +1,7 @@
 package com.jinpaihushi.jphs.sms.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.jinpaihushi.controller.BaseController;
 import com.jinpaihushi.jphs.sms.model.SmsHistory;
@@ -25,7 +28,11 @@ import com.jinpaihushi.jphs.sms.service.SmsTemplateService;
 import com.jinpaihushi.jphs.system.model.SystemUser;
 import com.jinpaihushi.jphs.system.service.DoPostSmsService;
 import com.jinpaihushi.service.BaseService;
+import com.jinpaihushi.util.POIUtil;
 import com.jinpaihushi.utils.PageInfos;
+
+import net.sf.json.JSONObject;
+
 import com.github.pagehelper.Page;
 
 /**
@@ -178,6 +185,38 @@ public class SmsHistoryController extends BaseController<SmsHistory> {
 		
 		return "redirect:/sms/history/index.jhtml";
 	}
+	
+	@ResponseBody
+	@RequestMapping(name = "读取手机号", path = "/readFile.json")
+	public JSONObject readFile(@RequestParam("file") MultipartFile  file) {
+		String phone="";
+		JSONObject js =new JSONObject();
+		//获取文件后缀(不支持其他文件)
+		//1.execle
+		//2.txt
+		System.out.println(file.getOriginalFilename());
+		 String prefix=file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
+		 if(!prefix.equals("xlsx"))
+		 {
+			 js.put("message", "格式不支持！");
+			 js.put("phone", "");
+			 return js;
+		 }
+		try {
+				String phone_old=POIUtil.readExcelToSting(file);
+				phone=phone_old.substring(0,phone_old.length()-1);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String phoneLength []=phone.split(",");
+		 js.put("message", "已成功导入"+(phoneLength.length+1)+"条手机号码。");
+		 js.put("phone", phone);
+		
+		return js;
+	}
+	
 	
 	
 

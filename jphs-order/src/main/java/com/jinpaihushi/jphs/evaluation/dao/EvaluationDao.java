@@ -25,4 +25,11 @@ public interface EvaluationDao extends BaseDao<Evaluation> {
 	
 	List<Evaluation> listInfo(Evaluation evaluation);
 	
+	/**
+	 * 查询评价数目
+	 * @param evaluation
+	 * @return
+	 */
+	Evaluation getListCountLevel(Evaluation evaluation);
+	
 }

@@ -1,9 +1,11 @@
 package com.jinpaihushi.jphs.commodity.dao;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.github.pagehelper.Page;
@@ -50,4 +52,15 @@ public interface CommodityOrderDao extends BaseDao<CommodityOrder> {
      * @return
      */
     List<Map<String, Object>> getSendTransaction();
+    
+    /**
+     * 查询有效订单数量
+     * @param activityId
+     * @param userId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    Integer getIndexNumber(@Param("activityId") String activityId, @Param("userId") String userId,
+            @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 }

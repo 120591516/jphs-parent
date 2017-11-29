@@ -13,7 +13,9 @@
 	action="/information/channel/insert.jhtml">
 	<div class="marage_right_content">
 		<div class="clearfix">
-			<button type="submit" class="public-info public_btn public_btn_left" data-role="save-btn">保存</button>
+			<jphs:hasPermission url="/information/channel/insert.jhtml">
+				<button type="submit" class="public-info public_btn public_btn_left" data-role="save-btn">保存</button>
+			</jphs:hasPermission>
 			<input type="button" class="public-info public_btn public_btn_left"
 			name="button1" id="button1" value="返回" onclick="history.go(-1)" />
 		</div>

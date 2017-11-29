@@ -54,7 +54,7 @@
 				<img alt="" height="200" width="200" id="moveurls"
 					src="${wap_image.url}" />
 				<div>
-					尺寸 140*140 比例（1：1）<br>*&nbsp;图片格式必须为.png格式
+					尺寸 140*140 比例（1：1）<br>*&nbsp;图片格式必须为.jpg，.png格式
 				</div>
 				<input class="input-file" type="file" name="myfiles" id="moveurl_s"
 					onchange="ajaxFileUpload('moveurl_s','moveurl');" /> <input
@@ -70,7 +70,7 @@
 				<img alt="" height="200" width="200" id="pcurls"
 					src="${pc_image.url}" />
 				<div>
-					尺寸 360*350 <br>*&nbsp;图片格式必须为.png格式
+					尺寸 360*350 <br>*&nbsp;图片格式必须为.jpg，.png格式
 				</div>
 				<input class="input-file" type="file" name="myfiles" id="pcurl_s"
 					onchange="ajaxFileUpload('pcurl_s','pcurl');" /> <input

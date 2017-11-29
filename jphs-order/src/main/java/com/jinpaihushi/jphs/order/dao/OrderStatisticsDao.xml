@@ -118,7 +118,15 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		SELECT
 			CASE
 		WHEN LENGTH(oo.address) > 6 THEN
-			SUBSTR(oo.address, 5, 2)
+				SUBSTR(
+				SUBSTRING_INDEX(
+					SUBSTRING_INDEX(oo.address, ',', '2'),
+					',',
+					'-1'
+				),
+				1,
+				2
+			)
 		ELSE
 			oo.address
 		END AS city,

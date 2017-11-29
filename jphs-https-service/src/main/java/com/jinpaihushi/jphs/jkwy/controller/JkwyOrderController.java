@@ -1,7 +1,5 @@
 package com.jinpaihushi.jphs.jkwy.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jinpaihushi.jphs.jkwy.model.JkwyOrder;
-import com.jinpaihushi.jphs.jkwy.model.JkwyPackagePrice;
 import com.jinpaihushi.jphs.jkwy.service.JkwyOrderService;
 import com.jinpaihushi.utils.JSONUtil;
 import com.jinpaihushi.utils.Util;
@@ -48,7 +45,7 @@ public class JkwyOrderController {
             }
             JkwyOrder jkwyOrder = new JkwyOrder();
             jkwyOrder.setCreatorId(userId);
-            List<JkwyPackagePrice> jkwyPackagePriceList = jkwyOrderService.getHealthyArchives(jkwyOrder);
+            JSONObject jkwyPackagePriceList = jkwyOrderService.getHealthyArchives(jkwyOrder);
             return JSONUtil.toJSONResult(1, "成功", jkwyPackagePriceList);
 		} catch (Exception e) {
 			Util.failLog.error("jkwy.order.getHealthyArchives.json userId="+userId, e);

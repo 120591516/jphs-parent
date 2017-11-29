@@ -374,6 +374,29 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		AND o.`status` =1 
 	</select>
 	
+	<select id="getJkwyOrderNumberActivityPromotion" resultType="java.lang.Integer">
+		SELECT
+			COUNT(*) countNum
+		FROM `JKWY_ORDER` JO
+		WHERE JO.create_time BETWEEN #{startTime} AND #{endTime}
+		AND JO.creator_id =  #{userId}
+		AND JO.activity_promotion_id = #{activityId}
+		AND JO.`schedule` != 1 
+		AND JO.`status` =0  
+	</select>
+	
+	<select id="getIndexNumberCommodityOrder" resultType="java.lang.Integer">
+		SELECT
+			COUNT(*) countNum
+		FROM
+			`commodity_order` co
+		WHERE co.create_time BETWEEN #{startTime} AND #{endTime}
+		AND co.creator_id =#{userId}
+		AND co.activity_promotion_id = #{activityId}
+		AND co.`schedule` &lt; 5
+		AND co.`status`=1 
+	</select>
+	
 	<select id="loadById" resultMap="activityPromotion">
 		SELECT <include refid="field"/>,G.title goodsTitle,C.title commodityTitle,P.name platformName,S.name siteName 
 		FROM `ACTIVITY_PROMOTION` AP 

@@ -32,7 +32,7 @@
 								<c:if test="${e.status == 0}"><span style="color: #F0BB1C;">已停用</span></c:if>	
 							</td>
 							<td>
-							
+							<jphs:hasPermission url="/information/channel/delete.jhtml">
 							<c:if test="${e.status == 1}">
 								<a onclick="deleteById('${e.id}','0')">
 									<img style="width: 20px;height: 20px;" src="/static/images/startup.png">
@@ -43,14 +43,18 @@
 									<img style="width: 20px;height: 20px;" src="/static/images/blockup.png">
 								</a>
 							</c:if>	
-							
+							</jphs:hasPermission>
+							<jphs:hasPermission url="/information/channel/redirectUpdate.jhtml">
 							<a onclick="redirectUpdatePage('${e.id}')">
 								<img  src="/static/images/xiugai.png">
 							</a>
+							</jphs:hasPermission>
 												
+							<jphs:hasPermission url="/information/channel/delete.jhtml">
 							<a onclick="deleteById('${e.id}','-1')"> 
 								<img style="width: 20px;height: 20px;" src="/static/images/shanchu.png">
 							</a>
+							</jphs:hasPermission>
 							</td>
 						</tr>
 					</c:forEach>
