@@ -17,4 +17,10 @@ public interface AnalysisTaskService extends BaseService<AnalysisTask> {
      */
     AnalysisTask queryTaskToStart();
 
+    /**
+     * 查询需要停止的任务
+     * @return 日志任务对象
+     */
+    AnalysisTask queryTaskToStop();
+
 }

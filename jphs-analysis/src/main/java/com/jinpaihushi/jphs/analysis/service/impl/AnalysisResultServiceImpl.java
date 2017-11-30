@@ -16,14 +16,14 @@ import com.jinpaihushi.service.impl.BaseServiceImpl;
  * @version 1.0
  */
 @Service("analysisResultService")
-public class AnalysisResultServiceImpl extends BaseServiceImpl<AnalysisResult> implements AnalysisResultService{
+public class AnalysisResultServiceImpl extends BaseServiceImpl<AnalysisResult> implements AnalysisResultService {
 
-	@Autowired
-	private AnalysisResultDao analysisResultDao;
-	
-	@Override
-	protected BaseDao<AnalysisResult> getDao(){
-		return analysisResultDao;
-	}
+    @Autowired
+    private AnalysisResultDao analysisResultDao;
+
+    @Override
+    protected BaseDao<AnalysisResult> getDao() {
+        return analysisResultDao;
+    }
 
 }

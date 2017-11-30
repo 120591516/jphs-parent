@@ -31,4 +31,9 @@ public class AnalysisTaskServiceImpl extends BaseServiceImpl<AnalysisTask> imple
         return analysisTaskDao.queryTaskToStart();
     }
 
+    @Override
+    public AnalysisTask queryTaskToStop() {
+        return analysisTaskDao.queryTaskToStop();
+    }
+
 }

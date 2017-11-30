@@ -4,26 +4,28 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
 <!--
 	author	:	wangwenteng
-	date	:	2017-11-21 10:44:26
+	date	:	2017-11-30 14:09:03
 	version	:	1.0
 -->
 <mapper namespace="com.jinpaihushi.jphs.analysis.dao.AnalysisResultDao">
 	
 	<sql id="field">
 		AR.id, AR.analysis_task_id, AR.ip, AR.province, 
-		AR.visit_time, AR.create_time
+		AR.visit_time, AR.startTime, AR.endTime, AR.create_time
 	</sql>
 
 	<sql id="fieldGlobal">
 		AR.id AR_id, AR.analysis_task_id AR_analysis_task_id, 
 		AR.ip AR_ip, AR.province AR_province, 
-		AR.visit_time AR_visit_time, AR.create_time AR_create_time
+		AR.visit_time AR_visit_time, AR.startTime AR_startTime, 
+		AR.endTime AR_endTime, AR.create_time AR_create_time
 	</sql>
 	
 	<sql id="fieldWithAlias">
 		AR.id id, AR.analysis_task_id analysisTaskId, 
 		AR.ip ip, AR.province province, 
-		AR.visit_time visitTime, AR.create_time createTime
+		AR.visit_time visitTime, AR.startTime starttime, 
+		AR.endTime endtime, AR.create_time createTime
 	</sql>
 	
 	<sql id="condition">
@@ -41,6 +43,12 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		</if>
 		<if test="visitTime!=null">
 			AND AR.visit_time=#{visitTime}
+		</if>
+		<if test="starttime!=null">
+			AND AR.startTime=#{starttime}
+		</if>
+		<if test="endtime!=null">
+			AND AR.endTime=#{endtime}
 		</if>
 		<if test="createTime!=null">
 			AND AR.create_time=#{createTime}
@@ -70,6 +78,12 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			<if test="visitTime!=null">
 				AND AR.visit_time=#{visitTime}
 			</if>
+			<if test="starttime!=null">
+				AND AR.startTime=#{starttime}
+			</if>
+			<if test="endtime!=null">
+				AND AR.endTime=#{endtime}
+			</if>
 			<if test="createTime!=null">
 				AND AR.create_time=#{createTime}
 			</if>
@@ -93,6 +107,12 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
            <if test="visitTime!=null">
 				AR.visit_time=#{visitTime}, 
 		   </if>
+           <if test="starttime!=null">
+				AR.startTime=#{starttime}, 
+		   </if>
+           <if test="endtime!=null">
+				AR.endTime=#{endtime}, 
+		   </if>
            <if test="createTime!=null">
 				AR.create_time=#{createTime}, 
 		   </if>
@@ -111,6 +131,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<result property="ip" column="ip" javaType="String" jdbcType="VARCHAR"></result>
 		<result property="province" column="province" javaType="String" jdbcType="VARCHAR"></result>
 		<result property="visitTime" column="visit_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="starttime" column="startTime" javaType="Date" jdbcType="TIME"></result>
+		<result property="endtime" column="endTime" javaType="Date" jdbcType="TIME"></result>
 		<result property="createTime" column="create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
 	</resultMap>
 	
@@ -120,6 +142,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<result property="ip" column="AR_ip" javaType="String" jdbcType="VARCHAR"></result>
 		<result property="province" column="AR_province" javaType="String" jdbcType="VARCHAR"></result>
 		<result property="visitTime" column="AR_visit_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="starttime" column="AR_startTime" javaType="Date" jdbcType="TIME"></result>
+		<result property="endtime" column="AR_endTime" javaType="Date" jdbcType="TIME"></result>
 		<result property="createTime" column="AR_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
 	</resultMap>
 	
@@ -127,11 +151,13 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		INSERT INTO `ANALYSIS_RESULT`(
 			id, analysis_task_id, 
 			ip, province, 
-			visit_time, create_time
+			visit_time, startTime, 
+			endTime, create_time
 		)VALUES(
 			#{id,jdbcType=VARCHAR}, #{analysisTaskId,jdbcType=VARCHAR}, 
 			#{ip,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
-			#{visitTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}
+			#{visitTime,jdbcType=TIMESTAMP}, #{starttime,jdbcType=TIME}, 
+			#{endtime,jdbcType=TIME}, #{createTime,jdbcType=TIMESTAMP}
 		)
 	</insert>
 	
@@ -141,7 +167,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         INSERT INTO `ANALYSIS_RESULT`(
 			id, analysis_task_id, 
 			ip, province, 
-			visit_time, create_time
+			visit_time, startTime, 
+			endTime, create_time
         )]]>
        	VALUES
 		<foreach collection="list" item="item" index="index"
@@ -149,7 +176,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			(
 			#{item.id,jdbcType=VARCHAR}, #{item.analysisTaskId,jdbcType=VARCHAR}, 
 			#{item.ip,jdbcType=VARCHAR}, #{item.province,jdbcType=VARCHAR}, 
-			#{item.visitTime,jdbcType=TIMESTAMP}, #{item.createTime,jdbcType=TIMESTAMP}
+			#{item.visitTime,jdbcType=TIMESTAMP}, #{item.starttime,jdbcType=TIME}, 
+			#{item.endtime,jdbcType=TIME}, #{item.createTime,jdbcType=TIMESTAMP}
 			)
 		</foreach>
 	</insert>

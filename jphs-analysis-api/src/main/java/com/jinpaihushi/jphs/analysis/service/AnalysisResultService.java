@@ -11,6 +11,4 @@ import com.jinpaihushi.service.BaseService;
  */
 public interface AnalysisResultService extends BaseService<AnalysisResult> {
 
-	
-
 }

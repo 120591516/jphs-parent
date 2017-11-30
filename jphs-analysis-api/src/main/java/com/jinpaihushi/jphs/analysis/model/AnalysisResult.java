@@ -17,7 +17,7 @@ import java.util.Date;
  * createTime : 创建时间	
  * 
  * @author wangwenteng
- * @date 2017-11-21 10:44:26
+ * @date 2017-11-30 14:09:03
  * @company jinpaihushi
  * @version 1.0
  */
@@ -40,6 +40,12 @@ public class AnalysisResult extends BaseModel implements Predicate<AnalysisResul
 
     /** 访问时间 */
 	private Date visitTime;
+
+    /** 开始时间 */
+	private Date starttime;
+
+    /** 结束时间 */
+	private Date endtime;
 
 	public AnalysisResult(){}
 
@@ -103,6 +109,34 @@ public class AnalysisResult extends BaseModel implements Predicate<AnalysisResul
     	this.visitTime = visitTime;
     }
 
+	/**
+	 * 获取开始时间
+	 */
+	public Date getStarttime() {
+    	return starttime;
+    }
+  	
+	/**
+	 * 设置开始时间
+	 */
+	public void setStarttime(Date starttime) {
+    	this.starttime = starttime;
+    }
+
+	/**
+	 * 获取结束时间
+	 */
+	public Date getEndtime() {
+    	return endtime;
+    }
+  	
+	/**
+	 * 设置结束时间
+	 */
+	public void setEndtime(Date endtime) {
+    	this.endtime = endtime;
+    }
+
     public String toString() {
 		return new StringBuilder().append("AnalysisResult{").
 			append("id=").append(id).
@@ -110,6 +144,8 @@ public class AnalysisResult extends BaseModel implements Predicate<AnalysisResul
 			append(",ip=").append(ip).
 			append(",province=").append(province).
 			append(",visitTime=").append(visitTime).
+			append(",starttime=").append(starttime).
+			append(",endtime=").append(endtime).
 			append(",createTime=").append(createTime).
 			append('}').toString();
     }
@@ -117,7 +153,7 @@ public class AnalysisResult extends BaseModel implements Predicate<AnalysisResul
     /**
 	 * 复制字段：
 	 * id, analysisTaskId, ip, province, 
-	 * visitTime, createTime
+	 * visitTime, starttime, endtime, createTime
 	 */
 	public AnalysisResult copy(){
 		AnalysisResult analysisResult = new AnalysisResult();
@@ -126,6 +162,8 @@ public class AnalysisResult extends BaseModel implements Predicate<AnalysisResul
      	analysisResult.ip = this.ip;
      	analysisResult.province = this.province;
      	analysisResult.visitTime = this.visitTime;
+     	analysisResult.starttime = this.starttime;
+     	analysisResult.endtime = this.endtime;
      	analysisResult.createTime = this.createTime;
 		return analysisResult;
 	}
@@ -133,7 +171,7 @@ public class AnalysisResult extends BaseModel implements Predicate<AnalysisResul
 	/**
 	 * 比较字段：
 	 * id, analysisTaskId, ip, province, 
-	 * visitTime, createTime
+	 * visitTime, starttime, endtime, createTime
 	 */
 	@Override
 	public boolean test(AnalysisResult t) {
@@ -143,6 +181,8 @@ public class AnalysisResult extends BaseModel implements Predicate<AnalysisResul
 				&& (this.ip == null || this.ip.equals(t.ip))
 				&& (this.province == null || this.province.equals(t.province))
 				&& (this.visitTime == null || this.visitTime.equals(t.visitTime))
+				&& (this.starttime == null || this.starttime.equals(t.starttime))
+				&& (this.endtime == null || this.endtime.equals(t.endtime))
 				&& (this.createTime == null || this.createTime.equals(t.createTime))
 		;
 	}
@@ -165,6 +205,12 @@ public class AnalysisResult extends BaseModel implements Predicate<AnalysisResul
 		}
 		if (this.visitTime != null) {
 			element.visitTime = this.visitTime;
+		}
+		if (this.starttime != null) {
+			element.starttime = this.starttime;
+		}
+		if (this.endtime != null) {
+			element.endtime = this.endtime;
 		}
 		if (this.createTime != null) {
 			element.createTime = this.createTime;
