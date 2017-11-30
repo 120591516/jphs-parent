@@ -12,7 +12,7 @@
 			<th>优惠金额</th>
 			<th>活动id</th>
 			<th>活动优惠价格</th>
-			<th>推广码</th>
+			<th>推广码<br><span style="color:red;">推荐人ID</span></th>
 			<th>原价</th>
 			<th>销售价</th>
 			<th>支付价</th>
@@ -33,7 +33,7 @@
 							<td><c:out value="${e.voucherPrice}"/></td>
 							<td><c:out value="${e.activityPromotionId}"/></td>
 							<td><c:out value="${e.activityPromotionPrice}"/></td>
-							<td><c:out value="${e.code}"/></td>
+							<td><c:out value="${e.code}"/><br><span style="color:red;"><c:out value="${e.recommendId}"/></span></td>
 							<td><c:out value="${e.oldPrice}"/></td>
 							<td><c:out value="${e.price}"/></td>
 							<td><c:out value="${e.payPrice}"/></td>

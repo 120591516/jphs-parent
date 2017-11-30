@@ -33,6 +33,8 @@ import com.jinpaihushi.jphs.commodity.model.Commodity;
 import com.jinpaihushi.jphs.commodity.model.CommodityPrice;
 import com.jinpaihushi.jphs.goods.dao.GoodsDao;
 import com.jinpaihushi.jphs.goods.model.Goods;
+import com.jinpaihushi.jphs.jkwy.model.JkwyPackage;
+import com.jinpaihushi.jphs.jkwy.service.JkwyPackageService;
 import com.jinpaihushi.jphs.price.dao.PriceNurseDao;
 import com.jinpaihushi.jphs.price.dao.PricePartDao;
 import com.jinpaihushi.jphs.price.model.PriceNurse;
@@ -82,7 +84,7 @@ public class VoucherServiceImpl extends BaseServiceImpl<Voucher> implements Vouc
     @Autowired
     private VoucherRepertoryDao voucherRepertoryDao;
 
-//    private JkwyPackagePriceDao jkwyPackagePriceDao;
+    //    private JkwyPackagePriceDao jkwyPackagePriceDao;
     @Autowired
     private PriceNurseDao priceNurseDao;
 
@@ -102,6 +104,9 @@ public class VoucherServiceImpl extends BaseServiceImpl<Voucher> implements Vouc
     private CarDao carDao;
 
     @Autowired
+    private JkwyPackageService jkwyPackageService;
+
+    @Autowired
     private UserDao userDao;
 
     @Autowired
@@ -114,7 +119,6 @@ public class VoucherServiceImpl extends BaseServiceImpl<Voucher> implements Vouc
 
     @Override
     public Page<Voucher> getList(Voucher voucher) {
-        // TODO Auto-generated method stub
         return voucherDao.getList(voucher);
     }
 
@@ -332,19 +336,20 @@ public class VoucherServiceImpl extends BaseServiceImpl<Voucher> implements Vouc
             }
 
             return listMap;
-        } else if (type == 5){
-        	
-        	Map<String,Object> map_se = new HashMap<String,Object>();
-        	map_se.put("id", pricePartId);
-        	Map<String,Object> map_price = voucherRepertoryDao.getJkwyPackagePriceVoucher(map_se);
-//        	pricePartId
-//        	goodsId
-        	if(!map_price.containsKey("price")){
-        		return null;
-        	}
-        	Double salePrice = Double.parseDouble(map_price.get("price").toString());
-        	
-        	// 获取用户的优惠券
+        }
+        else if (type == 5) {
+
+            Map<String, Object> map_se = new HashMap<String, Object>();
+            map_se.put("id", pricePartId);
+            Map<String, Object> map_price = voucherRepertoryDao.getJkwyPackagePriceVoucher(map_se);
+            //        	pricePartId
+            //        	goodsId
+            if (!map_price.containsKey("price")) {
+                return null;
+            }
+            Double salePrice = Double.parseDouble(map_price.get("price").toString());
+
+            // 获取用户的优惠券
             Map<String, Object> map = new HashMap<>();
             map.put("userId", userId);
             map.put("goodsId", goodsId);
@@ -443,7 +448,19 @@ public class VoucherServiceImpl extends BaseServiceImpl<Voucher> implements Vouc
                     productName += "、" + "通用券";
                 }
             }
-            map2.put("productName", productName.substring(1));
+            if (map2.get("product_type").equals("3")) {
+                String productIds = (String) map2.get("product_id");
+                if (productIds != null) {
+                    String[] productId = productIds.split(",");
+                    for (int i = 0; i < productId.length; i++) {
+                        JkwyPackage commodity = jkwyPackageService.loadById(productId[i]);
+                        if (commodity != null) {
+                            productName += "、" + commodity.getTitle();
+                        }
+                    }
+                }
+            }
+            map2.put("productName", productName.length() > 1 ? productName.substring(1) : "");
         }
         long endTime2 = System.currentTimeMillis();
         logger.info("for循环" + (endTime2 - endTime));
@@ -472,7 +489,7 @@ public class VoucherServiceImpl extends BaseServiceImpl<Voucher> implements Vouc
         return userAllVocher;
     }
 
-	@Override
+    @Override
     public Double getGoodsPrice(String voucherUseId, String pricePartId, String nurseId, Integer type) {
 
         Double price = null;
@@ -493,32 +510,34 @@ public class VoucherServiceImpl extends BaseServiceImpl<Voucher> implements Vouc
                     price = priceNurse.getPrice();
                 }
             }
-        } else if(type == 4){
-        	Double prices = 0d;
-        	String [] pricePartId_arr = pricePartId.split(",");
-        	for(int p=0;p<pricePartId_arr.length;p++){
-        		if(StringUtils.isEmpty(pricePartId_arr[p])){
-        			continue;
-        		}
-        		Car car = carDao.loadById(pricePartId_arr[p]);
-        		int carNumber = car.getNumber();
-        		CommodityPrice commodityPrice = commodityPriceDao.loadById(car.getCommodityPriceId());
-        		prices += commodityPrice.getPrice()*carNumber;
-        	}
-        	price = prices;
-        }else if(type == 5){
-        	Map<String,Object> map_se = new HashMap<String,Object>();
-        	map_se.put("id", pricePartId);
-        	Map<String,Object> map_price = voucherRepertoryDao.getJkwyPackagePriceVoucher(map_se);
-        	if(map_price == null){
-        		return null;
-        	}
-//        	pricePartId
-//        	goodsId
-        	if(!map_price.containsKey("price")){
-        		return null;
-        	}
-        	price = Double.parseDouble(map_price.get("price").toString());
+        }
+        else if (type == 4) {
+            Double prices = 0d;
+            String[] pricePartId_arr = pricePartId.split(",");
+            for (int p = 0; p < pricePartId_arr.length; p++) {
+                if (StringUtils.isEmpty(pricePartId_arr[p])) {
+                    continue;
+                }
+                Car car = carDao.loadById(pricePartId_arr[p]);
+                int carNumber = car.getNumber();
+                CommodityPrice commodityPrice = commodityPriceDao.loadById(car.getCommodityPriceId());
+                prices += commodityPrice.getPrice() * carNumber;
+            }
+            price = prices;
+        }
+        else if (type == 5) {
+            Map<String, Object> map_se = new HashMap<String, Object>();
+            map_se.put("id", pricePartId);
+            Map<String, Object> map_price = voucherRepertoryDao.getJkwyPackagePriceVoucher(map_se);
+            if (map_price == null) {
+                return null;
+            }
+            //        	pricePartId
+            //        	goodsId
+            if (!map_price.containsKey("price")) {
+                return null;
+            }
+            price = Double.parseDouble(map_price.get("price").toString());
         }
 
         // 获取优惠券的信息

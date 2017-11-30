@@ -1,0 +1,251 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+	author	:	wangwenteng
+	date	:	2017-11-30 09:24:38
+	version	:	1.0
+-->
+<mapper namespace="com.jinpaihushi.jphs.jkwy.dao.JkwyCodeDao">
+	
+	<sql id="field">
+		JC.id, JC.code, JC.recommend_id, JC.recommend_name, 
+		JC.recommend_phone, JC.status, JC.create_time, JC.creator_id, 
+		JC.creator_name
+	</sql>
+
+	<sql id="fieldGlobal">
+		JC.id JC_id, JC.code JC_code, 
+		JC.recommend_id JC_recommend_id, JC.recommend_name JC_recommend_name, 
+		JC.recommend_phone JC_recommend_phone, JC.status JC_status, 
+		JC.create_time JC_create_time, JC.creator_id JC_creator_id, 
+		JC.creator_name JC_creator_name
+	</sql>
+	
+	<sql id="fieldWithAlias">
+		JC.id id, JC.code code, 
+		JC.recommend_id recommendId, JC.recommend_name recommendName, 
+		JC.recommend_phone recommendPhone, JC.status status, 
+		JC.create_time createTime, JC.creator_id creatorId, 
+		JC.creator_name creatorName
+	</sql>
+	
+	<sql id="condition">
+		<if test="id!=null and id!=''">
+			AND JC.id=#{id}
+		</if>
+		<if test="code!=null and code!=''">
+			AND JC.code=#{code}
+		</if>
+		<if test="recommendId!=null and recommendId!=''">
+			AND JC.recommend_id=#{recommendId}
+		</if>
+		<if test="recommendName!=null and recommendName!=''">
+			AND JC.recommend_name=#{recommendName}
+		</if>
+		<if test="recommendPhone!=null and recommendPhone!=''">
+			AND JC.recommend_phone=#{recommendPhone}
+		</if>
+		<if test="status!=null">
+			AND JC.status=#{status}
+		</if>
+		<if test="createTime!=null">
+			AND JC.create_time=#{createTime}
+		</if>
+		<if test="creatorId!=null and creatorId!=''">
+			AND JC.creator_id=#{creatorId}
+		</if>
+		<if test="creatorName!=null and creatorName!=''">
+			AND JC.creator_name=#{creatorName}
+		</if>
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<include refid="condition"/>
+		</where>
+	</sql>
+	
+	<sql id="queryWhere">
+		<where>
+			<if test="id!=null and id!=''">
+				AND JC.id LIKE CONCAT('%', #{id}, '%')
+			</if>
+			<if test="code!=null and code!=''">
+				AND JC.code LIKE CONCAT('%', #{code}, '%')
+			</if>
+			<if test="recommendId!=null and recommendId!=''">
+				AND JC.recommend_id LIKE CONCAT('%', #{recommendId}, '%')
+			</if>
+			<if test="recommendName!=null and recommendName!=''">
+				AND JC.recommend_name LIKE CONCAT('%', #{recommendName}, '%')
+			</if>
+			<if test="recommendPhone!=null and recommendPhone!=''">
+				AND JC.recommend_phone LIKE CONCAT('%', #{recommendPhone}, '%')
+			</if>
+			<if test="status!=null">
+				AND JC.status=#{status}
+			</if>
+			<if test="createTime!=null">
+				AND JC.create_time=#{createTime}
+			</if>
+			<if test="creatorId!=null and creatorId!=''">
+				AND JC.creator_id LIKE CONCAT('%', #{creatorId}, '%')
+			</if>
+			<if test="creatorName!=null and creatorName!=''">
+				AND JC.creator_name LIKE CONCAT('%', #{creatorName}, '%')
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="dynamicSet">
+		<set>
+           <if test="id!=null">
+				JC.id=#{id}, 
+		   </if>
+           <if test="code!=null">
+				JC.code=#{code}, 
+		   </if>
+           <if test="recommendId!=null">
+				JC.recommend_id=#{recommendId}, 
+		   </if>
+           <if test="recommendName!=null">
+				JC.recommend_name=#{recommendName}, 
+		   </if>
+           <if test="recommendPhone!=null">
+				JC.recommend_phone=#{recommendPhone}, 
+		   </if>
+           <if test="status!=null">
+				JC.status=#{status}, 
+		   </if>
+           <if test="createTime!=null">
+				JC.create_time=#{createTime}, 
+		   </if>
+           <if test="creatorId!=null">
+				JC.creator_id=#{creatorId}, 
+		   </if>
+           <if test="creatorName!=null">
+				JC.creator_name=#{creatorName}, 
+		   </if>
+		</set>
+	</sql>
+	
+	<sql id="orderby">
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+	</sql>
+
+	<resultMap id="jkwyCode" type="com.jinpaihushi.jphs.jkwy.model.JkwyCode">
+		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="code" column="code" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="recommendId" column="recommend_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="recommendName" column="recommend_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="recommendPhone" column="recommend_phone" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="creator_name" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<resultMap id="jkwyCodeGlobal" type="com.jinpaihushi.jphs.jkwy.model.JkwyCode">
+		<result property="id" column="JC_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="code" column="JC_code" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="recommendId" column="JC_recommend_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="recommendName" column="JC_recommend_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="recommendPhone" column="JC_recommend_phone" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="JC_status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="JC_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="JC_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="JC_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+	</resultMap>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.jinpaihushi.jphs.jkwy.model.JkwyCode">
+		INSERT INTO `JKWY_CODE`(
+			id, code, 
+			recommend_id, recommend_name, 
+			recommend_phone, status, 
+			create_time, creator_id, 
+			creator_name
+		)VALUES(
+			#{id,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
+			#{recommendId,jdbcType=VARCHAR}, #{recommendName,jdbcType=VARCHAR}, 
+			#{recommendPhone,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+			#{createTime,jdbcType=TIMESTAMP}, #{creatorId,jdbcType=VARCHAR}, 
+			#{creatorName,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<insert id="inserts" useGeneratedKeys="false"
+		parameterType="list">
+        <![CDATA[
+        INSERT INTO `JKWY_CODE`(
+			id, code, 
+			recommend_id, recommend_name, 
+			recommend_phone, status, 
+			create_time, creator_id, 
+			creator_name
+        )]]>
+       	VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id,jdbcType=VARCHAR}, #{item.code,jdbcType=VARCHAR}, 
+			#{item.recommendId,jdbcType=VARCHAR}, #{item.recommendName,jdbcType=VARCHAR}, 
+			#{item.recommendPhone,jdbcType=VARCHAR}, #{item.status,jdbcType=INTEGER}, 
+			#{item.createTime,jdbcType=TIMESTAMP}, #{item.creatorId,jdbcType=VARCHAR}, 
+			#{item.creatorName,jdbcType=VARCHAR}
+			)
+		</foreach>
+	</insert>
+	
+	<delete id="deleteById">
+		DELETE JC FROM `JKWY_CODE` JC WHERE JC.ID = #{id} 
+	</delete>
+	
+	<update id="disableById">
+	    UPDATE `JKWY_CODE` JC
+		SET 
+		JC.STATUS = -1
+		WHERE JC.ID = #{id}
+	</update>
+
+	<update id="update">
+		UPDATE `JKWY_CODE` JC
+		<include refid="dynamicSet" /> 
+	    WHERE JC.ID = #{id}
+	</update>
+
+	<select id="load" resultMap="jkwyCode">
+		SELECT <include refid="field"/>
+		FROM `JKWY_CODE` JC
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM `JKWY_CODE` JC
+		<include refid="dynamicWhere" />
+	</select>
+
+	<select id="list" resultMap="jkwyCode">
+		SELECT <include refid="field"/>
+		FROM `JKWY_CODE` JC
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+
+	<select id="query" resultMap="jkwyCode">
+		SELECT <include refid="field"/>
+		FROM `JKWY_CODE` JC
+		<include refid="dynamicWhere" />
+		<include refid="orderby" />
+	</select>
+	
+	<select id="loadById" resultMap="jkwyCode">
+		SELECT <include refid="field"/>
+		FROM `JKWY_CODE` JC
+		WHERE JC.ID = #{id}
+	</select>
+	
+</mapper>

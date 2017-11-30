@@ -512,13 +512,13 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		,`p`.`title`
 		productName
 		FROM
-		`jphs`.`voucher` AS
+		`voucher` AS
 		`v`
-		LEFT JOIN `jphs`.`product` AS
+		LEFT JOIN `product` AS
 		`p`
 		ON (`v`.`product_id` = `p`.`id`)
 		LEFT JOIN
-		`jphs`.`voucher_repertory` AS
+		`voucher_repertory` AS
 		`vr`
 		ON (`v`.`id` =
 		`vr`.`voucher_id`)
@@ -563,6 +563,61 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		GROUP BY `v`.`batch_no`
 		<include refid="orderby" />
 	</select>
+	
+	<select id="getVoucherVoucherRepertorylist" resultMap="getVoucherVoucherRepertorylist">
+		SELECT  V.id V_id,  V.name V_name,V.type V_type,
+		V.product_type V_product_type,V.support_type V_support_type,
+		V.batch_no V_batch_no,
+		V.product_id V_product_id, V.goods_id V_goods_id,
+		V.start_time
+		V_start_time, V.end_time V_end_time,
+		V.activation_start_time
+		V_activation_start_time,
+		V.activation_end_time V_activation_end_time,
+		V.days V_days, V.creator_id V_creator_id, V.creator_name
+		V_creator_name, V.create_time
+		V_create_time, V.status V_status,
+		VR.id VR_id, VR.voucher_id VR_voucher_id, VR.no VR_no,
+		VR.code VR_code, VR.amount VR_amount, VR.condition_amount
+		VR_condition_amount, VR.discount_amount VR_discount_amount, VR.status
+		VR_status  
+		FROM `voucher` V 
+		LEFT JOIN `voucher_repertory` VR ON V.`id`=VR.`voucher_id` AND VR.`status`=0 
+		WHERE V.`batch_no`=#{batchNo} 
+	</select>
+	
+	<resultMap  id="getVoucherVoucherRepertorylist" type="com.jinpaihushi.jphs.voucher.model.Voucher">
+		<result property="id" column="V_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="name" column="V_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="type" column="V_type" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="productType" column="product_type" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="supportType" column="support_type" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="productType" column="V_product_type" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="supportType" column="V_support_type" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="batchNo" column="V_batch_no" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="productId" column="V_product_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="goodsId" column="V_goods_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="startTime" column="V_start_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="endTime" column="V_end_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="activationStartTime" column="V_activation_start_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="activationEndTime" column="V_activation_end_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="days" column="V_days" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="creatorId" column="V_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="V_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="createTime" column="V_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="status" column="V_status" javaType="Integer" jdbcType="INTEGER"></result>
+		<collection property="voucherRepertoryList" ofType="com.jinpaihushi.jphs.voucher.model.VoucherRepertory">
+			<result property="id" column="VR_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="voucherId" column="VR_voucher_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="no" column="VR_no" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="code" column="VR_code" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="amount" column="VR_amount" javaType="Double" jdbcType="DECIMAL"></result>
+			<result property="conditionAmount" column="VR_condition_amount" javaType="Double" jdbcType="DECIMAL"></result>
+			<result property="discountAmount" column="VR_discount_amount" javaType="Double" jdbcType="DECIMAL"></result>
+			<result property="status" column="VR_status" javaType="Integer" jdbcType="INTEGER"></result>
+		</collection>
+	</resultMap>
+	
 	<!-- 
 	userId 用户id
 	type 1.现金卷2.满减卷3.折扣卷

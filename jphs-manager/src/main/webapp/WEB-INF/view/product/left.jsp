@@ -98,6 +98,12 @@
 							src="/static/images/Group7.png" />套餐管理</a>
 					</dd>
 				</jphs:hasPermission>
+				<jphs:hasPermission url="/jkwy/code/index.jhtml">
+					<dd>
+						<a href="/jkwy/code/index.jhtml"><img
+							src="/static/images/Group7.png" />推广人管理</a>
+					</dd>
+				</jphs:hasPermission>
 				<%--<jphs:hasPermission url="/commodity/type/parent/index.jhtml">
 				<dd>
 						<a href="/commodity/type/parent/index.jhtml"><img

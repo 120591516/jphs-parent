@@ -12,9 +12,10 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	<sql id="field">
 		JO.id, JO.no, JO.jkwy_package_id, JO.jkwy_package_price_id, 
 		JO.voucher_user_id, JO.voucher_price, JO.activity_promotion_id, JO.activity_promotion_price, 
-		JO.code, JO.old_price, JO.price, JO.pay_price, 
-		JO.pay_time,JO.schedule, JO.end_time,JO.address, JO.detail_address, 
-		JO.status, JO.create_time, JO.creator_id, JO.creator_name
+		JO.code, JO.recommend_id, JO.old_price, JO.price, 
+		JO.pay_price, JO.schedule, JO.pay_time, JO.end_time, 
+		JO.address, JO.detail_address, JO.status, JO.create_time, 
+		JO.creator_id, JO.creator_name
 	</sql>
 
 	<sql id="fieldGlobal">
@@ -22,9 +23,10 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		JO.jkwy_package_id JO_jkwy_package_id, JO.jkwy_package_price_id JO_jkwy_package_price_id, 
 		JO.voucher_user_id JO_voucher_user_id, JO.voucher_price JO_voucher_price, 
 		JO.activity_promotion_id JO_activity_promotion_id, JO.activity_promotion_price JO_activity_promotion_price, 
-		JO.code JO_code, JO.old_price JO_old_price, 
-		JO.price JO_price, JO.pay_price JO_pay_price, 
-		JO.pay_time JO_pay_time, JO.schedule JO_schedule , JO.end_time JO_end_time, 
+		JO.code JO_code, JO.recommend_id JO_recommend_id, 
+		JO.old_price JO_old_price, JO.price JO_price, 
+		JO.pay_price JO_pay_price, JO.schedule JO_schedule, 
+		JO.pay_time JO_pay_time, JO.end_time JO_end_time, 
 		JO.address JO_address, JO.detail_address JO_detail_address, 
 		JO.status JO_status, JO.create_time JO_create_time, 
 		JO.creator_id JO_creator_id, JO.creator_name JO_creator_name
@@ -35,9 +37,10 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		JO.jkwy_package_id jkwyPackageId, JO.jkwy_package_price_id jkwyPackagePriceId, 
 		JO.voucher_user_id voucherUserId, JO.voucher_price voucherPrice, 
 		JO.activity_promotion_id activityPromotionId, JO.activity_promotion_price activityPromotionPrice, 
-		JO.code code, JO.old_price oldPrice, 
-		JO.price price, JO.pay_price payPrice, 
-		JO.pay_time payTime,JO.schedule schedule, JO.end_time endTime, 
+		JO.code code, JO.recommend_id recommendId, 
+		JO.old_price oldPrice, JO.price price, 
+		JO.pay_price payPrice, JO.schedule schedule, 
+		JO.pay_time payTime, JO.end_time endTime, 
 		JO.address address, JO.detail_address detailAddress, 
 		JO.status status, JO.create_time createTime, 
 		JO.creator_id creatorId, JO.creator_name creatorName
@@ -71,6 +74,9 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<if test="code!=null and code!=''">
 			AND JO.code=#{code}
 		</if>
+		<if test="recommendId!=null and recommendId!=''">
+			AND JO.recommend_id=#{recommendId}
+		</if>
 		<if test="oldPrice!=null">
 			AND JO.old_price=#{oldPrice}
 		</if>
@@ -80,11 +86,11 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<if test="payPrice!=null">
 			AND JO.pay_price=#{payPrice}
 		</if>
-		<if test="payTime!=null">
-			AND JO.pay_time=#{payTime}
-		</if>
 		<if test="schedule!=null">
 			AND JO.schedule=#{schedule}
+		</if>
+		<if test="payTime!=null">
+			AND JO.pay_time=#{payTime}
 		</if>
 		<if test="endTime!=null">
 			AND JO.end_time=#{endTime}
@@ -118,31 +124,34 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	<sql id="queryWhere">
 		<where>
 			<if test="id!=null and id!=''">
-				AND JO.id  =#{id} 
+				AND JO.id LIKE CONCAT('%', #{id}, '%')
 			</if>
 			<if test="no!=null and no!=''">
-				AND JO.no LIKE CONCAT(#{no}, '%')
+				AND JO.no LIKE CONCAT('%', #{no}, '%')
 			</if>
 			<if test="jkwyPackageId!=null and jkwyPackageId!=''">
-				AND JO.jkwy_package_id  = #{jkwyPackageId} 
+				AND JO.jkwy_package_id LIKE CONCAT('%', #{jkwyPackageId}, '%')
 			</if>
 			<if test="jkwyPackagePriceId!=null and jkwyPackagePriceId!=''">
-				AND JO.jkwy_package_price_id = #{jkwyPackagePriceId}
+				AND JO.jkwy_package_price_id LIKE CONCAT('%', #{jkwyPackagePriceId}, '%')
 			</if>
 			<if test="voucherUserId!=null and voucherUserId!=''">
-				AND JO.voucher_user_id = #{voucherUserId}
+				AND JO.voucher_user_id LIKE CONCAT('%', #{voucherUserId}, '%')
 			</if>
 			<if test="voucherPrice!=null">
 				AND JO.voucher_price=#{voucherPrice}
 			</if>
 			<if test="activityPromotionId!=null and activityPromotionId!=''">
-				AND JO.activity_promotion_id = #{activityPromotionId} 
+				AND JO.activity_promotion_id LIKE CONCAT('%', #{activityPromotionId}, '%')
 			</if>
 			<if test="activityPromotionPrice!=null">
 				AND JO.activity_promotion_price=#{activityPromotionPrice}
 			</if>
 			<if test="code!=null and code!=''">
 				AND JO.code LIKE CONCAT('%', #{code}, '%')
+			</if>
+			<if test="recommendId!=null and recommendId!=''">
+				AND JO.recommend_id LIKE CONCAT('%', #{recommendId}, '%')
 			</if>
 			<if test="oldPrice!=null">
 				AND JO.old_price=#{oldPrice}
@@ -152,6 +161,9 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			</if>
 			<if test="payPrice!=null">
 				AND JO.pay_price=#{payPrice}
+			</if>
+			<if test="schedule!=null">
+				AND JO.schedule=#{schedule}
 			</if>
 			<if test="payTime!=null">
 				AND JO.pay_time=#{payTime}
@@ -172,7 +184,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 				AND JO.create_time=#{createTime}
 			</if>
 			<if test="creatorId!=null and creatorId!=''">
-				AND JO.creator_id = #{creatorId} 
+				AND JO.creator_id LIKE CONCAT('%', #{creatorId}, '%')
 			</if>
 			<if test="creatorName!=null and creatorName!=''">
 				AND JO.creator_name LIKE CONCAT('%', #{creatorName}, '%')
@@ -209,6 +221,9 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
            <if test="code!=null">
 				JO.code=#{code}, 
 		   </if>
+           <if test="recommendId!=null">
+				JO.recommend_id=#{recommendId}, 
+		   </if>
            <if test="oldPrice!=null">
 				JO.old_price=#{oldPrice}, 
 		   </if>
@@ -218,11 +233,11 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
            <if test="payPrice!=null">
 				JO.pay_price=#{payPrice}, 
 		   </if>
+           <if test="schedule!=null">
+				JO.schedule=#{schedule}, 
+		   </if>
            <if test="payTime!=null">
 				JO.pay_time=#{payTime}, 
-		   </if>
-		    <if test="schedule!=null">
-				JO.schedule=#{schedule}, 
 		   </if>
            <if test="endTime!=null">
 				JO.end_time=#{endTime}, 
@@ -264,11 +279,12 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<result property="activityPromotionId" column="activity_promotion_id" javaType="String" jdbcType="VARCHAR"></result>
 		<result property="activityPromotionPrice" column="activity_promotion_price" javaType="Double" jdbcType="DECIMAL"></result>
 		<result property="code" column="code" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="recommendId" column="recommend_id" javaType="String" jdbcType="VARCHAR"></result>
 		<result property="oldPrice" column="old_price" javaType="Double" jdbcType="DECIMAL"></result>
 		<result property="price" column="price" javaType="Double" jdbcType="DECIMAL"></result>
 		<result property="payPrice" column="pay_price" javaType="Double" jdbcType="DECIMAL"></result>
-		<result property="payTime" column="pay_time" javaType="Date" jdbcType="TIMESTAMP"></result>
 		<result property="schedule" column="schedule" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="payTime" column="pay_time" javaType="Date" jdbcType="TIMESTAMP"></result>
 		<result property="endTime" column="end_time" javaType="Date" jdbcType="TIMESTAMP"></result>
 		<result property="address" column="address" javaType="String" jdbcType="VARCHAR"></result>
 		<result property="detailAddress" column="detail_address" javaType="String" jdbcType="VARCHAR"></result>
@@ -288,11 +304,12 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<result property="activityPromotionId" column="JO_activity_promotion_id" javaType="String" jdbcType="VARCHAR"></result>
 		<result property="activityPromotionPrice" column="JO_activity_promotion_price" javaType="Double" jdbcType="DECIMAL"></result>
 		<result property="code" column="JO_code" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="recommendId" column="JO_recommend_id" javaType="String" jdbcType="VARCHAR"></result>
 		<result property="oldPrice" column="JO_old_price" javaType="Double" jdbcType="DECIMAL"></result>
 		<result property="price" column="JO_price" javaType="Double" jdbcType="DECIMAL"></result>
 		<result property="payPrice" column="JO_pay_price" javaType="Double" jdbcType="DECIMAL"></result>
-		<result property="payTime" column="JO_pay_time" javaType="Date" jdbcType="TIMESTAMP"></result>
 		<result property="schedule" column="JO_schedule" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="payTime" column="JO_pay_time" javaType="Date" jdbcType="TIMESTAMP"></result>
 		<result property="endTime" column="JO_end_time" javaType="Date" jdbcType="TIMESTAMP"></result>
 		<result property="address" column="JO_address" javaType="String" jdbcType="VARCHAR"></result>
 		<result property="detailAddress" column="JO_detail_address" javaType="String" jdbcType="VARCHAR"></result>
@@ -308,9 +325,10 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			jkwy_package_id, jkwy_package_price_id, 
 			voucher_user_id, voucher_price, 
 			activity_promotion_id, activity_promotion_price, 
-			code, old_price, 
-			price, pay_price, 
-			pay_time,schedule, end_time, 
+			code, recommend_id, 
+			old_price, price, 
+			pay_price, schedule, 
+			pay_time, end_time, 
 			address, detail_address, 
 			status, create_time, 
 			creator_id, creator_name
@@ -319,9 +337,10 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			#{jkwyPackageId,jdbcType=VARCHAR}, #{jkwyPackagePriceId,jdbcType=VARCHAR}, 
 			#{voucherUserId,jdbcType=VARCHAR}, #{voucherPrice,jdbcType=DECIMAL}, 
 			#{activityPromotionId,jdbcType=VARCHAR}, #{activityPromotionPrice,jdbcType=DECIMAL}, 
-			#{code,jdbcType=VARCHAR}, #{oldPrice,jdbcType=DECIMAL}, 
-			#{price,jdbcType=DECIMAL}, #{payPrice,jdbcType=DECIMAL}, 
-			#{payTime,jdbcType=TIMESTAMP},#{schedule,jdbcType=INTEGER}, #{endTime,jdbcType=TIMESTAMP}, 
+			#{code,jdbcType=VARCHAR}, #{recommendId,jdbcType=VARCHAR}, 
+			#{oldPrice,jdbcType=DECIMAL}, #{price,jdbcType=DECIMAL}, 
+			#{payPrice,jdbcType=DECIMAL}, #{schedule,jdbcType=INTEGER}, 
+			#{payTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
 			#{address,jdbcType=VARCHAR}, #{detailAddress,jdbcType=VARCHAR}, 
 			#{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
 			#{creatorId,jdbcType=VARCHAR}, #{creatorName,jdbcType=VARCHAR}
@@ -336,9 +355,10 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			jkwy_package_id, jkwy_package_price_id, 
 			voucher_user_id, voucher_price, 
 			activity_promotion_id, activity_promotion_price, 
-			code, old_price, 
-			price, pay_price, 
-			pay_time,schedule, end_time, 
+			code, recommend_id, 
+			old_price, price, 
+			pay_price, schedule, 
+			pay_time, end_time, 
 			address, detail_address, 
 			status, create_time, 
 			creator_id, creator_name
@@ -351,9 +371,10 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			#{item.jkwyPackageId,jdbcType=VARCHAR}, #{item.jkwyPackagePriceId,jdbcType=VARCHAR}, 
 			#{item.voucherUserId,jdbcType=VARCHAR}, #{item.voucherPrice,jdbcType=DECIMAL}, 
 			#{item.activityPromotionId,jdbcType=VARCHAR}, #{item.activityPromotionPrice,jdbcType=DECIMAL}, 
-			#{item.code,jdbcType=VARCHAR}, #{item.oldPrice,jdbcType=DECIMAL}, 
-			#{item.price,jdbcType=DECIMAL}, #{item.payPrice,jdbcType=DECIMAL}, 
-			#{item.payTime,jdbcType=TIMESTAMP},#{item.schedule,jdbcType=INTEGER},  #{item.endTime,jdbcType=TIMESTAMP}, 
+			#{item.code,jdbcType=VARCHAR}, #{item.recommendId,jdbcType=VARCHAR}, 
+			#{item.oldPrice,jdbcType=DECIMAL}, #{item.price,jdbcType=DECIMAL}, 
+			#{item.payPrice,jdbcType=DECIMAL}, #{item.schedule,jdbcType=INTEGER}, 
+			#{item.payTime,jdbcType=TIMESTAMP}, #{item.endTime,jdbcType=TIMESTAMP}, 
 			#{item.address,jdbcType=VARCHAR}, #{item.detailAddress,jdbcType=VARCHAR}, 
 			#{item.status,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP}, 
 			#{item.creatorId,jdbcType=VARCHAR}, #{item.creatorName,jdbcType=VARCHAR}
@@ -429,77 +450,174 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	</resultMap>
 	<select id="getQuantityByWeek" resultMap="statistics">
 		SELECT
-			jo.`code` device,
+			'订单量' device,
 			DATE_FORMAT(jo.create_time, '%Y-%m-%d') create_time,
-			COUNT(jo.`code`) num
+			COUNT(jo.`recommend_id`) num
 		FROM
 			jkwy_order jo
 		WHERE
-			jo.`code` != ''
-		AND jo.`code` IS NOT NULL
+			jo.`recommend_id` != ''
+		AND jo.`recommend_id` IS NOT NULL
 		AND (
 			DATE_FORMAT(jo.create_time, '%Y-%m-%d') BETWEEN #{startTime}
 		AND #{endTime} )
 		GROUP BY
-			jo.`code`,
 			DATE_FORMAT(jo.create_time, '%Y-%m-%d')
 		ORDER BY
-			jo.create_time,
-			jo.`code`
+			jo.create_time
 	</select>
 	<select id="quantityByMonth" resultMap="statistics">
 		SELECT
-			jo.`code` device,
+			'订单量' device,
 			DATE_FORMAT(jo.create_time, '%Y-%m-%d') create_time,
-			COUNT(jo.`code`) num
+			COUNT(jo.`recommend_id`) num
 		FROM
 			jkwy_order jo
 		WHERE
-			jo.`code` != ''
-		AND jo.`code` IS NOT NULL
+			jo.`recommend_id` != ''
+		AND jo.`recommend_id` IS NOT NULL
 		AND   DATE_FORMAT(jo.create_time, '%Y-%m')  =#{month}
 		GROUP BY
-			jo.`code`,
 			DATE_FORMAT(jo.create_time, '%Y-%m-%d')
 		ORDER BY
-			jo.create_time,
-			jo.`code`
+			jo.create_time
 	</select>
 	<select id="quantityByYear" resultMap="statistics">
 		SELECT
 			jo.`code` device,
 			DATE_FORMAT(jo.create_time, '%Y-%m') create_time,
-			COUNT(jo.`code`) num
+			COUNT(jo.`recommend_id`) num
 		FROM
 			jkwy_order jo
 		WHERE
-			jo.`code` != ''
-		AND jo.`code` IS NOT NULL
+			jo.`recommend_id` != ''
+		AND jo.`recommend_id` IS NOT NULL
 		AND   DATE_FORMAT(jo.create_time, '%Y') =#{year}
 		GROUP BY
-			jo.`code`,
 			DATE_FORMAT(jo.create_time, '%Y-%m')
 		ORDER BY
-			jo.create_time,
-			jo.`code`
+			jo.create_time
 	</select>
 	<select id="getAllNumByYear" resultMap="statistics">
 		SELECT
-			jo.`code` device,
+			jc.recommend_name device,
 			DATE_FORMAT(jo.create_time, '%Y') years,
 			DATE_FORMAT(jo.create_time, '%m') months,
-			COUNT(jo.`code`) num
+			COUNT(jc.recommend_name) num
 		FROM
 			jkwy_order jo
+		LEFT JOIN jkwy_code jc ON jo.recommend_id = jc.recommend_id
 		WHERE
-			jo.`code` != ''
-		AND jo.`code` IS NOT NULL
+			jo.`recommend_id` != ''
+		AND jo.`recommend_id` IS NOT NULL
 		AND   DATE_FORMAT(jo.create_time, '%Y') =#{year}
 		GROUP BY
-			jo.`code`,
+			jo.recommend_id,
 			DATE_FORMAT(jo.create_time, '%Y-%m')
 		ORDER BY
 			jo.create_time,
-			jo.`code`
+			jo.`recommend_id`
 	</select>
+	
+	<select id="getHealthyArchivesAndOrder" resultMap="getHealthyArchivesAndOrder">
+		SELECT 
+		JO.id JO_id, JO.no JO_no, 
+		JO.jkwy_package_id JO_jkwy_package_id, JO.jkwy_package_price_id JO_jkwy_package_price_id, 
+		JO.voucher_user_id JO_voucher_user_id, JO.voucher_price JO_voucher_price, 
+		JO.activity_promotion_id JO_activity_promotion_id, JO.activity_promotion_price JO_activity_promotion_price, 
+		JO.code JO_code, JO.old_price JO_old_price, 
+		JO.price JO_price, JO.pay_price JO_pay_price, 
+		JO.pay_time JO_pay_time, JO.schedule JO_schedule , JO.end_time JO_end_time, 
+		JO.address JO_address, JO.detail_address JO_detail_address, 
+		JO.status JO_status, JO.create_time JO_create_time, 
+		JO.creator_id JO_creator_id, JO.creator_name JO_creator_name,
+		JPP.id JPP_id, JPP.jkwy_package_id JPP_jkwy_package_id, 
+		JPP.title JPP_title, JPP.old_price JPP_old_price, 
+		JPP.price JPP_price, JPP.service_time JPP_service_time, 
+		JPP.unit JPP_unit, JPP.support_number JPP_support_number, 
+		JPP.support_fee JPP_support_fee, JPP.support_change JPP_support_change, 
+		JPP.status JPP_status, JPP.create_time JPP_create_time,
+		JP.id JP_id, JP.title JP_title, 
+		JP.sub_title JP_sub_title, JP.content JP_content, 
+		JP.sort JP_sort, JP.status JP_status, 
+		JP.create_time JP_create_time, 
+		JR.id JR_id, JR.name JR_name, 
+		JR.phone JR_phone, JR.sex JR_sex, 
+		JR.relation JR_relation, JR.sfz JR_sfz, 
+		JR.birthday JR_birthday, JR.status JR_status, 
+		JR.create_time JR_create_time, JR.creator_id JR_creator_id, 
+		JR.creator_name JR_creator_name 
+		FROM `jkwy_order` `JO` 
+		LEFT JOIN `jkwy_order_relation` `JOR` ON `JO`.`id`=`JOR`.`jkwy_order_id` 
+		LEFT JOIN `jkwy_relation` `JR` ON `JOR`.`jkwy_relation`=`JR`.`id` 
+		LEFT JOIN `jkwy_package_price` `JPP` ON `JO`.`jkwy_package_price_id`=`JPP`.`id` 
+		LEFT JOIN `jkwy_package` `JP` ON `JO`.`jkwy_package_id`=`JP`.`id` 
+		WHERE `JO`.schedule=1 AND `JO`.status=0 AND `JO`.`creator_id`=#{creatorId} ORDER BY `JO`.create_time DESC 
+	</select>
+	
+	<resultMap id="getHealthyArchivesAndOrder" type="com.jinpaihushi.jphs.jkwy.model.JkwyOrder" >
+		<result property="id" column="JO_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="no" column="JO_no" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="jkwyPackageId" column="JO_jkwy_package_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="jkwyPackagePriceId" column="JO_jkwy_package_price_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="voucherUserId" column="JO_voucher_user_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="voucherPrice" column="JO_voucher_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="activityPromotionId" column="JO_activity_promotion_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="activityPromotionPrice" column="JO_activity_promotion_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="code" column="JO_code" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="oldPrice" column="JO_old_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="price" column="JO_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="payPrice" column="JO_pay_price" javaType="Double" jdbcType="DECIMAL"></result>
+		<result property="payTime" column="JO_pay_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="schedule" column="JO_schedule" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="endTime" column="JO_end_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="address" column="JO_address" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="detailAddress" column="JO_detail_address" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="status" column="JO_status" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="createTime" column="JO_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+		<result property="creatorId" column="JO_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="creatorName" column="JO_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+		<association property="jkwyPackagePrice" javaType="com.jinpaihushi.jphs.jkwy.model.JkwyPackagePrice">
+			<result property="id" column="JPP_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="jkwyPackageId" column="JPP_jkwy_package_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="title" column="JPP_title" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="oldPrice" column="JPP_old_price" javaType="Double" jdbcType="DECIMAL"></result>
+			<result property="price" column="JPP_price" javaType="Double" jdbcType="DECIMAL"></result>
+			<result property="serviceTime" column="JPP_service_time" javaType="Integer" jdbcType="INTEGER"></result>
+			<result property="unit" column="JPP_unit" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="supportNumber" column="JPP_support_number" javaType="Integer" jdbcType="INTEGER"></result>
+			<result property="supportFee" column="JPP_support_fee" javaType="Integer" jdbcType="INTEGER"></result>
+			<result property="supportChange" column="JPP_support_change" javaType="Integer" jdbcType="INTEGER"></result>
+			<result property="status" column="JPP_status" javaType="Integer" jdbcType="INTEGER"></result>
+			<result property="createTime" column="JPP_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+			<result property="creatorId" column="JPP_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="creatorName" column="JPP_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+		</association>
+		<association property="jkwyPackage" javaType="com.jinpaihushi.jphs.jkwy.model.JkwyPackage">
+			<result property="id" column="JP_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="title" column="JP_title" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="subTitle" column="JP_sub_title" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="content" column="JP_content" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="imgUrl" column="JP_img_url" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="sort" column="JP_sort" javaType="Integer" jdbcType="INTEGER"></result>
+			<result property="status" column="JP_status" javaType="Integer" jdbcType="INTEGER"></result>
+			<result property="createTime" column="JP_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+			<result property="creatorId" column="JP_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="creatorName" column="JP_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+		</association>
+		<collection property="jkwyRelationList" ofType="com.jinpaihushi.jphs.jkwy.model.JkwyRelation" >
+			<result property="id" column="JR_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="name" column="JR_name" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="phone" column="JR_phone" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="sex" column="JR_sex" javaType="Integer" jdbcType="INTEGER"></result>
+			<result property="relation" column="JR_relation" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="sfz" column="JR_sfz" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="birthday" column="JR_birthday" javaType="Date" jdbcType="TIMESTAMP"></result>
+			<result property="status" column="JR_status" javaType="Integer" jdbcType="INTEGER"></result>
+			<result property="createTime" column="JR_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
+			<result property="creatorId" column="JR_creator_id" javaType="String" jdbcType="VARCHAR"></result>
+			<result property="creatorName" column="JR_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+		</collection>
+	</resultMap>
+	
 </mapper>

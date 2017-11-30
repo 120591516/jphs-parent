@@ -56,6 +56,10 @@ public class JkwyOrder extends BaseModel implements Predicate<JkwyOrder>, Updato
     @Length(max = 255, message = "{jkwyOrder.code.illegal.length}")
     private String code;
 
+    /** 分享人id 推荐人  */
+    @Length(max = 50, message = "{order.recommendId.illegal.length}")
+    private String recommendId;
+
     /** 原价 */
     private Double oldPrice;
 
@@ -68,17 +72,17 @@ public class JkwyOrder extends BaseModel implements Predicate<JkwyOrder>, Updato
     /** 支付时间 */
     private Date payTime;
 
-	private String platformId;
-	
+    private String platformId;
+
     public String getPlatformId() {
-		return platformId;
-	}
+        return platformId;
+    }
 
-	public void setPlatformId(String platformId) {
-		this.platformId = platformId;
-	}
+    public void setPlatformId(String platformId) {
+        this.platformId = platformId;
+    }
 
-	/** 套餐结束日期 */
+    /** 套餐结束日期 */
     private Integer schedule;
 
     /** 套餐结束日期 */
@@ -249,6 +253,14 @@ public class JkwyOrder extends BaseModel implements Predicate<JkwyOrder>, Updato
      */
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getRecommendId() {
+        return recommendId;
+    }
+
+    public void setRecommendId(String recommendId) {
+        this.recommendId = recommendId;
     }
 
     /**
