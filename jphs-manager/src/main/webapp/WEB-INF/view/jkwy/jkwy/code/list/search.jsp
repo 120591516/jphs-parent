@@ -8,22 +8,22 @@
 <div class="clearfix">
 	<table class="text-right ">
 		<tr>
-			<td>活动码：</td>
+			<td>活动码CODE：</td>
 			<td width="200">
 				<input type="text" name="code" id="code" value="${jkwyCode.code}" />
 			</td>
-			<td>推荐人id：</td>
+			<td>推广人ID：</td>
 			<td width="200">
 				<input type="text" name="recommendId" id="recommendId" value="${jkwyCode.recommendId}" />
 			</td>
 			</tr>
 			<tr>
 			
-			<td>推荐人姓名：</td>
+			<td>推广人姓名：</td>
 			<td width="200">
 				<input type="text" name="recommendName" id="recommendName" value="${jkwyCode.recommendName}" />
 			</td>
-			<td>推荐人手机号：</td>
+			<td>推广人手机号：</td>
 			<td width="200">
 				<input type="text" name="recommendPhone" id="recommendPhone" value="${jkwyCode.recommendPhone}" />
 			</td>

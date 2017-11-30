@@ -34,6 +34,8 @@ public class JkwyOrder extends BaseModel implements Predicate<JkwyOrder>, Updato
     @Length(max = 50, message = "{jkwyOrder.jkwyPackageId.illegal.length}")
     private String jkwyPackageId;
 
+    private String jkwyPackageName;
+
     /**  */
     @Length(max = 50, message = "{jkwyOrder.jkwyPackagePriceId.illegal.length}")
     private String jkwyPackagePriceId;
@@ -74,12 +76,38 @@ public class JkwyOrder extends BaseModel implements Predicate<JkwyOrder>, Updato
 
     private String platformId;
 
+    private Integer ifExpire;
+
+    private Integer lastTime;
+
+    private String subDate;
+
+    private String bgTime;
+
+    private String enTime;
+
     public String getPlatformId() {
         return platformId;
     }
 
     public void setPlatformId(String platformId) {
         this.platformId = platformId;
+    }
+
+    public Integer getIfExpire() {
+        return ifExpire;
+    }
+
+    public void setIfExpire(Integer ifExpire) {
+        this.ifExpire = ifExpire;
+    }
+
+    public Integer getLastTime() {
+        return lastTime;
+    }
+
+    public void setLastTime(Integer lastTime) {
+        this.lastTime = lastTime;
     }
 
     /** 套餐结束日期 */
@@ -169,6 +197,38 @@ public class JkwyOrder extends BaseModel implements Predicate<JkwyOrder>, Updato
      */
     public void setJkwyPackageId(String jkwyPackageId) {
         this.jkwyPackageId = jkwyPackageId;
+    }
+
+    public String getJkwyPackageName() {
+        return jkwyPackageName;
+    }
+
+    public String getSubDate() {
+        return subDate;
+    }
+
+    public void setSubDate(String subDate) {
+        this.subDate = subDate;
+    }
+
+    public String getBgTime() {
+        return bgTime;
+    }
+
+    public void setBgTime(String bgTime) {
+        this.bgTime = bgTime;
+    }
+
+    public String getEnTime() {
+        return enTime;
+    }
+
+    public void setEnTime(String enTime) {
+        this.enTime = enTime;
+    }
+
+    public void setJkwyPackageName(String jkwyPackageName) {
+        this.jkwyPackageName = jkwyPackageName;
     }
 
     /**

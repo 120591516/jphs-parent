@@ -283,6 +283,9 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		JR.birthday JR_birthday, JR.status JR_status, 
 		JR.create_time JR_create_time, JR.creator_id JR_creator_id, 
 		JR.creator_name JR_creator_name,
+		CASE WHEN `JOR`.id = '' THEN '0'  WHEN `JOR`.id = 'null' THEN '0'   WHEN `JOR`.id IS NULL THEN '0' ELSE '1' END ifOrder,
+		CASE WHEN `JOR`.id = '' THEN '0'  WHEN `JOR`.id = 'null' THEN '0'   WHEN `JOR`.id IS NULL THEN '0' ELSE `JP`.title  END jpTitle,
+		CASE WHEN `JOR`.id = '' THEN '0'  WHEN `JOR`.id = 'null' THEN '0'   WHEN `JOR`.id IS NULL THEN '0' ELSE `JPP`.title END jppTitle,
 		JO.id JO_id, JO.no JO_no, 
 		JO.jkwy_package_id JO_jkwy_package_id, JO.jkwy_package_price_id JO_jkwy_package_price_id, 
 		JO.voucher_user_id JO_voucher_user_id, JO.voucher_price JO_voucher_price, 
@@ -312,6 +315,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<if test="id !=null and id!=''">
 			AND `JR`.`id`=#{id}
 		</if>
+		order by `JR`.create_time DESC 
 	</select>
 	
 	<resultMap id="getUserRelationOfOrder" type="com.jinpaihushi.jphs.jkwy.model.JkwyRelation">
@@ -326,6 +330,9 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<result property="createTime" column="JR_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
 		<result property="creatorId" column="JR_creator_id" javaType="String" jdbcType="VARCHAR"></result>
 		<result property="creatorName" column="JR_creator_name" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="ifOrder" column="ifOrder" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="jpTitle" column="jpTitle" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="jppTitle" column="jppTitle" javaType="String" jdbcType="VARCHAR"></result>
 		<collection property="jkwyOrderList" ofType="com.jinpaihushi.jphs.jkwy.model.JkwyOrder">
 			<result property="id" column="JO_id" javaType="String" jdbcType="VARCHAR"></result>
 			<result property="no" column="JO_no" javaType="String" jdbcType="VARCHAR"></result>

@@ -8,10 +8,11 @@
 	<thead>
 		<tr >
 			<th width="30"></th>
-			<th>活动码</th>
-			<th>推荐人id</th>
-			<th>推荐人姓名</th>
-			<th>推荐人手机号</th>
+			<th>活动码CODE</th>
+			<th>推广人ID</th>
+			<th>推广人姓名</th>
+			<th>推广人手机号</th>
+			<th>添加时间</th>
 			<th>状态</th>
 			<th width="125">操作</th>
 		</tr>
@@ -26,6 +27,7 @@
 							<td><c:out value="${e.recommendId}"/></td>
 							<td><c:out value="${e.recommendName}"/></td>
 							<td><c:out value="${e.recommendPhone}"/></td>
+							<td><fmt:formatDate value="${e.createTime }" pattern="yy-MM-dd HH:mm" /></td>
 							<td><c:if test="${e.status == 0}">
 									<span style="color: #34BC2C;"><c:out value="使用中" /></span>
 								</c:if> <c:if test="${e.status == -1}">

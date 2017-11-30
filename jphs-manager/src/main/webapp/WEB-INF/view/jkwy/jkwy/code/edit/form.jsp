@@ -17,25 +17,25 @@
 		</div>
 		<div class="form-group">
 			<!-- 文本输入 -->
-			<label class="control-label col-md-3" for="input01">推荐人Id：</label>
+			<label class="control-label col-md-3" for="input01">推广人ID：</label>
 			<div class="controls col-md-6">
-				<input type="text" id="recommendId" name="recommendId" maxlength="20" value="${jkwyCode.recommendId}" placeholder="推荐人Id"
+				<input type="text" id="recommendId" name="recommendId" maxlength="20" value="${jkwyCode.recommendId}" placeholder="推广人ID"
 					class="form-control" required="required" />
 			</div>
 		</div>
 		<div class="form-group">
 			<!-- 文本输入 -->
-			<label class="control-label col-md-3" for="input01">推荐人姓名：</label>
+			<label class="control-label col-md-3" for="input01">推广人姓名：</label>
 			<div class="controls col-md-6">
-				<input type="text" id="recommendName" name="recommendName" maxlength="20" value="${jkwyCode.recommendName}" placeholder="推荐人姓名"
+				<input type="text" id="recommendName" name="recommendName" maxlength="20" value="${jkwyCode.recommendName}" placeholder="推广人姓名"
 					class="form-control" required="required" />
 			</div>
 		</div>
 		<div class="form-group">
 			<!-- 文本输入 -->
-			<label class="control-label col-md-3" for="input01">推荐人手机号：</label>
+			<label class="control-label col-md-3" for="input01">推广人手机号：</label>
 			<div class="controls col-md-6">
-				<input type="text" id="recommendPhone" name="recommendPhone" maxlength="20" value="${jkwyCode.recommendPhone}" placeholder="推荐人手机号"
+				<input type="text" id="recommendPhone" name="recommendPhone" maxlength="20" value="${jkwyCode.recommendPhone}" placeholder="推广人手机号"
 					class="form-control" required="required" />
 			</div>
 		</div>

@@ -82,7 +82,10 @@ public class JkwyOrderController extends BaseController<JkwyOrder> {
     public String index(HttpSession hs, HttpServletRequest req, HttpServletResponse resp, ModelMap modelMap,
             JkwyOrder jkwyOrder, Integer p, Integer n) {
         startPage(p, n);
-        Page<JkwyOrder> list = jkwyOrderService.query(jkwyOrder);
+        jkwyOrder.setStatus(0);
+        jkwyOrder.setSchedule(1);
+        jkwyOrder.setOrderby("create_time DESC");
+        Page<JkwyOrder> list = jkwyOrderService.queryList(jkwyOrder);
         PageInfos<JkwyOrder> pageInfo = new PageInfos<JkwyOrder>(list, req);
         modelMap.put("list", list);
         modelMap.put("pageInfo", pageInfo);

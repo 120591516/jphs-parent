@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import com.github.pagehelper.Page;
 import com.jinpaihushi.dao.BaseDao;
 import com.jinpaihushi.jphs.jkwy.model.JkwyOrder;
 import com.jinpaihushi.jphs.statistics.model.StatisticsModel;
@@ -53,4 +54,13 @@ public interface JkwyOrderDao extends BaseDao<JkwyOrder> {
      * @return
      */
     List<StatisticsModel> getAllNumByYear(Map<String, Object> map);
+
+    /**
+     * 查询用户下单记录-健康档案
+     * @param jkwyOrder
+     * @return
+     */
+    List<JkwyOrder> getHealthyArchivesAndOrder(JkwyOrder jkwyOrder);
+
+    Page<JkwyOrder> queryList(JkwyOrder jkwyOrder);
 }

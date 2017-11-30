@@ -14,19 +14,19 @@
 			</td>
 		</tr>
 		<tr>
-			<td align="right">推荐人id：</td>
+			<td align="right">推广人ID：</td>
 			<td>
 				<c:out value="${jkwyCode.recommendId}"/>
 			</td>
 		</tr>
 		<tr>
-			<td align="right">推荐人姓名：</td>
+			<td align="right">推广人姓名：</td>
 			<td>
 				<c:out value="${jkwyCode.recommendName}"/>
 			</td>
 		</tr>
 		<tr>
-			<td align="right">推荐人手机号：</td>
+			<td align="right">推广人手机号：</td>
 			<td>
 				<c:out value="${jkwyCode.recommendPhone}"/>
 			</td>
@@ -38,7 +38,7 @@
 			</td>
 		</tr>
 		<tr>
-			<td align="right">创建时间：</td>
+			<td align="right">添加时间：</td>
 			<td>
 				<fmt:formatDate value="${jkwyCode.createTime }" pattern="yy-MM-dd HH:mm" />
 			</td>

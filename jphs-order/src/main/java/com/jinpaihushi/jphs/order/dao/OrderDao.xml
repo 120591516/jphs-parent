@@ -571,16 +571,16 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		  p.title spec,
 		  co.`status` otherStatus
 		FROM
-		  `jphs`.`order` AS `o` 
-		  LEFT JOIN `jphs`.`order_goods` AS `og` 
+		  `order` AS `o` 
+		  LEFT JOIN `order_goods` AS `og` 
 		    ON (`o`.`id` = `og`.`order_id`) 
-		  LEFT JOIN `jphs`.`user` AS `u1` 
+		  LEFT JOIN `user` AS `u1` 
 		    ON (`o`.`creator_id` = `u1`.`id`) 
-		  LEFT JOIN `jphs`.`user` AS `u2` 
+		  LEFT JOIN `user` AS `u2` 
 		    ON (`o`.`accept_user_id` = `u2`.`id`) 
-		  LEFT JOIN `jphs`.`goods` AS `g` 
+		  LEFT JOIN `goods` AS `g` 
 		    ON (`og`.`goods_id` = `g`.`id`) 
-		  LEFT JOIN `jphs`.`order_other` AS `oo`
+		  LEFT JOIN `order_other` AS `oo`
 		    ON (`o`.`id` = `oo`.`order_id`)
 		    LEFT JOIN cancel_order co ON co.source_id  = o.id
 		    LEFT JOIN price_part pp ON pp.id = og.price_part_id

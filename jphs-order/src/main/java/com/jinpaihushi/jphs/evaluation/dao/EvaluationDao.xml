@@ -357,17 +357,17 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		, `u`.`phone` userPhone
 		, `u2`.`name` nurseName
 		FROM
-		`jphs`.`evaluation` AS `e`
-		LEFT JOIN `jphs`.`user` AS `u`
+		`evaluation` AS `e`
+		LEFT JOIN `user` AS `u`
 		ON
 		(`e`.`creator_id` = `u`.`id`)
-		LEFT JOIN `jphs`.`nurse` AS `n`
+		LEFT JOIN `nurse` AS `n`
 		ON
 		(`e`.`nurse_id` = `n`.`id`)
-		LEFT JOIN `jphs`.`goods` AS `g`
+		LEFT JOIN `goods` AS `g`
 		ON
 		(`e`.`goods_id` = `g`.`id`)
-		LEFT JOIN `jphs`.`user` AS `u2`
+		LEFT JOIN `user` AS `u2`
 		ON
 		(`n`.`creator_id` = `u2`.`id`)
 		WHERE 1 =1
@@ -413,17 +413,17 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		`e`.`creator_name`
 		, `e`.`create_time`
 		FROM
-		`jphs`.`evaluation` AS `e`
-		LEFT JOIN `jphs`.`goods` AS `g`
+		`evaluation` AS `e`
+		LEFT JOIN `goods` AS `g`
 		ON (`e`.`goods_id` = `g`.`id`)
 		LEFT JOIN
-		`jphs`.`nurse` AS `n`
+		`nurse` AS `n`
 		ON (`e`.`nurse_id` = `n`.`id`)
 		LEFT JOIN
-		`jphs`.`user` AS `u`
+		`user` AS `u`
 		ON (`n`.`creator_id` = `u`.`id`)
 		LEFT JOIN
-		`jphs`.`user` AS `u1`
+		`user` AS `u1`
 		ON (`e`.`creator_id` = `u1`.`id`)
 		WHERE 1 = 1
 		<if test="orderId != null">

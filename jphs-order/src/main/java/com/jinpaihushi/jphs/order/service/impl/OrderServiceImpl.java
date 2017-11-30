@@ -75,6 +75,7 @@ import com.jinpaihushi.jphs.user.dao.UserDao;
 import com.jinpaihushi.jphs.user.model.User;
 import com.jinpaihushi.jphs.user.model.UserAddress;
 import com.jinpaihushi.jphs.voucher.dao.VoucherRepertoryDao;
+import com.jinpaihushi.jphs.voucher.service.AllocationVoucherUtilsService;
 import com.jinpaihushi.jphs.voucher.service.VoucherService;
 import com.jinpaihushi.jphs.worktime.dao.WorktimeDao;
 import com.jinpaihushi.jphs.worktime.model.Worktime;
@@ -109,6 +110,9 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
 
     @Autowired
     private AccountDao accountDao;
+    
+    @Autowired
+    private AllocationVoucherUtilsService allocationVoucherUtilsService;
 
     @Autowired
     private BfmAwardLogDao bfmAwardLogDao;
@@ -1912,9 +1916,14 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
      * 
      * @return
      */
-    public byte[] balancePayment(String orderId, String orderNo, Double payParice, String userId) {
+    @SuppressWarnings("static-access")
+	public byte[] balancePayment(String orderId, String orderNo, Double payParice, String userId) {
+    	
+    	
         TransactionTemplate transactionTemplate = TransactionTemplateUtils.getDefaultTransactionTemplate(txManager);
         String rs = (String) transactionTemplate.execute(new TransactionCallback<Object>() {
+        	JSONObject obj_re = new JSONObject();
+        	
             // 事务模板
             public String doInTransaction(final TransactionStatus status) {
                 try {
@@ -1927,7 +1936,8 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
 
                     if (orders == null || "".equals(orders)) {
                         status.setRollbackOnly();// 回滚
-                        return "5";
+                        obj_re.put("resultcode", 5);
+                        return obj_re.toString();
                     }
 
                     OrderGoods orderGoods = new OrderGoods();
@@ -1935,22 +1945,26 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
                     orderGoods = orderGoodsDao.load(orderGoods);
                     // 判断支付金额跟订单金额
                     if (DoubleUtils.sub(orderGoods.getPayPrice(), payParice) != 0) {
-                        return "2";
+                    	obj_re.put("resultcode", 2);
+                        return obj_re.toString();
                     }
                     Account model = new Account();
                     model.setCreatorId(userId);
                     Account account = accountDao.load(model);
                     if (null == account || "".equals(account)) {
-                        return "10";
+                    	obj_re.put("resultcode", 10);
+                        return obj_re.toString();
                     }
                     if (null == account.getBalance() || "".equals(account.getBalance())) {
-                        return "11";
+                    	obj_re.put("resultcode", 11);
+                        return obj_re.toString();
                     }
                     /**
                      * 用于余额不足
                      */
                     if (DoubleUtils.sub(account.getBalance(), payParice) < 0) {
-                        return "3";
+                    	obj_re.put("resultcode", 3);
+                        return obj_re.toString();
                     }
                     /**
                      * 用户余额减去-订单金额 更新用户余额
@@ -1960,7 +1974,8 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
                     int a = accountDao.update(account);
                     if (a < 1) {
                         status.setRollbackOnly();// 回滚
-                        return "4";
+                        obj_re.put("resultcode", 4);
+                        return obj_re.toString();
                     }
 
                     OrderGoods orderGoods_up = new OrderGoods();
@@ -1969,12 +1984,16 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
                     OrderGoods orderGoods_ny = orderGoodsDao.load(orderGoods_up);
                     if (orderGoods_ny == null || "".equals(orderGoods_ny)) {
                         status.setRollbackOnly();// 回滚
-                        return "6";
+                        obj_re.put("resultcode",6);
+                        return obj_re.toString();
                     }
-
+                    
+                    obj_re.put("goodsId", orderGoods_ny.getGoodsId());
+                    
                     if (DoubleUtils.sub(orderGoods_ny.getPayPrice(), payParice) < 0) {
                         status.setRollbackOnly();// 回滚
-                        return "7";
+                        obj_re.put("resultcode", 7);
+                        return obj_re.toString();
                     }
 
                     String remark = "";
@@ -2001,7 +2020,8 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
                     int ti = transactionDao.insert(transaction);
                     if (ti <= 0) {
                         status.setRollbackOnly();// 回滚
-                        return "8";
+                        obj_re.put("resultcode", 8);
+                        return obj_re.toString();
                     }
                     Order orderUp = new Order();
                     orderUp.setId(orders.getId());
@@ -2014,13 +2034,16 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
                     int orderUpbool = orderDao.update(orderUp);
                     if (orderUpbool < 1) {
                         status.setRollbackOnly();// 回滚
-                        return "9";
+                        obj_re.put("resultcode", 9);
+                        return obj_re.toString();
                     }
                     User user = new User();
                     user.setId(orders.getCreatorId());
                     user.setStatus(1);
                     User orderUser = userDao.load(user);
                     if (orderUser != null) {
+                    	
+                    	
                         // 发送验证码
                         try {
                             Map<String, Object> map = getSmsMessage(orders.getId());
@@ -2028,7 +2051,9 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
                             // 通知用户下单成功
                             doPostSmsService.sendSms(map.get("userPhone").toString(), SMS_pay_success,
                                     "{\"service_name\":\"" + map.get("goodsName").toString() + "\"}");
-                            // 通知客服
+                            //	发放优惠请使用
+                            obj_re.put("goodsName", map.get("goodsName").toString());
+                           /* // 通知客服
                             doPostSmsService.sendSms("13581912414", SMS_notice_order,
                                     "{\"service_name\":\"" + map.get("goodsName").toString() + "\",\"order_no\":\""
                                             + map.get("order_no").toString() + "\"}");
@@ -2056,6 +2081,9 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
                             nurseJPushService.jpushTag("有新的用户下单了，快去抢哦！",
                                     MD5.md5crypt(MD5.md5crypt(area)).substring(0, 8), "0");
                             //                            }
+*/                            
+
+//                        
                         }
                         catch (Exception e) {
                         }
@@ -2065,13 +2093,19 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
                     e.printStackTrace();
                     // 日志打印区
                     status.setRollbackOnly();// 回滚
-                    return "0";
+                    obj_re.put("resultcode",0);
+                    return obj_re.toString();
                 }
-                return "1";
+                obj_re.put("resultcode", 1);
+                return obj_re.toString();
             }
         });
         String msg = "支付成功";
-        int rsi = Integer.parseInt(rs);
+        JSONObject rs_obj = new JSONObject().fromObject(rs);
+        int rsi = rs_obj.getInt("resultcode");
+        if(rsi == 1){
+        	allocationVoucherUtilsService.setVoucher(userId,2,rs_obj.getString("goodsId"),rs_obj.getString("goodsName"));
+        }
         if (rsi == 0) {
             msg = "支付失败，请刷新重试";
         }

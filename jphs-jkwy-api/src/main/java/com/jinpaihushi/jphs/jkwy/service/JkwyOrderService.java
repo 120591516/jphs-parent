@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 
+import com.github.pagehelper.Page;
 import com.jinpaihushi.jphs.jkwy.model.JkwyOrder;
-import com.jinpaihushi.jphs.jkwy.model.JkwyPackagePrice;
 import com.jinpaihushi.service.BaseService;
 
 import net.sf.json.JSONObject;
@@ -26,23 +26,23 @@ public interface JkwyOrderService extends BaseService<JkwyOrder> {
      */
     JSONObject createOrder(JkwyOrder jkwyOrder, String jkwyRelationId);
 
-	/**
-	 * 支付回调
-	 * @param type
-	 * @param no
-	 * @param trade_no
-	 * @param total_fee
-	 * @param packageParams
-	 * @return
-	 */
-	boolean jkwyNotify(int type,String no,String trade_no,String total_fee,SortedMap<Object, Object> packageParams);
-	
-	/**
-	 * 查询用户订单列表
-	 * @param jkwyOrder
-	 * @return
-	 */
-	JSONObject getHealthyArchives(JkwyOrder jkwyOrder);
+    /**
+     * 支付回调
+     * @param type
+     * @param no
+     * @param trade_no
+     * @param total_fee
+     * @param packageParams
+     * @return
+     */
+    boolean jkwyNotify(int type, String no, String trade_no, String total_fee, SortedMap<Object, Object> packageParams);
+
+    /**
+     * 查询用户订单列表
+     * @param jkwyOrder
+     * @return
+     */
+    JSONObject getHealthyArchives(JkwyOrder jkwyOrder);
 
     /**
     * 订单量周统计
@@ -71,4 +71,11 @@ public interface JkwyOrderService extends BaseService<JkwyOrder> {
      * @return
      */
     Map<String, Object> getAllNumByYear(String year);
+
+    /**
+     * 健康无忧订单列表
+     * @param jkwyOrder
+     * @return
+     */
+    Page<JkwyOrder> queryList(JkwyOrder jkwyOrder);
 }

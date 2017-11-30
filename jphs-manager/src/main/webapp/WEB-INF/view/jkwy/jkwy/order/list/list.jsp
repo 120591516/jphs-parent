@@ -7,20 +7,18 @@
 <table id="dateTable" cellpadding="0" cellspacing="0" class="data_table text-center">
 	<thead>
 		<tr >
-			<th width="30"></th>
+			<th width="30">序号</th>
 			<th>单号</th>
-			<th>优惠金额</th>
-			<th>活动id</th>
-			<th>活动优惠价格</th>
-			<th>推广码<br><span style="color:red;">推荐人ID</span></th>
-			<th>原价</th>
-			<th>销售价</th>
-			<th>支付价</th>
-			<th>支付时间</th>
-			<th>套餐结束日期</th>
-			<th>上门地址</th>
-			<th>详细地址</th>
-			<th width="125">操作</th>
+			<th>套餐</th>
+			<th>原价￥</th>
+			<th>销售价￥</th>
+			<th>实付款￥</th>
+			<th>下单人</th>
+			<th>下单时间<br>结束时间</th>
+			<th>剩余天数</th>
+			<th>所在地区</th>
+			<th>推广码<br><span  class="title_value">推广人ID</span></th>
+			<th width="80">操作</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -30,17 +28,22 @@
 						<tr class="bg_list_body">
 							<td width="30">${s.index+1}</td>
 							<td><c:out value="${e.no}"/></td>
-							<td><c:out value="${e.voucherPrice}"/></td>
-							<td><c:out value="${e.activityPromotionId}"/></td>
-							<td><c:out value="${e.activityPromotionPrice}"/></td>
-							<td><c:out value="${e.code}"/><br><span style="color:red;"><c:out value="${e.recommendId}"/></span></td>
+							<td><c:out value="${e.jkwyPackageName }"/></td>
 							<td><c:out value="${e.oldPrice}"/></td>
 							<td><c:out value="${e.price}"/></td>
 							<td><c:out value="${e.payPrice}"/></td>
-							<td><fmt:formatDate value="${e.payTime}" pattern="yy-MM-dd HH:mm"/></td>
-							<td><fmt:formatDate value="${e.endTime}" pattern="yy-MM-dd HH:mm"/></td>
+							<td>${e.creatorName }</td>
+							<td><fmt:formatDate value="${e.createTime}" pattern="yy-MM-dd HH:mm"/><br><fmt:formatDate value="${e.endTime}" pattern="yy-MM-dd HH:mm"/></td>
+							<td>
+								<c:if test="${e.subDate>=0 }">
+									<span title="剩余${e.subDate }天" style="color: green;">${e.subDate }</span>
+								</c:if>
+								<c:if test="${e.subDate<0 }">
+									<span title="已过期${-e.subDate }天" style="color:red;">${-e.subDate }</span>
+								</c:if>
+							</td>
 							<td><c:out value="${e.address}"/></td>
-							<td><c:out value="${e.detailAddress}"/></td>
+							<td><c:out value="${e.code}"/><br><span  class="title_value"><c:out value="${e.recommendId}"/></span></td>
 							<td>
 							<jphs:hasPermission url="/jkwy/order/detail.jhtml">
 								<a onclick="redirectDetailPage('${e.id}')">

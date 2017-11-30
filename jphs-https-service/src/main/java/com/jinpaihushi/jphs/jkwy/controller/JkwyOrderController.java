@@ -87,7 +87,9 @@ public class JkwyOrderController {
 			if(json.containsKey("resultcode")){
 				if(json.getInt("resultcode") == 0){
 					return JSONUtil.toJSONResult(0,json.getString("msg"), json.getString("result"));
-				}else{
+				}else if(json.getInt("resultcode") == 2){
+					return JSONUtil.toJSONResult(2,json.getString("msg"), json.getJSONObject("result"));
+				}else {
 					return JSONUtil.toJSONResult(1,json.getString("msg"), json.getJSONObject("result"));
 				}
 			}

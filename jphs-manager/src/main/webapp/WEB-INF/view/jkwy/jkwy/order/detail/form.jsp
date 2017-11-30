@@ -224,12 +224,12 @@
 				</p>
 				<p>
 					<span>优惠券使用结束时间：</span>
-					<span>
+					<span class="title_value">
 						<fmt:formatDate value="${voucherUse.endTime}"
 									pattern="yyyy-MM-dd HH:mm:ss" />
 					</span>
 					<span>优惠券使用时间：</span>
-					<span>
+					<span class="title_value">
 						<fmt:formatDate value="${voucherUse.useTime}"
 									pattern="yyyy-MM-dd HH:mm:ss" />
 					</span>

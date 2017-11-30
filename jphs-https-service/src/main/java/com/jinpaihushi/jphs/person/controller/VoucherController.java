@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jinpaihushi.jphs.voucher.service.VoucherService;
+import com.jinpaihushi.utils.DoubleUtils;
 import com.jinpaihushi.utils.JSONUtil;
 import com.jinpaihushi.utils.Util;
 
@@ -201,7 +202,7 @@ public class VoucherController {
             }
             // 计算使用优惠券之后的价格
             Double price = voucherService.getGoodsPrice(voucherUseId, pricePartId, nurseId, type);
-            return JSONUtil.toJSONResult(1, "操作成功！", price);
+            return JSONUtil.toJSONResult(1, "操作成功！", DoubleUtils.round(price, 2));
             // 1.根据 name，password,type查询完整信息
             // 2.错误N种情况判断及返回前端
             // 3.信息无误，封装信息以及生成token，返回前端

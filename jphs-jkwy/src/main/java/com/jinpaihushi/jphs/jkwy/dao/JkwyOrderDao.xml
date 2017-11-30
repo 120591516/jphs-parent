@@ -124,34 +124,34 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	<sql id="queryWhere">
 		<where>
 			<if test="id!=null and id!=''">
-				AND JO.id LIKE CONCAT('%', #{id}, '%')
+				AND JO.id = #{id} 
 			</if>
 			<if test="no!=null and no!=''">
-				AND JO.no LIKE CONCAT('%', #{no}, '%')
+				AND JO.no LIKE CONCAT( #{no}, '%')
 			</if>
 			<if test="jkwyPackageId!=null and jkwyPackageId!=''">
-				AND JO.jkwy_package_id LIKE CONCAT('%', #{jkwyPackageId}, '%')
+				AND JO.jkwy_package_id = #{jkwyPackageId} 
 			</if>
 			<if test="jkwyPackagePriceId!=null and jkwyPackagePriceId!=''">
-				AND JO.jkwy_package_price_id LIKE CONCAT('%', #{jkwyPackagePriceId}, '%')
+				AND JO.jkwy_package_price_id = #{jkwyPackagePriceId}
 			</if>
 			<if test="voucherUserId!=null and voucherUserId!=''">
-				AND JO.voucher_user_id LIKE CONCAT('%', #{voucherUserId}, '%')
+				AND JO.voucher_user_id = #{voucherUserId} 
 			</if>
 			<if test="voucherPrice!=null">
 				AND JO.voucher_price=#{voucherPrice}
 			</if>
 			<if test="activityPromotionId!=null and activityPromotionId!=''">
-				AND JO.activity_promotion_id LIKE CONCAT('%', #{activityPromotionId}, '%')
+				AND JO.activity_promotion_id = #{activityPromotionId} 
 			</if>
 			<if test="activityPromotionPrice!=null">
 				AND JO.activity_promotion_price=#{activityPromotionPrice}
 			</if>
 			<if test="code!=null and code!=''">
-				AND JO.code LIKE CONCAT('%', #{code}, '%')
+				AND JO.code LIKE CONCAT( #{code}, '%')
 			</if>
 			<if test="recommendId!=null and recommendId!=''">
-				AND JO.recommend_id LIKE CONCAT('%', #{recommendId}, '%')
+				AND JO.recommend_id = #{recommendId} 
 			</if>
 			<if test="oldPrice!=null">
 				AND JO.old_price=#{oldPrice}
@@ -172,16 +172,22 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 				AND JO.end_time=#{endTime}
 			</if>
 			<if test="address!=null and address!=''">
-				AND JO.address LIKE CONCAT('%', #{address}, '%')
+				AND JO.address LIKE CONCAT( #{address}, '%')
 			</if>
 			<if test="detailAddress!=null and detailAddress!=''">
-				AND JO.detail_address LIKE CONCAT('%', #{detailAddress}, '%')
+				AND JO.detail_address LIKE CONCAT(#{detailAddress}, '%')
 			</if>
 			<if test="status!=null">
 				AND JO.status=#{status}
 			</if>
 			<if test="createTime!=null">
 				AND JO.create_time=#{createTime}
+			</if>
+			<if test="bgTime!=null">
+					AND DATE_FORMAT(JO.create_time, '%Y-%m-%d') >= #{bgTime}
+			</if>
+			<if test="enTime!=null">
+					AND #{enTime} >= DATE_FORMAT(JO.create_time, '%Y-%m-%d')
 			</if>
 			<if test="creatorId!=null and creatorId!=''">
 				AND JO.creator_id LIKE CONCAT('%', #{creatorId}, '%')
@@ -273,6 +279,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<result property="id" column="id" javaType="String" jdbcType="VARCHAR"></result>
 		<result property="no" column="no" javaType="String" jdbcType="VARCHAR"></result>
 		<result property="jkwyPackageId" column="jkwy_package_id" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="jkwyPackageName" column="jkwyPackageName" javaType="String" jdbcType="VARCHAR"></result>
+		<result property="subDate" column="subDate" javaType="String" jdbcType="VARCHAR"></result>
 		<result property="jkwyPackagePriceId" column="jkwy_package_price_id" javaType="String" jdbcType="VARCHAR"></result>
 		<result property="voucherUserId" column="voucher_user_id" javaType="String" jdbcType="VARCHAR"></result>
 		<result property="voucherPrice" column="voucher_price" javaType="Double" jdbcType="DECIMAL"></result>
@@ -531,6 +539,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		JO.address JO_address, JO.detail_address JO_detail_address, 
 		JO.status JO_status, JO.create_time JO_create_time, 
 		JO.creator_id JO_creator_id, JO.creator_name JO_creator_name,
+		CASE WHEN `JO`.end_time &gt; NOW() THEN '1'  WHEN  `JO`.end_time &lt; NOW() THEN '0' ELSE '0' END  ifExpire,
+		TO_DAYS(NOW()) - TO_DAYS(`JO`.create_time)  lastTime,
 		JPP.id JPP_id, JPP.jkwy_package_id JPP_jkwy_package_id, 
 		JPP.title JPP_title, JPP.old_price JPP_old_price, 
 		JPP.price JPP_price, JPP.service_time JPP_service_time, 
@@ -574,6 +584,10 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<result property="address" column="JO_address" javaType="String" jdbcType="VARCHAR"></result>
 		<result property="detailAddress" column="JO_detail_address" javaType="String" jdbcType="VARCHAR"></result>
 		<result property="status" column="JO_status" javaType="Integer" jdbcType="INTEGER"></result>
+		
+		<result property="ifExpire" column="ifExpire" javaType="Integer" jdbcType="INTEGER"></result>
+		<result property="lastTime" column="lastTime" javaType="Integer" jdbcType="INTEGER"></result>
+		
 		<result property="createTime" column="JO_create_time" javaType="Date" jdbcType="TIMESTAMP"></result>
 		<result property="creatorId" column="JO_creator_id" javaType="String" jdbcType="VARCHAR"></result>
 		<result property="creatorName" column="JO_creator_name" javaType="String" jdbcType="VARCHAR"></result>
@@ -619,5 +633,11 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			<result property="creatorName" column="JR_creator_name" javaType="String" jdbcType="VARCHAR"></result>
 		</collection>
 	</resultMap>
-	
+	<select id="queryList" resultMap="jkwyOrder">
+		SELECT <include refid="field"/>,jp.title jkwyPackageName,DATEDIFF(jo.end_time,NOW())subDate
+		FROM `JKWY_ORDER` JO
+		LEFT JOIN JKWY_PACKAGE JP ON JO.jkwy_package_id = JP.id
+		<include refid="queryWhere" />
+		<include refid="orderby" />
+	</select>
 </mapper>

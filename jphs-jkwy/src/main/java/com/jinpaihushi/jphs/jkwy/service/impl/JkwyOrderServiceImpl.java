@@ -18,11 +18,13 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import com.github.pagehelper.Page;
 import com.jinpaihushi.dao.BaseDao;
 import com.jinpaihushi.jphs.activity.dao.ActivityPromotionDao;
 import com.jinpaihushi.jphs.activity.dao.VoucherUseDao;
 import com.jinpaihushi.jphs.activity.model.ActivityPromotion;
 import com.jinpaihushi.jphs.activity.model.VoucherUse;
+import com.jinpaihushi.jphs.jkwy.dao.JkwyCodeDao;
 import com.jinpaihushi.jphs.jkwy.dao.JkwyOrderContentDao;
 import com.jinpaihushi.jphs.jkwy.dao.JkwyOrderDao;
 import com.jinpaihushi.jphs.jkwy.dao.JkwyOrderRelationDao;
@@ -30,6 +32,7 @@ import com.jinpaihushi.jphs.jkwy.dao.JkwyPackageContentDao;
 import com.jinpaihushi.jphs.jkwy.dao.JkwyPackageDao;
 import com.jinpaihushi.jphs.jkwy.dao.JkwyPackagePriceDao;
 import com.jinpaihushi.jphs.jkwy.dao.JkwyRelationDao;
+import com.jinpaihushi.jphs.jkwy.model.JkwyCode;
 import com.jinpaihushi.jphs.jkwy.model.JkwyOrder;
 import com.jinpaihushi.jphs.jkwy.model.JkwyOrderContent;
 import com.jinpaihushi.jphs.jkwy.model.JkwyOrderRelation;
@@ -42,6 +45,7 @@ import com.jinpaihushi.jphs.statistics.model.StatisticsModel;
 import com.jinpaihushi.jphs.transaction.dao.TransactionDao;
 import com.jinpaihushi.jphs.transaction.model.Transaction;
 import com.jinpaihushi.jphs.user.dao.UserDao;
+import com.jinpaihushi.jphs.user.model.User;
 import com.jinpaihushi.jphs.voucher.dao.VoucherDao;
 import com.jinpaihushi.jphs.voucher.dao.VoucherRepertoryDao;
 import com.jinpaihushi.jphs.voucher.model.Voucher;
@@ -68,176 +72,194 @@ import net.sf.json.JSONObject;
 @Service("jkwyOrderService")
 public class JkwyOrderServiceImpl extends BaseServiceImpl<JkwyOrder> implements JkwyOrderService {
 
-	@Autowired
-	private JkwyOrderDao jkwyOrderDao;
-	@Autowired
-	private JkwyPackagePriceDao jkwyPackagePriceDao;
-	@Autowired
-	private JkwyPackageDao jkwyPackageDao;
-	@Autowired
-	private JkwyRelationDao jkwyRelationDao;
-	@Autowired
-	private JkwyPackageContentDao jkwyPackageContentDao;
-	@Autowired
-	private JkwyOrderContentDao jkwyOrderContentDao;
-	@Autowired
-	private UserDao userDao;
-	@Autowired
-	private VoucherUseDao voucherUseDao;
-	@Autowired
-	private VoucherRepertoryDao voucherRepertoryDao;
-	@Autowired
-	private JkwyOrderRelationDao jkwyOrderRelationDao;
-	@Autowired
-	private ActivityPromotionDao activityPromotionDao;
-	@Autowired
-	private VoucherDao voucherDao;
-	@Autowired
-	private TransactionDao transactionDao;
-	
-	@Autowired
-	private PlatformTransactionManager txManager;// 创建事务管理器
-	
-	@Override
-	protected BaseDao<JkwyOrder> getDao(){
-		return jkwyOrderDao;
-	}
-	
-	/**
-	 * 查询用户订单列表
-	 * @param jkwyOrder
-	 * @return
-	 */
-	@SuppressWarnings("static-access")
-	public JSONObject getHealthyArchives(JkwyOrder jkwyOrder){
-		JSONObject object = new JSONObject();
-		
-		JkwyRelation jkwyRelation = new JkwyRelation();
-		jkwyRelation.setCreatorId(jkwyOrder.getCreatorId());
-		/**
-		 * 未绑定产品的亲友
-		 */
-		List<JkwyRelation> jkwyRelationList = jkwyRelationDao.getUserRelationIsNotOrder(jkwyRelation);
-		/**
-		 * 绑定过餐品的亲友
-		 */
-		List<JkwyPackagePrice> jkwyPackagePriceList = jkwyPackagePriceDao.getHealthyArchives(jkwyOrder);
-		if(jkwyRelationList != null){
-			object.put("notGoods", new JSONArray().fromObject(jkwyRelationList));
-		}
-		if(jkwyPackagePriceList != null){
-			object.put("goods", new JSONArray().fromObject(jkwyPackagePriceList));
-		}
-		return object;
-	}
-	
-	/**
-	 * 
-	 * @param type					回调类型1，支付宝，2微信，3余额
-	 * @param no					支付宝回调订单号-自己平台定义回调返回结果
-	 * @param trade_no				支付宝交易号-支付宝生成
-	 * @param total_fee				支付宝回调返回支付金额
-	 * @param packageParams			微信回调返回内容
-	 * @return
-	 */
-	public boolean jkwyNotify(int type,String no,String trade_no,String total_fee,SortedMap<Object, Object> packageParams){
-		TransactionTemplate transactionTemplate = TransactionTemplateUtils.getDefaultTransactionTemplate(txManager);
-		String rs = (String) transactionTemplate.execute(new TransactionCallback<Object>() {
-			public String doInTransaction(final TransactionStatus status) {
-				try {
-					String out_trade_no = "";		//	自己平台订单号
-					String total_fees ="";			//	支付金额
-					String transaction_id ="";		//	第三方支付交易号
-					if(type == 1){
-						out_trade_no = no;
-						total_fees = total_fee;
-						transaction_id = trade_no;
-					}
-					if(type == 2){
-						String mch_id = (String) packageParams.get("mch_id");
-			            String openid = (String) packageParams.get("openid");
-			            String attach = (String) packageParams.get("attach");
-			            String is_subscribe = (String) packageParams.get("is_subscribe");
-			            out_trade_no = (String) packageParams.get("out_trade_no");			//	订单号
-			            total_fees = (String) packageParams.get("total_fee");				//	支付金额
-			            transaction_id = (String) packageParams.get("transaction_id");		//	交易号
-			            if (Util.debugLog.isDebugEnabled()) {
-		                    Util.debugLog.debug("支付回调：mch_id="+mch_id+" openid="+openid
-		                    		+" attach="+attach+" is_subscribe="+is_subscribe);
-		                }
-					}
-					if (Util.debugLog.isDebugEnabled()) {
-	                    Util.debugLog.debug("支付回调：out_trade_no="+out_trade_no+" total_fees="+total_fees
-	                    		+" transaction_id="+transaction_id);
-	                }
-					JkwyOrder jkwyOrder = new JkwyOrder();
-					jkwyOrder.setNo(out_trade_no);
-					jkwyOrder.setSchedule(0);
-					jkwyOrder.setStatus(0);
-					//	修改订单状态
-					JkwyOrder jkwyOrder_up = jkwyOrderDao.load(jkwyOrder);
-					if (Util.debugLog.isDebugEnabled()) {
-	                    Util.debugLog.debug("支付回调：jkwyOrder_up="+jkwyOrder_up);
-	                }
-					if(jkwyOrder_up == null){
-						return "0";
-					}
-					jkwyOrder_up.setSchedule(1);
-					jkwyOrder_up.setPayTime(new Date());
-					jkwyOrder_up.setPayPrice(Double.parseDouble(total_fees));
-					if (Util.debugLog.isDebugEnabled()) {
-	                    Util.debugLog.debug("支付回调：jkwyOrder_up_up="+jkwyOrder_up);
-	                }
-					int jod = jkwyOrderDao.update(jkwyOrder_up);
-					if (Util.debugLog.isDebugEnabled()) {
-	                    Util.debugLog.debug("支付回调：jod="+jod);
-	                }
-					if(jod<=0){
-						return "2";
-					}
-					// 修改亲友订单关系表
-					JkwyOrderRelation jkwyOrderRelation = new JkwyOrderRelation();
-					jkwyOrderRelation.setJkwyOrderId(jkwyOrder_up.getId());
-					jkwyOrderRelation.setStatus(0);
-					List<JkwyOrderRelation> jkwyOrderRelationList = jkwyOrderRelationDao.list(jkwyOrderRelation);
-					if(jkwyOrderRelationList == null || jkwyOrderRelationList.size()<1){
-						for(int j = 0; j < jkwyOrderRelationList.size() ; j++){
-							JkwyOrderRelation jkwyOrderRelation_one = jkwyOrderRelationList.get(j);
-							jkwyOrderRelation_one.setStatus(1);
-							if (Util.debugLog.isDebugEnabled()) {
-			                    Util.debugLog.debug("支付回调：jkwyOrderRelation_one"+j+"="+jkwyOrderRelation_one);
-			                }
-							int jord = jkwyOrderRelationDao.update(jkwyOrderRelation_one);
-							if(jord<=0){
-								return "3";
-							}
-						}
-					}
-					//	修改优惠券状态
-					if(!StringUtils.isEmpty(jkwyOrder_up.getVoucherUserId())){
-						if (Util.debugLog.isDebugEnabled()) {
-		                    Util.debugLog.debug("支付回调：VoucherUserId="+jkwyOrder_up.getVoucherUserId());
-		                }
-						VoucherUse voucherUse_re = voucherUseDao.loadById(jkwyOrder_up.getVoucherUserId());
-						if (Util.debugLog.isDebugEnabled()) {
-		                    Util.debugLog.debug("支付回调：voucherUse_re="+voucherUse_re);
-		                }
-						voucherUse_re.setUseTime(new Date());
-						int vud = voucherUseDao.update(voucherUse_re);
-						if (Util.debugLog.isDebugEnabled()) {
-		                    Util.debugLog.debug("支付回调：voucherUse_re="+voucherUse_re);
-		                }
-						if(vud<=0){
-							return "3";
-						}
-					}
-					
-					JkwyPackage jkwyPackage = jkwyPackageDao.loadById(jkwyOrder_up.getJkwyPackageId());
-					JkwyPackagePrice jkwyPackagePrice = jkwyPackagePriceDao.loadById(jkwyOrder_up.getJkwyPackagePriceId());
-					
-					Transaction transaction = new Transaction();
+    @Autowired
+    private JkwyOrderDao jkwyOrderDao;
+
+    @Autowired
+    private JkwyCodeDao jkwyCodeDao;
+
+    @Autowired
+    private JkwyPackagePriceDao jkwyPackagePriceDao;
+
+    @Autowired
+    private JkwyPackageDao jkwyPackageDao;
+
+    @Autowired
+    private JkwyRelationDao jkwyRelationDao;
+
+    @Autowired
+    private JkwyPackageContentDao jkwyPackageContentDao;
+
+    @Autowired
+    private JkwyOrderContentDao jkwyOrderContentDao;
+
+    @Autowired
+    private UserDao userDao;
+
+    @Autowired
+    private VoucherUseDao voucherUseDao;
+
+    @Autowired
+    private VoucherRepertoryDao voucherRepertoryDao;
+
+    @Autowired
+    private JkwyOrderRelationDao jkwyOrderRelationDao;
+
+    @Autowired
+    private ActivityPromotionDao activityPromotionDao;
+
+    @Autowired
+    private VoucherDao voucherDao;
+
+    @Autowired
+    private TransactionDao transactionDao;
+
+    @Autowired
+    private PlatformTransactionManager txManager;// 创建事务管理器
+
+    @Override
+    protected BaseDao<JkwyOrder> getDao() {
+        return jkwyOrderDao;
+    }
+
+    /**
+     * 查询用户订单列表
+     * @param jkwyOrder
+     * @return
+     */
+    @SuppressWarnings("static-access")
+    public JSONObject getHealthyArchives(JkwyOrder jkwyOrder) {
+        JSONObject object = new JSONObject();
+
+        JkwyRelation jkwyRelation = new JkwyRelation();
+        jkwyRelation.setCreatorId(jkwyOrder.getCreatorId());
+        /**
+         * 未绑定产品的亲友
+         */
+        List<JkwyRelation> jkwyRelationList = jkwyRelationDao.getUserRelationIsNotOrder(jkwyRelation);
+        /**
+         * 绑定过餐品的亲友
+         */
+        //		List<JkwyPackagePrice> jkwyPackagePriceList = jkwyPackagePriceDao.getHealthyArchives(jkwyOrder);
+        List<JkwyOrder> jkwyPackagePriceList = jkwyOrderDao.getHealthyArchivesAndOrder(jkwyOrder);
+        if (jkwyRelationList != null) {
+            object.put("notGoods", new JSONArray().fromObject(jkwyRelationList));
+        }
+        if (jkwyPackagePriceList != null) {
+            object.put("goods", new JSONArray().fromObject(jkwyPackagePriceList));
+        }
+        return object;
+    }
+
+    /**
+     * 
+     * @param type					回调类型1，支付宝，2微信，3余额
+     * @param no					支付宝回调订单号-自己平台定义回调返回结果
+     * @param trade_no				支付宝交易号-支付宝生成
+     * @param total_fee				支付宝回调返回支付金额
+     * @param packageParams			微信回调返回内容
+     * @return
+     */
+    public boolean jkwyNotify(int type, String no, String trade_no, String total_fee,
+            SortedMap<Object, Object> packageParams) {
+        TransactionTemplate transactionTemplate = TransactionTemplateUtils.getDefaultTransactionTemplate(txManager);
+        String rs = (String) transactionTemplate.execute(new TransactionCallback<Object>() {
+            public String doInTransaction(final TransactionStatus status) {
+                try {
+                    String out_trade_no = ""; //	自己平台订单号
+                    String total_fees = ""; //	支付金额
+                    String transaction_id = ""; //	第三方支付交易号
+                    if (type == 1) {
+                        out_trade_no = no;
+                        total_fees = total_fee;
+                        transaction_id = trade_no;
+                    }
+                    if (type == 2) {
+                        String mch_id = (String) packageParams.get("mch_id");
+                        String openid = (String) packageParams.get("openid");
+                        String attach = (String) packageParams.get("attach");
+                        String is_subscribe = (String) packageParams.get("is_subscribe");
+                        out_trade_no = (String) packageParams.get("out_trade_no"); //	订单号
+                        total_fees = (String) packageParams.get("total_fee"); //	支付金额
+                        transaction_id = (String) packageParams.get("transaction_id"); //	交易号
+                        if (Util.debugLog.isDebugEnabled()) {
+                            Util.debugLog.debug("支付回调：mch_id=" + mch_id + " openid=" + openid + " attach=" + attach
+                                    + " is_subscribe=" + is_subscribe);
+                        }
+                    }
+                    if (Util.debugLog.isDebugEnabled()) {
+                        Util.debugLog.debug("支付回调：out_trade_no=" + out_trade_no + " total_fees=" + total_fees
+                                + " transaction_id=" + transaction_id);
+                    }
+                    JkwyOrder jkwyOrder = new JkwyOrder();
+                    jkwyOrder.setNo(out_trade_no);
+                    jkwyOrder.setSchedule(0);
+                    jkwyOrder.setStatus(0);
+                    //	修改订单状态
+                    JkwyOrder jkwyOrder_up = jkwyOrderDao.load(jkwyOrder);
+                    if (Util.debugLog.isDebugEnabled()) {
+                        Util.debugLog.debug("支付回调：jkwyOrder_up=" + jkwyOrder_up);
+                    }
+                    if (jkwyOrder_up == null) {
+                        return "0";
+                    }
+                    jkwyOrder_up.setSchedule(1);
+                    jkwyOrder_up.setPayTime(new Date());
+                    jkwyOrder_up.setPayPrice(Double.parseDouble(total_fees));
+                    if (Util.debugLog.isDebugEnabled()) {
+                        Util.debugLog.debug("支付回调：jkwyOrder_up_up=" + jkwyOrder_up);
+                    }
+                    int jod = jkwyOrderDao.update(jkwyOrder_up);
+                    if (Util.debugLog.isDebugEnabled()) {
+                        Util.debugLog.debug("支付回调：jod=" + jod);
+                    }
+                    if (jod <= 0) {
+                        return "2";
+                    }
+                    // 修改亲友订单关系表
+                    JkwyOrderRelation jkwyOrderRelation = new JkwyOrderRelation();
+                    jkwyOrderRelation.setJkwyOrderId(jkwyOrder_up.getId());
+                    jkwyOrderRelation.setStatus(0);
+                    List<JkwyOrderRelation> jkwyOrderRelationList = jkwyOrderRelationDao.list(jkwyOrderRelation);
+                    if (jkwyOrderRelationList == null || jkwyOrderRelationList.size() < 1) {
+                        for (int j = 0; j < jkwyOrderRelationList.size(); j++) {
+                            JkwyOrderRelation jkwyOrderRelation_one = jkwyOrderRelationList.get(j);
+                            jkwyOrderRelation_one.setStatus(1);
+                            if (Util.debugLog.isDebugEnabled()) {
+                                Util.debugLog.debug("支付回调：jkwyOrderRelation_one" + j + "=" + jkwyOrderRelation_one);
+                            }
+                            int jord = jkwyOrderRelationDao.update(jkwyOrderRelation_one);
+                            if (jord <= 0) {
+                                return "3";
+                            }
+                        }
+                    }
+                    //	修改优惠券状态
+                    if (!StringUtils.isEmpty(jkwyOrder_up.getVoucherUserId())) {
+                        if (Util.debugLog.isDebugEnabled()) {
+                            Util.debugLog.debug("支付回调：VoucherUserId=" + jkwyOrder_up.getVoucherUserId());
+                        }
+                        VoucherUse voucherUse_re = voucherUseDao.loadById(jkwyOrder_up.getVoucherUserId());
+                        if (Util.debugLog.isDebugEnabled()) {
+                            Util.debugLog.debug("支付回调：voucherUse_re=" + voucherUse_re);
+                        }
+                        voucherUse_re.setUseTime(new Date());
+                        int vud = voucherUseDao.update(voucherUse_re);
+                        if (Util.debugLog.isDebugEnabled()) {
+                            Util.debugLog.debug("支付回调：voucherUse_re=" + voucherUse_re);
+                        }
+                        if (vud <= 0) {
+                            return "3";
+                        }
+                    }
+
+                    JkwyPackage jkwyPackage = jkwyPackageDao.loadById(jkwyOrder_up.getJkwyPackageId());
+                    JkwyPackagePrice jkwyPackagePrice = jkwyPackagePriceDao
+                            .loadById(jkwyOrder_up.getJkwyPackagePriceId());
+
+                    Transaction transaction = new Transaction();
                     transaction.setId(UUID.randomUUID().toString());
-                    transaction.setOrderId(out_trade_no);
+                    transaction.setOrderId(jkwyOrder_up.getId());
                     transaction.setAmount(Double.parseDouble(total_fees));
                     transaction.setScore((new Double(transaction.getAmount())).intValue());
                     transaction.setOperate(3);
@@ -251,242 +273,262 @@ public class JkwyOrderServiceImpl extends BaseServiceImpl<JkwyOrder> implements 
                     transaction.setStatus(1);
                     transaction.setType(3);
                     transactionDao.insert(transaction);
-				} catch (Exception e) {
-					e.printStackTrace();
-					status.setRollbackOnly();// 回滚
-					return "4";
-				}
-				return "1";
-			}
-		});
-		if(rs.equals("1")){
-			return true;
-		}
-		
-		return false;
-	}
-	
-	public JSONObject createOrder(JkwyOrder jkwyOrder,String jkwyRelationId){
-		TransactionTemplate transactionTemplate = TransactionTemplateUtils.getDefaultTransactionTemplate(txManager);
-		String rs = (String) transactionTemplate.execute(new TransactionCallback<Object>() {
-			JSONObject re_json = new JSONObject();
-			Double payPrice = 0d;
-			String jkwyName = "";
-			String orderId= UUIDUtils.getId();
-			String no = Common.getOrderJKNumber();
-			public String doInTransaction(final TransactionStatus status) {
-				try {
-					
-					if(userDao.loadById(jkwyOrder.getCreatorId()) == null){
-						if (Util.debugLog.isDebugEnabled()) {
-		                    Util.debugLog.debug("健康优护-下单失败，：用户ID异常="+jkwyOrder.getCreatorId());
-		                }
-						re_json.put("msg", "下单失败，用户id="+jkwyOrder.getCreatorId()+" 异常");
-						re_json.put("resultcode", 0);
-						re_json.put("result", 0);
-						return re_json.toString();
-					}
-					String jkwyPackageId = jkwyOrder.getJkwyPackageId();
-					String jkwyPackagePriceId =jkwyOrder.getJkwyPackagePriceId();
-					JkwyPackagePrice jkwyPackagePrice = new JkwyPackagePrice();
-					jkwyPackagePrice.setJkwyPackageId(jkwyPackageId);
-					jkwyPackagePrice.setId(jkwyPackagePriceId);
-					JkwyPackagePrice jkwyPackagePriceOne = jkwyPackagePriceDao.load(jkwyPackagePrice);
-					if(jkwyPackagePriceOne == null){
-						if (Util.debugLog.isDebugEnabled()) {
-		                    Util.debugLog.debug("健康优护-下单失败，规格id="+jkwyPackagePriceId+"不正确");
-		                }
-						re_json.put("msg", "下单失败，套餐id="+jkwyPackageId+"或规格id="+jkwyPackagePriceId+"不正确");
-						re_json.put("resultcode", 0);
-						re_json.put("result", 0);
-						return re_json.toString();
-					}
-					JkwyPackage jkwyPackageOne = jkwyPackageDao.loadById(jkwyPackageId);
-					if(jkwyPackageOne == null){
-						if (Util.debugLog.isDebugEnabled()) {
-		                    Util.debugLog.debug("健康优护-下单失败，：套餐id="+jkwyPackageId+"不正确");
-		                }
-						re_json.put("msg", "下单失败，套餐id="+jkwyPackageId+"或规格id="+jkwyPackagePriceId+"不正确");
-						re_json.put("resultcode", 0);
-						re_json.put("result", 0);
-						return re_json.toString();
-					}
-					
-					// 提出套餐绑定的亲友
-					int supportNumber = jkwyPackagePriceOne.getSupportNumber();
-					String[] jkwyRelationId_arr = jkwyRelationId.split(",");
-					List<String> jkwyRelationId_list = new ArrayList<String>();
-					for(int a=0;a<jkwyRelationId_arr.length;a++){
-						if(!StringUtils.isEmpty(jkwyRelationId_arr[a])){
-							jkwyRelationId_list.add(jkwyRelationId_arr[a]);
-						}
-					}
-					if(supportNumber != jkwyRelationId_list.size()){
-						if (Util.debugLog.isDebugEnabled()) {
-		                    Util.debugLog.debug("健康优护-下单失败，：创建订单失败，套餐人数="+supportNumber+"和选择人数="+jkwyRelationId_list.size()+"不一致");
-		                }
-						re_json.put("resultcode", 0);
-						re_json.put("msg", "创建订单失败，套餐人数="+supportNumber+"和选择人数="+jkwyRelationId_list.size()+"不一致");
-						re_json.put("result", 0);
-						return re_json.toString();
-					}
-					//	 订单绑定亲友
-					for(int j=0;j<jkwyRelationId_list.size();j++){
-						JkwyRelation jkwyRelation=jkwyRelationDao.loadById(jkwyRelationId_list.get(j));
-						if(jkwyRelation == null){
-	            			status.setRollbackOnly();// 回滚
-							re_json.put("resultcode", 0);
-							if (Util.debugLog.isDebugEnabled()) {
-			                    Util.debugLog.debug("健康优护-下单失败，：亲友id不正确 ="+jkwyRelationId_list.get(j));
-			                }
-							re_json.put("msg", "生成订单失败,亲友id不正确 ="+jkwyRelationId_list.get(j));
-							re_json.put("result", 0);
-							return re_json.toString();
-	            		}
-						/*JkwyOrderRelation jkwyOrderRelation_se =new JkwyOrderRelation();
-						jkwyOrderRelation_se.setJkwyRelation(jkwyRelation.getId());
-						jkwyOrderRelation_se.setCreatorId(jkwyOrder.getCreatorId());
-						jkwyOrderRelation_se.setStatus(1);
-						List<JkwyOrderRelation> jkwyOrderRelationList = jkwyOrderRelationDao.list(jkwyOrderRelation_se);
-						if(jkwyOrderRelationList !=null && jkwyOrderRelationList.size()>0){
-							for(int jorl=0;jorl<jkwyOrderRelationList.size();jorl++){
-								JkwyOrder jkwy_order_R = new JkwyOrder();
-								jkwy_order_R.setId(jkwyOrderRelationList.get(jorl).getJkwyOrderId());
-								jkwy_order_R.setStatus(0);
-								jkwy_order_R.setSchedule(1);
-								JkwyOrder jkwyOrder_s = jkwyOrderDao.load(jkwy_order_R);
-								if(DateUtils.isAfter(jkwyOrder_s.getEndTime(),new Date())){
-									if(!jkwyOrder_s.getJkwyPackageId().equals(jkwyPackageId) || !jkwyOrder_s.getJkwyPackagePriceId().equals(jkwyPackagePriceId) ){
-										status.setRollbackOnly();// 回滚
-										re_json.put("resultcode", 0);
-										if (Util.debugLog.isDebugEnabled()) {
-						                    Util.debugLog.debug("健康优护-下单失败，：下订单失败,亲友 "+jkwyRelation.getName()+" 已购买"+jkwyPackageDao.loadById(jkwyOrder_s.getJkwyPackageId()).getTitle()+"-"+jkwyPackagePriceDao.loadById(jkwyOrder_s.getJkwyPackagePriceId()).getTitle()+"套餐。");
-						                }
-										re_json.put("msg", "下订单失败,亲友 "+jkwyRelation.getName()+" 已购买"+jkwyPackageDao.loadById(jkwyOrder_s.getJkwyPackageId()).getTitle()+"-"+jkwyPackagePriceDao.loadById(jkwyOrder_s.getJkwyPackagePriceId()).getTitle()+"套餐。");
-										re_json.put("result", 0);
-										return re_json.toString();
-									}
-								}
-							}
-						}*/
-						
-						JkwyOrderRelation jkwyOrderRelation_in = new JkwyOrderRelation();
-						jkwyOrderRelation_in.setId(UUIDUtils.getId());
-						jkwyOrderRelation_in.setJkwyOrderId(orderId);
-						jkwyOrderRelation_in.setJkwyRelation(jkwyRelationId_list.get(j));
-						jkwyOrderRelation_in.setStatus(0);
-						jkwyOrderRelation_in.setCreateTime(new Date());
-						jkwyOrderRelation_in.setCreatorId(jkwyOrder.getCreatorId());
-						
-						int jord = jkwyOrderRelationDao.insert(jkwyOrderRelation_in);
-						if(jord <=0){
-	            			status.setRollbackOnly();// 回滚
-							re_json.put("resultcode", 0);
-							re_json.put("msg", "生成订单失败,添加订单绑定亲友失败");
-							re_json.put("result", 0);
-							return re_json.toString();
-	            		}
-					}
-					
-					jkwyName = jkwyPackageOne.getTitle()+jkwyPackagePriceOne.getTitle();
-					// 使用完优惠券之后的价格
-					Double payPrice_one = jkwyPackagePriceOne.getPrice();
-					if(!StringUtils.isEmpty(jkwyOrder.getVoucherUserId())){
-						VoucherUse voucherUse = voucherUseDao.loadById(jkwyOrder.getVoucherUserId());
-						if(voucherUse == null ){
-							re_json.put("msg", "下单失败，优惠券VoucherUserId="+jkwyOrder.getVoucherUserId()+"不正确");
-							re_json.put("resultcode", 0);
-							re_json.put("result", 0);
-							return re_json.toString();
-						}
-						VoucherRepertory voucherRepertoryOne = voucherRepertoryDao.loadById(voucherUse.getVoucherRepertoryId());
-						if(voucherRepertoryOne == null ){
-							re_json.put("msg", "下单失败，优惠券VoucherRepertoryId="+voucherUse.getVoucherRepertoryId()+"不正确");
-							re_json.put("resultcode", 0);
-							re_json.put("result", 0);
-							return re_json.toString();
-						}
-						Voucher voucherOne = voucherDao.loadById(voucherRepertoryOne.getVoucherId());
-						if(voucherOne == null ){
-							re_json.put("msg", "下单失败，优惠券VoucherId="+voucherRepertoryOne.getVoucherId()+"不正确");
-							re_json.put("resultcode", 0);
-							re_json.put("result", 0);
-							return re_json.toString();
-						}
-						/*VoucherUse voucherUse_re = new VoucherUse();
-						voucherUse_re.setId(voucherUse.getId());
-						voucherUse_re.setUseTime(new Date());*/
-						if (voucherOne.getType() == 1) {
-								payPrice_one = DoubleUtils.subToPositive(jkwyPackagePriceOne.getPrice(), voucherRepertoryOne.getAmount());
-		                		
-		                		jkwyOrder.setVoucherPrice(voucherRepertoryOne.getAmount());
-		                		jkwyOrder.setVoucherUserId(voucherUse.getId());
-		                		/*int ucuv = voucherUseDao.update(voucherUse_re);
-		                		 * if(ucuv <=0){
-		                			status.setRollbackOnly();// 回滚
-									re_json.put("resultcode", 0);
-									re_json.put("msg", "修改优惠券状态失败");
-									re_json.put("result", 0);
-									return re_json.toString();
-		                		}*/
-		                } else if (voucherOne.getType() == 2) {
-		                    if (jkwyPackagePriceOne.getPrice() > voucherRepertoryOne.getConditionAmount()) {
-		                    	payPrice_one =  DoubleUtils.subToPositive(jkwyPackagePriceOne.getPrice(), voucherRepertoryOne.getAmount());
-		                    	jkwyOrder.setVoucherPrice(voucherRepertoryOne.getAmount());
-		                		jkwyOrder.setVoucherUserId(voucherUse.getId());
-		                		/*int ucuv = voucherUseDao.update(voucherUse_re);
-		                		if(ucuv <=0){
-		                			status.setRollbackOnly();// 回滚
-									re_json.put("resultcode", 0);
-									re_json.put("msg", "修改优惠券状态失败");
-									re_json.put("result", 0);
-									return re_json.toString();
-		                		}*/
-		                    }
-		                } else if (voucherOne.getType() == 3) {
-		                    if (jkwyPackagePriceOne.getPrice() > voucherRepertoryOne.getDiscountAmount()) {
-		                    	payPrice_one = DoubleUtils.mul(jkwyPackagePriceOne.getPrice(), voucherRepertoryOne.getAmount());
-		                    	jkwyOrder.setVoucherPrice(voucherRepertoryOne.getAmount());
-		                		jkwyOrder.setVoucherUserId(voucherUse.getId());
-//		                		int ucuv = voucherUseDao.update(voucherUse_re);
-		                		/*if(ucuv <=0){
-		                			status.setRollbackOnly();// 回滚
-									re_json.put("resultcode", 0);
-									re_json.put("msg", "修改优惠券状态失败");
-									re_json.put("result", 0);
-									return re_json.toString();
-		                		}*/
-		                    }
-		                }
-					}
-					// 查询特价优惠
-					ActivityPromotion activityPromotion = new ActivityPromotion();
-					activityPromotion.setResourceId(jkwyPackageId);
-					activityPromotion.setPriceId(jkwyPackagePriceId);
-					activityPromotion.setResourceType(3);
-					activityPromotion.setPlatformId(jkwyOrder.getPlatformId());
-					ActivityPromotion activityPromotion_one = activityPromotionDao.getActivityForGoods(activityPromotion);
-					if(activityPromotion_one != null ){
-						
-						boolean flag = false;
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                    status.setRollbackOnly();// 回滚
+                    return "4";
+                }
+                return "1";
+            }
+        });
+        if (rs.equals("1")) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public JSONObject createOrder(JkwyOrder jkwyOrder, String jkwyRelationId) {
+        TransactionTemplate transactionTemplate = TransactionTemplateUtils.getDefaultTransactionTemplate(txManager);
+        String rs = (String) transactionTemplate.execute(new TransactionCallback<Object>() {
+            JSONObject re_json = new JSONObject();
+
+            Double payPrice = 0d;
+
+            String jkwyName = "";
+
+            String orderId = UUIDUtils.getId();
+
+            String no = Common.getOrderJKNumber();
+
+            public String doInTransaction(final TransactionStatus status) {
+                try {
+                    User user = userDao.loadById(jkwyOrder.getCreatorId());
+                    if (user == null) {
+                        if (Util.debugLog.isDebugEnabled()) {
+                            Util.debugLog.debug("健康优护-下单失败，：用户ID异常=" + jkwyOrder.getCreatorId());
+                        }
+                        re_json.put("msg", "下单失败，用户id=" + jkwyOrder.getCreatorId() + " 异常");
+                        re_json.put("resultcode", 0);
+                        re_json.put("result", 0);
+                        return re_json.toString();
+                    }
+                    jkwyOrder.setCreatorName(user.getName());
+                    String jkwyPackageId = jkwyOrder.getJkwyPackageId();
+                    String jkwyPackagePriceId = jkwyOrder.getJkwyPackagePriceId();
+                    JkwyPackagePrice jkwyPackagePrice = new JkwyPackagePrice();
+                    jkwyPackagePrice.setJkwyPackageId(jkwyPackageId);
+                    jkwyPackagePrice.setId(jkwyPackagePriceId);
+                    JkwyPackagePrice jkwyPackagePriceOne = jkwyPackagePriceDao.load(jkwyPackagePrice);
+                    if (jkwyPackagePriceOne == null) {
+                        if (Util.debugLog.isDebugEnabled()) {
+                            Util.debugLog.debug("健康优护-下单失败，规格id=" + jkwyPackagePriceId + "不正确");
+                        }
+                        re_json.put("msg", "下单失败，套餐id=" + jkwyPackageId + "或规格id=" + jkwyPackagePriceId + "不正确");
+                        re_json.put("resultcode", 0);
+                        re_json.put("result", 0);
+                        return re_json.toString();
+                    }
+                    JkwyPackage jkwyPackageOne = jkwyPackageDao.loadById(jkwyPackageId);
+                    if (jkwyPackageOne == null) {
+                        if (Util.debugLog.isDebugEnabled()) {
+                            Util.debugLog.debug("健康优护-下单失败，：套餐id=" + jkwyPackageId + "不正确");
+                        }
+                        re_json.put("msg", "下单失败，套餐id=" + jkwyPackageId + "或规格id=" + jkwyPackagePriceId + "不正确");
+                        re_json.put("resultcode", 0);
+                        re_json.put("result", 0);
+                        return re_json.toString();
+                    }
+
+                    // 提出套餐绑定的亲友
+                    int supportNumber = jkwyPackagePriceOne.getSupportNumber();
+                    String[] jkwyRelationId_arr = jkwyRelationId.split(",");
+                    List<String> jkwyRelationId_list = new ArrayList<String>();
+                    for (int a = 0; a < jkwyRelationId_arr.length; a++) {
+                        if (!StringUtils.isEmpty(jkwyRelationId_arr[a])) {
+                            jkwyRelationId_list.add(jkwyRelationId_arr[a]);
+                        }
+                    }
+                    if (supportNumber != jkwyRelationId_list.size()) {
+                        if (Util.debugLog.isDebugEnabled()) {
+                            Util.debugLog.debug("健康优护-下单失败，：创建订单失败，套餐人数=" + supportNumber + "和选择人数="
+                                    + jkwyRelationId_list.size() + "不一致");
+                        }
+                        re_json.put("resultcode", 0);
+                        re_json.put("msg",
+                                "创建订单失败，套餐人数=" + supportNumber + "和选择人数=" + jkwyRelationId_list.size() + "不一致");
+                        re_json.put("result", 0);
+                        return re_json.toString();
+                    }
+                    //	 订单绑定亲友
+                    for (int j = 0; j < jkwyRelationId_list.size(); j++) {
+                        JkwyRelation jkwyRelation = jkwyRelationDao.loadById(jkwyRelationId_list.get(j));
+                        if (jkwyRelation == null) {
+                            status.setRollbackOnly();// 回滚
+                            re_json.put("resultcode", 0);
+                            if (Util.debugLog.isDebugEnabled()) {
+                                Util.debugLog.debug("健康优护-下单失败，：亲友id不正确 =" + jkwyRelationId_list.get(j));
+                            }
+                            re_json.put("msg", "生成订单失败,亲友id不正确 =" + jkwyRelationId_list.get(j));
+                            re_json.put("result", 0);
+                            return re_json.toString();
+                        }
+                        /*JkwyOrderRelation jkwyOrderRelation_se =new JkwyOrderRelation();
+                        jkwyOrderRelation_se.setJkwyRelation(jkwyRelation.getId());
+                        jkwyOrderRelation_se.setCreatorId(jkwyOrder.getCreatorId());
+                        jkwyOrderRelation_se.setStatus(1);
+                        List<JkwyOrderRelation> jkwyOrderRelationList = jkwyOrderRelationDao.list(jkwyOrderRelation_se);
+                        if(jkwyOrderRelationList !=null && jkwyOrderRelationList.size()>0){
+                        	for(int jorl=0;jorl<jkwyOrderRelationList.size();jorl++){
+                        		JkwyOrder jkwy_order_R = new JkwyOrder();
+                        		jkwy_order_R.setId(jkwyOrderRelationList.get(jorl).getJkwyOrderId());
+                        		jkwy_order_R.setStatus(0);
+                        		jkwy_order_R.setSchedule(1);
+                        		JkwyOrder jkwyOrder_s = jkwyOrderDao.load(jkwy_order_R);
+                        		if(DateUtils.isAfter(jkwyOrder_s.getEndTime(),new Date())){
+                        			if(!jkwyOrder_s.getJkwyPackageId().equals(jkwyPackageId) || !jkwyOrder_s.getJkwyPackagePriceId().equals(jkwyPackagePriceId) ){
+                        				status.setRollbackOnly();// 回滚
+                        				re_json.put("resultcode", 0);
+                        				if (Util.debugLog.isDebugEnabled()) {
+                                            Util.debugLog.debug("健康优护-下单失败，：下订单失败,亲友 "+jkwyRelation.getName()+" 已购买"+jkwyPackageDao.loadById(jkwyOrder_s.getJkwyPackageId()).getTitle()+"-"+jkwyPackagePriceDao.loadById(jkwyOrder_s.getJkwyPackagePriceId()).getTitle()+"套餐。");
+                                        }
+                        				re_json.put("msg", "下订单失败,亲友 "+jkwyRelation.getName()+" 已购买"+jkwyPackageDao.loadById(jkwyOrder_s.getJkwyPackageId()).getTitle()+"-"+jkwyPackagePriceDao.loadById(jkwyOrder_s.getJkwyPackagePriceId()).getTitle()+"套餐。");
+                        				re_json.put("result", 0);
+                        				return re_json.toString();
+                        			}
+                        		}
+                        	}
+                        }*/
+
+                        JkwyOrderRelation jkwyOrderRelation_in = new JkwyOrderRelation();
+                        jkwyOrderRelation_in.setId(UUIDUtils.getId());
+                        jkwyOrderRelation_in.setJkwyOrderId(orderId);
+                        jkwyOrderRelation_in.setJkwyRelation(jkwyRelationId_list.get(j));
+                        jkwyOrderRelation_in.setStatus(0);
+                        jkwyOrderRelation_in.setCreateTime(new Date());
+                        jkwyOrderRelation_in.setCreatorId(jkwyOrder.getCreatorId());
+
+                        int jord = jkwyOrderRelationDao.insert(jkwyOrderRelation_in);
+                        if (jord <= 0) {
+                            status.setRollbackOnly();// 回滚
+                            re_json.put("resultcode", 0);
+                            re_json.put("msg", "生成订单失败,添加订单绑定亲友失败");
+                            re_json.put("result", 0);
+                            return re_json.toString();
+                        }
+                    }
+
+                    jkwyName = jkwyPackageOne.getTitle() + jkwyPackagePriceOne.getTitle();
+                    // 使用完优惠券之后的价格
+                    Double payPrice_one = jkwyPackagePriceOne.getPrice();
+                    if (!StringUtils.isEmpty(jkwyOrder.getVoucherUserId())) {
+                        VoucherUse voucherUse = voucherUseDao.loadById(jkwyOrder.getVoucherUserId());
+                        if (voucherUse == null) {
+                            re_json.put("msg", "下单失败，优惠券VoucherUserId=" + jkwyOrder.getVoucherUserId() + "不正确");
+                            re_json.put("resultcode", 0);
+                            re_json.put("result", 0);
+                            return re_json.toString();
+                        }
+                        VoucherRepertory voucherRepertoryOne = voucherRepertoryDao
+                                .loadById(voucherUse.getVoucherRepertoryId());
+                        if (voucherRepertoryOne == null) {
+                            re_json.put("msg",
+                                    "下单失败，优惠券VoucherRepertoryId=" + voucherUse.getVoucherRepertoryId() + "不正确");
+                            re_json.put("resultcode", 0);
+                            re_json.put("result", 0);
+                            return re_json.toString();
+                        }
+                        Voucher voucherOne = voucherDao.loadById(voucherRepertoryOne.getVoucherId());
+                        if (voucherOne == null) {
+                            re_json.put("msg", "下单失败，优惠券VoucherId=" + voucherRepertoryOne.getVoucherId() + "不正确");
+                            re_json.put("resultcode", 0);
+                            re_json.put("result", 0);
+                            return re_json.toString();
+                        }
+                        /*VoucherUse voucherUse_re = new VoucherUse();
+                        voucherUse_re.setId(voucherUse.getId());
+                        voucherUse_re.setUseTime(new Date());*/
+                        if (voucherOne.getType() == 1) {
+                            payPrice_one = DoubleUtils.subToPositive(jkwyPackagePriceOne.getPrice(),
+                                    voucherRepertoryOne.getAmount());
+
+                            jkwyOrder.setVoucherPrice(voucherRepertoryOne.getAmount());
+                            jkwyOrder.setVoucherUserId(voucherUse.getId());
+                            /*int ucuv = voucherUseDao.update(voucherUse_re);
+                             * if(ucuv <=0){
+                            	status.setRollbackOnly();// 回滚
+                            	re_json.put("resultcode", 0);
+                            	re_json.put("msg", "修改优惠券状态失败");
+                            	re_json.put("result", 0);
+                            	return re_json.toString();
+                            }*/
+                        }
+                        else if (voucherOne.getType() == 2) {
+                            if (jkwyPackagePriceOne.getPrice() > voucherRepertoryOne.getConditionAmount()) {
+                                payPrice_one = DoubleUtils.subToPositive(jkwyPackagePriceOne.getPrice(),
+                                        voucherRepertoryOne.getAmount());
+                                jkwyOrder.setVoucherPrice(voucherRepertoryOne.getAmount());
+                                jkwyOrder.setVoucherUserId(voucherUse.getId());
+                                /*int ucuv = voucherUseDao.update(voucherUse_re);
+                                if(ucuv <=0){
+                                	status.setRollbackOnly();// 回滚
+                                	re_json.put("resultcode", 0);
+                                	re_json.put("msg", "修改优惠券状态失败");
+                                	re_json.put("result", 0);
+                                	return re_json.toString();
+                                }*/
+                            }
+                        }
+                        else if (voucherOne.getType() == 3) {
+                            if (jkwyPackagePriceOne.getPrice() > voucherRepertoryOne.getDiscountAmount()) {
+                                payPrice_one = DoubleUtils.mul(jkwyPackagePriceOne.getPrice(),
+                                        voucherRepertoryOne.getAmount());
+                                jkwyOrder.setVoucherPrice(voucherRepertoryOne.getAmount());
+                                jkwyOrder.setVoucherUserId(voucherUse.getId());
+                                //		                		int ucuv = voucherUseDao.update(voucherUse_re);
+                                /*if(ucuv <=0){
+                                	status.setRollbackOnly();// 回滚
+                                	re_json.put("resultcode", 0);
+                                	re_json.put("msg", "修改优惠券状态失败");
+                                	re_json.put("result", 0);
+                                	return re_json.toString();
+                                }*/
+                            }
+                        }
+                    }
+                    // 查询特价优惠
+                    ActivityPromotion activityPromotion = new ActivityPromotion();
+                    activityPromotion.setResourceId(jkwyPackageId);
+                    activityPromotion.setPriceId(jkwyPackagePriceId);
+                    activityPromotion.setResourceType(3);
+                    activityPromotion.setPlatformId(jkwyOrder.getPlatformId());
+                    ActivityPromotion activityPromotion_one = activityPromotionDao
+                            .getActivityForGoods(activityPromotion);
+                    if (activityPromotion_one != null) {
+
+                        boolean flag = false;
                         //活动类型 1、立减
                         if (activityPromotion_one.getType() == 1) {
                             payPrice_one = DoubleUtils.subToPositive(payPrice_one, activityPromotion_one.getPrice());
                             flag = true;
-                        } else {
+                        }
+                        else {
                             int num = 0;/*orderDao.countByActivity(activityPromotion_one.getId(), activityPromotion_one.getCreatorId(),
                                         activityPromotion_one.getBeginTime(), activityPromotion_one.getEndTime());*/
                             //2 首单立减
                             if (activityPromotion_one.getType() == 2) {
                                 if (num == 0) {
-                                    payPrice_one = DoubleUtils.subToPositive(payPrice_one, activityPromotion_one.getPrice());
+                                    payPrice_one = DoubleUtils.subToPositive(payPrice_one,
+                                            activityPromotion_one.getPrice());
                                     flag = true;
                                 }
                             }
                             //3 第二单立减
                             if (activityPromotion_one.getType() == 3) {
                                 if (num == 1) {
-                                    payPrice_one = DoubleUtils.subToPositive(payPrice_one,  activityPromotion_one.getPrice());
+                                    payPrice_one = DoubleUtils.subToPositive(payPrice_one,
+                                            activityPromotion_one.getPrice());
                                     flag = true;
                                 }
                             }
@@ -494,7 +536,7 @@ public class JkwyOrderServiceImpl extends BaseServiceImpl<JkwyOrder> implements 
                         if (flag) {
                             jkwyOrder.setActivityPromotionId(activityPromotion_one.getId());
                             jkwyOrder.setActivityPromotionPrice(activityPromotion_one.getPrice());
-                           /* if (DoubleUtils.subToPositive(payPrice_one, activityPromotion_one.getPrice()) == 0) {
+                            /* if (DoubleUtils.subToPositive(payPrice_one, activityPromotion_one.getPrice()) == 0) {
                                 payPrice_one = 0d;
                             }
                             else {
@@ -503,6 +545,8 @@ public class JkwyOrderServiceImpl extends BaseServiceImpl<JkwyOrder> implements 
                         }
 
                     }
+
+                    payPrice_one = DoubleUtils.round(payPrice_one, 2);
                     if (DoubleUtils.sub(payPrice_one, jkwyOrder.getPayPrice()) != 0) {
                         re_json.put("resultcode", 0);
                         re_json.put("msg", "创建订单失败，支付金额计算结果异常 payPrice_one=" + payPrice_one + " jkwyOrder.payPrice="
@@ -545,6 +589,17 @@ public class JkwyOrderServiceImpl extends BaseServiceImpl<JkwyOrder> implements 
                             return re_json.toString();
                         }
                     }
+
+                    if (!StringUtils.isEmpty(jkwyOrder.getCode())) {
+                        JkwyCode jkwyCode = new JkwyCode();
+                        jkwyCode.setCode(jkwyOrder.getCode());
+                        jkwyCode.setStatus(0);
+                        JkwyCode jkwyCode_one = jkwyCodeDao.load(jkwyCode);
+                        if (jkwyCode_one != null) {
+                            jkwyOrder.setRecommendId(jkwyCode_one.getRecommendId());
+                        }
+                    }
+
                     // 生成订单
                     jkwyOrder.setId(orderId);
                     jkwyOrder.setNo(no);
@@ -573,8 +628,96 @@ public class JkwyOrderServiceImpl extends BaseServiceImpl<JkwyOrder> implements 
                         return re_json.toString();
                     }
 
-                    payPrice = payPrice_one;
+                    if (DoubleUtils.subToPositive(payPrice_one, 0) == 0) {
 
+                        jkwyOrder.setSchedule(1);
+                        jkwyOrder.setPayTime(new Date());
+                        jkwyOrder.setPayPrice(0d);
+                        jkwyOrderDao.update(jkwyOrder);
+
+                        // 修改亲友订单关系表
+                        JkwyOrderRelation jkwyOrderRelation = new JkwyOrderRelation();
+                        jkwyOrderRelation.setJkwyOrderId(orderId);
+                        jkwyOrderRelation.setStatus(0);
+                        List<JkwyOrderRelation> jkwyOrderRelationList = jkwyOrderRelationDao.list(jkwyOrderRelation);
+                        if (jkwyOrderRelationList == null || jkwyOrderRelationList.size() < 1) {
+                            status.setRollbackOnly();// 回滚
+                            re_json.put("msg", "下单失败，");
+                            re_json.put("resultcode", 0);
+                            re_json.put("result", 0);
+                            return re_json.toString();
+                        }
+                        for (int j = 0; j < jkwyOrderRelationList.size(); j++) {
+                            JkwyOrderRelation jkwyOrderRelation_one = jkwyOrderRelationList.get(j);
+                            jkwyOrderRelation_one.setStatus(1);
+                            if (Util.debugLog.isDebugEnabled()) {
+                                Util.debugLog.debug("0元直接支付完成：jkwyOrderRelation_one" + j + "=" + jkwyOrderRelation_one);
+                            }
+                            int jord = jkwyOrderRelationDao.update(jkwyOrderRelation_one);
+                            if (jord <= 0) {
+                                status.setRollbackOnly();// 回滚
+                                re_json.put("msg", "下单失败，");
+                                re_json.put("resultcode", 0);
+                                re_json.put("result", 0);
+                                return re_json.toString();
+                            }
+                        }
+
+                        //	修改优惠券状态
+                        if (!StringUtils.isEmpty(jkwyOrder.getVoucherUserId())) {
+                            if (Util.debugLog.isDebugEnabled()) {
+                                Util.debugLog.debug("0元直接支付完成：VoucherUserId=" + jkwyOrder.getVoucherUserId());
+                            }
+                            VoucherUse voucherUse_re = voucherUseDao.loadById(jkwyOrder.getVoucherUserId());
+                            if (Util.debugLog.isDebugEnabled()) {
+                                Util.debugLog.debug("0元直接支付完成：voucherUse_re=" + voucherUse_re);
+                            }
+                            voucherUse_re.setUseTime(new Date());
+                            int vud = voucherUseDao.update(voucherUse_re);
+                            if (Util.debugLog.isDebugEnabled()) {
+                                Util.debugLog.debug("0元直接支付完成：voucherUse_re=" + voucherUse_re);
+                            }
+                            if (vud <= 0) {
+                                status.setRollbackOnly();// 回滚
+                                re_json.put("msg", "下单失败，");
+                                re_json.put("resultcode", 0);
+                                re_json.put("result", 0);
+                                return re_json.toString();
+                            }
+                        }
+
+                        JkwyPackage jkwyPackage = jkwyPackageDao.loadById(jkwyOrder.getJkwyPackageId());
+                        JkwyPackagePrice jkwyPackagePrice_s = jkwyPackagePriceDao
+                                .loadById(jkwyOrder.getJkwyPackagePriceId());
+
+                        Transaction transaction = new Transaction();
+                        transaction.setId(UUID.randomUUID().toString());
+                        transaction.setOrderId(orderId);
+                        transaction.setAmount(0d);
+                        transaction.setScore((new Double(transaction.getAmount())).intValue());
+                        transaction.setOperate(3);
+                        transaction.setOperateSource(4);
+                        transaction.setRemark(jkwyPackage.getTitle() + "-" + jkwyPackagePrice_s.getTitle());
+                        transaction.setWithdraw(0);
+                        transaction.setPayType(3);
+                        transaction.setCreatorId(jkwyOrder.getCreatorId());
+                        transaction.setCreateTime(new Date());
+                        transaction.setStatus(1);
+                        transaction.setType(3);
+                        transactionDao.insert(transaction);
+
+                        JSONObject json_re = new JSONObject();
+                        json_re.put("payPrice", payPrice);
+                        json_re.put("no", no);
+                        json_re.put("orderId", orderId);
+                        json_re.put("goodsName", jkwyName);
+                        re_json.put("msg", "下单成功");
+                        re_json.put("resultcode", 2);
+                        re_json.put("result", json_re);
+                        return re_json.toString();
+                    }
+
+                    payPrice = payPrice_one;
                 }
                 catch (Exception e) {
                     e.printStackTrace();
@@ -743,4 +886,10 @@ public class JkwyOrderServiceImpl extends BaseServiceImpl<JkwyOrder> implements 
         result.put("year", "'" + year + "-01'");
         return result;
     }
+
+    @Override
+    public Page<JkwyOrder> queryList(JkwyOrder jkwyOrder) {
+        return jkwyOrderDao.queryList(jkwyOrder);
+    }
+
 }

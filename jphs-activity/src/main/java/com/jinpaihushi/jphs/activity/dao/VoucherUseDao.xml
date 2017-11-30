@@ -323,10 +323,10 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			V_creator_id, V.creator_name
 			V_creator_name, V.create_time
 			V_create_time, V.status V_status
-			FROM `jphs`.`voucher_use` AS `VU` 
-			LEFT JOIN `jphs`.`user` AS `U` ON `VU`.`creator_id` = `U`.`id`
-		    LEFT JOIN `jphs`.`voucher_repertory` AS `VR`  ON (`VU`.`voucher_repertory_id` = `VR`.`id`)
-		    LEFT JOIN `jphs`.`voucher` AS `V` ON (`VR`.`voucher_id` = `V`.`id`) 
+			FROM `voucher_use` AS `VU` 
+			LEFT JOIN `user` AS `U` ON `VU`.`creator_id` = `U`.`id`
+		    LEFT JOIN `voucher_repertory` AS `VR`  ON (`VU`.`voucher_repertory_id` = `VR`.`id`)
+		    LEFT JOIN `voucher` AS `V` ON (`VR`.`voucher_id` = `V`.`id`) 
 		    WHERE 1=1 
 		    <if test="id!=null and id!=''">
 				AND VU.id LIKE CONCAT('%', #{id}, '%')
@@ -457,8 +457,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		    vr.`no`,
 		    vr.`code` 
 		FROM
-		    `jphs`.`voucher_use` AS `vu`
-		    RIGHT JOIN `jphs`.`voucher_repertory` AS `vr` 
+		    `voucher_use` AS `vu`
+		    RIGHT JOIN `voucher_repertory` AS `vr` 
 		        ON (`vu`.`voucher_repertory_id` = `vr`.`id`) 
 	    WHERE  `vr`.`voucher_id` = #{id} ORDER BY vr.`no` 
 	</select>
@@ -476,11 +476,19 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		  vu.`create_time` ,
 		  u.`name`
 		FROM
-		  `jphs`.`voucher_use` vu
-		  LEFT JOIN `jphs`.`user` AS `u` 
+		  `voucher_use` vu
+		  LEFT JOIN `user` AS `u` 
 		    ON (vu.`creator_id`= u.`id`)  
 	    WHERE  `voucher_repertory_id` = #{voucherRepertoryId}
 	</select>
 	
+	<!-- 查询该批次优惠券，某个用户的拥有量 -->
+	<select id="getVoucherBatchNoUserNumber" resultType="java.lang.Integer">
+		SELECT  COUNT(*) 
+		FROM `voucher_use` VU 
+		LEFT JOIN `voucher_repertory` VR ON VU.voucher_repertory_id=VR.id 
+		LEFT JOIN `voucher` V ON VR.voucher_id=V.id 
+		WHERE VU.creator_id=#{creatorId} AND V.batch_no=#{batchNo} AND VU.status !=-1 
+	</select>
 	
 </mapper>

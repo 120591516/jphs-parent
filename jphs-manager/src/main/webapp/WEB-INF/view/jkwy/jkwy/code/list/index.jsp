@@ -14,7 +14,7 @@
 <div class="marage_right_content">
 	<!-- 左对齐按钮 -->
 	<jphs:hasPermission url="/jkwy/code/redirectAddPage.jhtml">
-		<button id="redirectAddPage" type="button" class="public-info public_btn">新建销售人员</button>
+		<button id="redirectAddPage" type="button" class="public-info public_btn">添加销售人员</button>
 	</jphs:hasPermission>
 	<!-- <button type="button" class="btn btn-info public_btn">导出</button>	 -->
 	<!-- 右对齐按钮 -->

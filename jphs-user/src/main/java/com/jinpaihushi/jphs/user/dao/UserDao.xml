@@ -487,7 +487,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		FROM `user` u 
 		LEFT JOIN `account` a ON u.id = a.creator_id 
 		LEFT JOIN `user` uu ON u.recommend_id = uu.id 
-		LEFT JOIN `jphs`.`user_address` uad ON (u.`id` = uad.`creator_id`)
+		LEFT JOIN `user_address` uad ON (u.`id` = uad.`creator_id`)
 		<include refid="queryWhere" />
 		GROUP BY u.`id`
 		ORDER BY u.create_time DESC
@@ -514,8 +514,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		`account`.`balance`
 		, `account`.`score`
 		FROM
-		`jphs`.`user`LEFT
-		JOIN`jphs`.`account`
+		`user`LEFT
+		JOIN`account`
 		ON (`user`.`id` = `account`.`creator_id`) WHERE
 		user.`id`= #{id}
 	</select>
@@ -547,9 +547,9 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		balance
 		, `account`.`score` score
 		FROM
-		`jphs`.`user`
-		LEFT JOIN `jphs`.`user_address` ON (`user`.`id` = `user_address`.`creator_id`)
-		LEFT JOIN `jphs`.`account`
+		`user`
+		LEFT JOIN `user_address` ON (`user`.`id` = `user_address`.`creator_id`)
+		LEFT JOIN `account`
 		ON (`user`.`id` = `account`.`creator_id`)
 		WHERE `user`.`TYPE` = #{type} AND `user`.`status` = #{status}
 		<if test="id!=null">

@@ -54,7 +54,35 @@ public class JkwyRelation extends BaseModel implements Predicate<JkwyRelation>,
 	
 	private List<JkwyOrder> jkwyOrderList;
 
+	private int ifOrder;
+	private String jpTitle;
+	private String jppTitle;
+	
 	public JkwyRelation(){}
+
+	public int getIfOrder() {
+		return ifOrder;
+	}
+
+	public void setIfOrder(int ifOrder) {
+		this.ifOrder = ifOrder;
+	}
+
+	public String getJpTitle() {
+		return jpTitle;
+	}
+
+	public void setJpTitle(String jpTitle) {
+		this.jpTitle = jpTitle;
+	}
+
+	public String getJppTitle() {
+		return jppTitle;
+	}
+
+	public void setJppTitle(String jppTitle) {
+		this.jppTitle = jppTitle;
+	}
 
 	public JkwyRelation(String id){
 		this.id = id;

@@ -3,6 +3,7 @@ package com.jinpaihushi.jphs.voucher.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.github.pagehelper.Page;
@@ -31,4 +32,11 @@ public interface VoucherDao extends BaseDao<Voucher> {
      * @return
      */
     List<Map<String, Object>> getUserVoucherNum(Map<String, Object> map);
+    
+    /**
+     * 获取可用优惠券
+     * @param voucher
+     * @return
+     */
+    Voucher getVoucherVoucherRepertorylist(@Param("batchNo") String batchNo);
 }
